@@ -1,0 +1,209 @@
+/* =====================================================
+   AUTH
+   Pantallas de autenticación
+   ===================================================== */
+
+.auth-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(
+    135deg,
+    #eef2ff,
+    #f8f9ff,
+    #ffffff
+  );
+  font-family: "Poppins", sans-serif;
+}
+
+
+/* =====================================================
+   CONTENEDOR
+   ===================================================== */
+
+.auth-container {
+  width: 100%;
+  max-width: 420px;
+  padding: 20px;
+}
+
+
+/* =====================================================
+   TARJETA
+   ===================================================== */
+
+.auth-card {
+  background: white;
+  border-radius: 16px;
+  padding: 40px 36px;
+  box-shadow:
+    0 15px 40px rgba(0,0,0,0.08),
+    0 2px 6px rgba(0,0,0,0.04);
+
+  text-align: center;
+}
+
+
+/* =====================================================
+   BRAND
+   ===================================================== */
+
+.auth-logo {
+  font-size: 36px;
+  font-weight: 700;
+  color: #2d5bff;
+  margin-bottom: 6px;
+}
+
+.auth-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 10px;
+}
+
+.auth-subtitle {
+  font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 30px;
+}
+
+
+/* =====================================================
+   BOTONES
+   ===================================================== */
+
+.auth-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.auth-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  border: none;
+  border-radius: 10px;
+
+  padding: 12px 14px;
+
+  font-size: 14px;
+  font-weight: 500;
+
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+
+/* Google */
+
+.auth-btn-google {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+}
+
+.auth-btn-google:hover {
+  background: #f8f9ff;
+  transform: translateY(-1px);
+}
+
+
+/* Anónimo */
+
+.auth-btn-guest {
+  background: #2d5bff;
+  color: white;
+}
+
+.auth-btn-guest:hover {
+  background: #2447c7;
+  transform: translateY(-1px);
+}
+
+
+/* =====================================================
+   ICONOS
+   ===================================================== */
+
+.auth-icon {
+  width: 18px;
+  height: 18px;
+}
+
+
+/* =====================================================
+   FOOTER
+   ===================================================== */
+
+.auth-footer {
+  margin-top: 24px;
+  font-size: 12px;
+  color: #9ca3af;
+}
+
+
+/* =====================================================
+   AVATAR / USUARIO
+   ===================================================== */
+
+.auth-user-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.auth-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+
+  background: #2d5bff;
+  color: white;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-weight: 600;
+}
+
+.auth-user-info {
+  text-align: left;
+}
+
+.auth-user-name {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.auth-user-email {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+
+/* =====================================================
+   RESPONSIVE
+   ===================================================== */
+
+@media (max-width: 480px) {
+
+  .auth-card {
+    padding: 30px 24px;
+  }
+
+  .auth-logo {
+    font-size: 30px;
+  }
+
+  .auth-title {
+    font-size: 18px;
+  }
+
+}

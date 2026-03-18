@@ -1,0 +1,803 @@
+/* =====================================================
+   MAPA
+   Pantalla principal del juego
+===================================================== */
+
+:root {
+  --map-bg-1: #eef2ff;
+  --map-bg-2: #f8f9ff;
+  --map-bg-3: #ffffff;
+
+  --map-surface: rgba(255, 255, 255, 0.9);
+  --map-surface-strong: #ffffff;
+  --map-surface-soft: #f8faff;
+  --map-surface-muted: #f3f6ff;
+
+  --map-text: #182033;
+  --map-text-soft: #4b5565;
+  --map-text-muted: #6b7280;
+  --map-text-faint: #94a3b8;
+
+  --map-border: #e5e7eb;
+  --map-border-strong: #d7ddea;
+
+  --map-primary: #2d5bff;
+  --map-primary-dark: #2146c7;
+  --map-primary-soft: rgba(45, 91, 255, 0.12);
+
+  --map-success: #16a34a;
+  --map-success-soft: rgba(34, 197, 94, 0.12);
+
+  --map-warning: #f59e0b;
+  --map-warning-soft: rgba(245, 158, 11, 0.14);
+
+  --map-shadow-sm: 0 8px 24px rgba(21, 34, 66, 0.06);
+  --map-shadow-md: 0 16px 40px rgba(21, 34, 66, 0.1);
+  --map-shadow-lg: 0 24px 60px rgba(21, 34, 66, 0.16);
+
+  --map-radius-sm: 12px;
+  --map-radius-md: 18px;
+  --map-radius-lg: 24px;
+
+  --map-header-height: 88px;
+  --map-sidebar-width: 300px;
+}
+
+.map-page {
+  min-height: 100vh;
+  font-family: "Poppins", sans-serif;
+  color: var(--map-text);
+  background:
+    radial-gradient(circle at top left, rgba(45, 91, 255, 0.08), transparent 26%),
+    radial-gradient(circle at bottom right, rgba(99, 102, 241, 0.08), transparent 24%),
+    linear-gradient(135deg, var(--map-bg-1), var(--map-bg-2), var(--map-bg-3));
+}
+
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.map-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+
+  min-height: var(--map-header-height);
+  padding: 18px 28px;
+
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+
+  border-bottom: 1px solid rgba(229, 231, 235, 0.9);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04);
+}
+
+.brand-block {
+  min-width: 0;
+}
+
+.brand-kicker {
+  margin: 0 0 2px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--map-text-muted);
+}
+
+.brand-title {
+  margin: 0;
+  font-size: clamp(1.25rem, 2vw, 2rem);
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--map-text);
+}
+
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.xp-box {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 10px 14px;
+  border-radius: 14px;
+
+  background: var(--map-primary-soft);
+  border: 1px solid rgba(45, 91, 255, 0.12);
+  color: var(--map-text);
+}
+
+.xp-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--map-text-muted);
+}
+
+.xp-value {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--map-primary-dark);
+}
+
+.profile-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 42px;
+  padding: 0 16px;
+  border-radius: 12px;
+
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+
+  color: var(--map-primary);
+  background: #fff;
+  border: 1px solid rgba(45, 91, 255, 0.12);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease;
+}
+
+.profile-link:hover {
+  transform: translateY(-1px);
+  background: #f8fbff;
+  border-color: rgba(45, 91, 255, 0.22);
+  box-shadow: var(--map-shadow-sm);
+}
+
+
+/* =====================================================
+   LAYOUT
+===================================================== */
+
+.map-layout {
+  display: grid;
+  grid-template-columns: minmax(260px, var(--map-sidebar-width)) 1fr;
+  min-height: calc(100vh - var(--map-header-height));
+}
+
+
+/* =====================================================
+   SIDEBAR
+===================================================== */
+
+.sidebar-panel {
+  padding: 28px 22px 28px 24px;
+  border-right: 1px solid var(--map-border);
+  background: linear-gradient(180deg, rgba(250, 251, 255, 0.96), rgba(245, 248, 255, 0.9));
+}
+
+.player-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+
+  padding: 14px;
+  margin-bottom: 24px;
+  border-radius: 18px;
+
+  background: var(--map-surface);
+  border: 1px solid rgba(229, 231, 235, 0.85);
+  box-shadow: var(--map-shadow-sm);
+}
+
+.avatar-circle {
+  flex: 0 0 auto;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+
+  background: linear-gradient(135deg, var(--map-primary), #5b7dff);
+  color: white;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-weight: 700;
+  font-size: 18px;
+  box-shadow: 0 10px 24px rgba(45, 91, 255, 0.24);
+}
+
+.player-meta {
+  min-width: 0;
+}
+
+.player-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--map-text-muted);
+}
+
+.player-name {
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--map-text);
+  word-break: break-word;
+}
+
+.player-level {
+  margin-top: 2px;
+  font-size: 12px;
+  color: var(--map-text-faint);
+}
+
+
+/* =====================================================
+   PANELS
+===================================================== */
+
+.story-panel,
+.progress-panel,
+.legend-panel {
+  margin-bottom: 18px;
+  padding: 18px 16px;
+  border-radius: 18px;
+
+  background: var(--map-surface);
+  border: 1px solid rgba(229, 231, 235, 0.85);
+  box-shadow: var(--map-shadow-sm);
+}
+
+.story-panel h3,
+.progress-panel h3,
+.legend-panel h3 {
+  margin: 0 0 12px;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--map-text);
+}
+
+.story-panel p,
+.progress-panel p,
+.legend-panel p {
+  margin: 0;
+  color: var(--map-text-soft);
+  line-height: 1.6;
+}
+
+.progress-stat {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+
+  margin-bottom: 10px;
+  font-size: 13px;
+  color: var(--map-text-soft);
+}
+
+.progress-stat:last-child {
+  margin-bottom: 0;
+}
+
+.progress-stat strong,
+.progress-stat span:last-child {
+  font-weight: 700;
+  color: var(--map-text);
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 9px;
+  font-size: 14px;
+  color: var(--map-text-soft);
+}
+
+.legend-item:last-child {
+  margin-bottom: 0;
+}
+
+.legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex: 0 0 auto;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.06);
+}
+
+.legend-dot.unlocked {
+  background: var(--map-success);
+}
+
+.legend-dot.locked {
+  background: #94a3b8;
+}
+
+.legend-dot.completed {
+  background: var(--map-primary);
+}
+
+
+/* =====================================================
+   MAIN
+===================================================== */
+
+.map-main {
+  padding: 30px;
+}
+
+.map-intro-card {
+  margin-bottom: 26px;
+  padding: 24px 24px 22px;
+  border-radius: 22px;
+
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(229, 231, 235, 0.82);
+  box-shadow: var(--map-shadow-sm);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.map-kicker {
+  margin: 0 0 8px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--map-text-muted);
+}
+
+.map-intro-card h2 {
+  margin: 0 0 10px;
+  font-size: clamp(1.8rem, 2.4vw, 2.4rem);
+  line-height: 1.12;
+  color: var(--map-text);
+}
+
+.map-intro-card p {
+  margin: 0;
+  max-width: 760px;
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--map-text-soft);
+}
+
+
+/* =====================================================
+   GRID DE REGIONES
+===================================================== */
+
+.regions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+
+/* =====================================================
+   REGION CARD
+===================================================== */
+
+.region-card {
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  min-height: 240px;
+  padding: 18px;
+  border-radius: 20px;
+
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(249, 251, 255, 0.94));
+  border: 1px solid var(--map-border);
+  box-shadow: var(--map-shadow-sm);
+
+  transition:
+    transform 0.24s ease,
+    box-shadow 0.24s ease,
+    border-color 0.24s ease,
+    opacity 0.24s ease;
+}
+
+.region-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--map-shadow-md);
+}
+
+.region-status {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+
+  min-height: 28px;
+  padding: 0 10px;
+  border-radius: 999px;
+
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+
+  color: var(--map-text-muted);
+  background: var(--map-surface-muted);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+}
+
+.region-title {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--map-text);
+}
+
+.region-text {
+  margin: 0;
+  min-height: 44px;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--map-text-muted);
+}
+
+.region-meta {
+  margin-top: auto;
+
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 6px;
+
+  font-size: 12px;
+  color: var(--map-text-faint);
+}
+
+.region-meta span {
+  display: block;
+  line-height: 1.45;
+}
+
+.region-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.region-actions .btn,
+.region-actions button,
+.region-actions a {
+  min-height: 42px;
+}
+
+
+/* =====================================================
+   ESTADOS DE TARJETA
+===================================================== */
+
+.region-card.available,
+.region-card.unlocked {
+  border-color: rgba(34, 197, 94, 0.18);
+}
+
+.region-card.available .region-status,
+.region-card.unlocked .region-status {
+  color: #166534;
+  background: var(--map-success-soft);
+  border-color: rgba(34, 197, 94, 0.15);
+}
+
+.region-card.locked {
+  opacity: 0.78;
+  background: linear-gradient(180deg, rgba(248, 250, 252, 0.95), rgba(243, 244, 246, 0.94));
+}
+
+.region-card.locked .region-title,
+.region-card.locked .region-text,
+.region-card.locked .region-meta {
+  color: #8a93a5;
+}
+
+.region-card.locked .region-status {
+  color: #64748b;
+  background: rgba(148, 163, 184, 0.12);
+  border-color: rgba(148, 163, 184, 0.16);
+}
+
+.region-card.completed {
+  border-color: rgba(45, 91, 255, 0.3);
+  box-shadow:
+    0 16px 36px rgba(45, 91, 255, 0.12),
+    inset 0 0 0 1px rgba(45, 91, 255, 0.06);
+}
+
+.region-card.completed .region-status {
+  color: var(--map-primary-dark);
+  background: rgba(45, 91, 255, 0.12);
+  border-color: rgba(45, 91, 255, 0.14);
+}
+
+
+/* =====================================================
+   MODAL
+===================================================== */
+
+.region-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 24px;
+
+  background: rgba(15, 23, 42, 0.42);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+
+  opacity: 1;
+  visibility: visible;
+  transition:
+    opacity 0.22s ease,
+    visibility 0.22s ease;
+}
+
+/* IMPORTANTE:
+   Esto corrige el bug del modal visible desde el inicio */
+.region-modal.hidden {
+  display: none;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.region-modal-card {
+  position: relative;
+
+  width: min(100%, 520px);
+  padding: 30px 28px 24px;
+  border-radius: 24px;
+
+  background: rgba(255, 255, 255, 0.97);
+  border: 1px solid rgba(229, 231, 235, 0.95);
+  box-shadow: var(--map-shadow-lg);
+
+  animation: mapModalIn 0.22s ease;
+}
+
+@keyframes mapModalIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.modal-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 50%;
+
+  background: #f8fafc;
+  color: #0f172a;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
+
+  transition:
+    transform 0.18s ease,
+    background 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.modal-close:hover {
+  transform: scale(1.05);
+  background: #eef2ff;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.12);
+}
+
+.modal-kicker {
+  margin: 0 0 8px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--map-primary);
+}
+
+.modal-title {
+  margin: 0 0 10px;
+  font-size: clamp(1.55rem, 2vw, 2rem);
+  line-height: 1.15;
+  color: var(--map-text);
+}
+
+.modal-text {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--map-text-muted);
+}
+
+
+/* =====================================================
+   HELPERS VISUALES EXTRAS
+===================================================== */
+
+.map-section-title {
+  margin: 0 0 14px;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--map-text);
+}
+
+.map-muted {
+  color: var(--map-text-muted);
+}
+
+.map-soft {
+  color: var(--map-text-soft);
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 1100px) {
+  .map-layout {
+    grid-template-columns: 260px 1fr;
+  }
+
+  .map-main {
+    padding: 24px;
+  }
+
+  .regions-grid {
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
+  .map-header {
+    padding: 16px 18px;
+    align-items: flex-start;
+  }
+
+  .topbar-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .map-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar-panel {
+    border-right: none;
+    border-bottom: 1px solid var(--map-border);
+    padding: 20px 18px;
+  }
+
+  .map-main {
+    padding: 20px 18px 28px;
+  }
+
+  .map-intro-card {
+    padding: 20px 18px;
+    border-radius: 18px;
+  }
+
+  .region-card {
+    min-height: 220px;
+  }
+}
+
+@media (max-width: 640px) {
+  .map-header {
+    gap: 12px;
+  }
+
+  .brand-title {
+    font-size: 1.5rem;
+  }
+
+  .xp-box,
+  .profile-link {
+    min-height: 40px;
+  }
+
+  .player-card,
+  .story-panel,
+  .progress-panel,
+  .legend-panel {
+    border-radius: 16px;
+  }
+
+  .map-main {
+    padding: 16px 14px 24px;
+  }
+
+  .sidebar-panel {
+    padding: 16px 14px;
+  }
+
+  .regions-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .region-card {
+    padding: 16px;
+    border-radius: 18px;
+  }
+
+  .region-title {
+    font-size: 1.45rem;
+  }
+
+  .region-actions {
+    flex-direction: column;
+  }
+
+  .region-actions .btn,
+  .region-actions button,
+  .region-actions a {
+    width: 100%;
+  }
+
+  .region-modal {
+    padding: 14px;
+  }
+
+  .region-modal-card {
+    width: 100%;
+    padding: 24px 18px 20px;
+    border-radius: 20px;
+  }
+
+  .modal-close {
+    top: 10px;
+    right: 10px;
+    width: 38px;
+    height: 38px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .region-card,
+  .profile-link,
+  .modal-close,
+  .region-modal,
+  .region-modal-card {
+    transition: none;
+    animation: none;
+  }
+}

@@ -1,0 +1,447 @@
+/* =====================================================
+   MUSI
+   perfil.css
+   Estilos de la pantalla de perfil del jugador
+   ===================================================== */
+
+/* =====================================================
+   BASE
+   ===================================================== */
+
+.profile-page {
+  min-height: 100vh;
+  padding-bottom: 60px;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* fondo suave tipo videojuego */
+
+.background-profile {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+
+  background:
+    radial-gradient(circle at 20% 30%, #ffd9c9 0%, transparent 40%),
+    radial-gradient(circle at 80% 20%, #d4f1ff 0%, transparent 45%),
+    radial-gradient(circle at 60% 90%, #fff3b5 0%, transparent 45%),
+    linear-gradient(180deg, #f6f9ff 0%, #eef3ff 100%);
+}
+
+/* =====================================================
+   DECORACIÓN ESCENA
+   ===================================================== */
+
+.map-scene-decor {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.scene-cloud {
+  position: absolute;
+  width: 120px;
+  height: 50px;
+  background: white;
+  border-radius: 60px;
+  opacity: 0.5;
+  filter: blur(2px);
+}
+
+.cloud-1 {
+  top: 120px;
+  left: 10%;
+  animation: cloudMove 30s linear infinite;
+}
+
+.cloud-2 {
+  top: 220px;
+  right: 10%;
+  animation: cloudMove 38s linear infinite reverse;
+}
+
+.scene-glow {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, #fff6c9, transparent);
+  opacity: 0.5;
+  filter: blur(20px);
+}
+
+.glow-1 {
+  top: 60%;
+  left: 20%;
+}
+
+.glow-2 {
+  top: 10%;
+  right: 15%;
+}
+
+.scene-star {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: #ffffff;
+  border-radius: 50%;
+  opacity: 0.7;
+}
+
+.star-1 { top: 25%; left: 35%; }
+.star-2 { top: 40%; left: 75%; }
+.star-3 { top: 70%; left: 60%; }
+
+/* =====================================================
+   HEADER
+   ===================================================== */
+
+.profile-header {
+  max-width: 1200px;
+  margin: auto;
+  padding: 28px 20px 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.profile-header-left {
+  max-width: 650px;
+}
+
+.brand-kicker {
+  font-size: 12px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+.profile-page-title {
+  font-size: 32px;
+  font-weight: 700;
+  margin-top: 4px;
+}
+
+.brand-subtitle {
+  font-size: 14px;
+  color: var(--color-text-soft);
+  margin-top: 6px;
+}
+
+/* =====================================================
+   HERO DEL JUGADOR
+   ===================================================== */
+
+.player-summary-card {
+  max-width: 1200px;
+  margin: 24px auto;
+  padding: 26px;
+
+  border-radius: 20px;
+  background: #ffffff;
+
+  box-shadow:
+    0 10px 25px rgba(0,0,0,0.06),
+    0 2px 6px rgba(0,0,0,0.04);
+}
+
+.player-summary-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.profile-avatar {
+  width: 78px;
+  height: 78px;
+  border-radius: 50%;
+
+  background: linear-gradient(135deg,#5b7cff,#7c9cff);
+  color: white;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 30px;
+  font-weight: 700;
+
+  box-shadow: 0 6px 14px rgba(0,0,0,0.15);
+}
+
+.profile-name {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.profile-email {
+  font-size: 13px;
+  color: var(--color-text-soft);
+}
+
+.player-status-strip {
+  margin-top: 8px;
+  display: flex;
+  gap: 8px;
+}
+
+.status-pill {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 5px 10px;
+  border-radius: 999px;
+}
+
+.status-online {
+  background: #d1fae5;
+  color: #047857;
+}
+
+.status-world {
+  background: #e0e7ff;
+  color: #3730a3;
+}
+
+/* =====================================================
+   STATS DEL JUGADOR
+   ===================================================== */
+
+.player-stats-grid {
+  margin-top: 22px;
+
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  gap: 16px;
+}
+
+.player-stat-card {
+  background: #f9fbff;
+  border-radius: 14px;
+  padding: 14px;
+  text-align: center;
+
+  border: 1px solid var(--color-border);
+}
+
+.player-stat-card-label {
+  font-size: 12px;
+  color: var(--color-text-soft);
+}
+
+.player-stat-card-value {
+  font-size: 20px;
+  font-weight: 700;
+  margin-top: 4px;
+}
+
+/* =====================================================
+   PROGRESO NIVEL
+   ===================================================== */
+
+.profile-xp-progress {
+  margin-top: 22px;
+}
+
+.panel-kicker {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin-bottom: 6px;
+}
+
+/* =====================================================
+   STRIP RÁPIDO
+   ===================================================== */
+
+.profile-quick-strip {
+  max-width: 1200px;
+  margin: auto;
+  margin-bottom: 22px;
+
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 14px;
+}
+
+.map-stat-card {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+
+  background: white;
+  border-radius: 16px;
+  padding: 14px 16px;
+
+  border: 1px solid var(--color-border);
+
+  box-shadow: 0 6px 16px rgba(0,0,0,0.05);
+}
+
+.map-stat-icon {
+  font-size: 22px;
+}
+
+.map-stat-label {
+  font-size: 12px;
+  color: var(--color-text-soft);
+}
+
+/* =====================================================
+   GRID DE CONTENIDO
+   ===================================================== */
+
+.profile-content-grid {
+  max-width: 1200px;
+  margin: auto;
+
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  gap: 18px;
+}
+
+.profile-panel {
+  background: white;
+  border-radius: 18px;
+  padding: 20px;
+
+  border: 1px solid var(--color-border);
+
+  box-shadow:
+    0 10px 22px rgba(0,0,0,0.05);
+}
+
+.profile-panel-highlight {
+  grid-column: span 2;
+}
+
+.panel-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.panel-head h3 {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.panel-badge {
+  background: #eef2ff;
+  color: var(--color-primary);
+  border-radius: 999px;
+  font-size: 12px;
+  padding: 4px 10px;
+  font-weight: 700;
+}
+
+/* =====================================================
+   LISTAS
+   ===================================================== */
+
+.profile-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ui-list-item {
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--color-border);
+  background: #fafcff;
+}
+
+.ui-list-item-title {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.ui-list-item-meta {
+  font-size: 12px;
+  color: var(--color-text-soft);
+  margin-top: 4px;
+}
+
+/* =====================================================
+   ACTIVIDAD
+   ===================================================== */
+
+.last-activity-box {
+  padding: 14px;
+}
+
+.last-activity-title {
+  font-weight: 600;
+}
+
+.last-activity-meta {
+  font-size: 13px;
+  color: var(--color-text-soft);
+}
+
+/* =====================================================
+   ANIMACIONES
+   ===================================================== */
+
+@keyframes cloudMove {
+  from { transform: translateX(0); }
+  to { transform: translateX(300px); }
+}
+
+.pop-in {
+  animation: popIn .25s ease;
+}
+
+@keyframes popIn {
+  from {
+    opacity:0;
+    transform:scale(.95);
+  }
+  to {
+    opacity:1;
+    transform:scale(1);
+  }
+}
+
+/* =====================================================
+   RESPONSIVE
+   ===================================================== */
+
+@media (max-width: 900px) {
+
+  .player-stats-grid {
+    grid-template-columns: repeat(2,1fr);
+  }
+
+  .profile-content-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-panel-highlight {
+    grid-column: span 1;
+  }
+
+  .profile-quick-strip {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 520px) {
+
+  .profile-avatar {
+    width: 64px;
+    height: 64px;
+    font-size: 24px;
+  }
+
+  .profile-page-title {
+    font-size: 26px;
+  }
+
+}
