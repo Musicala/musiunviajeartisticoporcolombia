@@ -1,0 +1,1250 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Centro de control | Musi</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <meta
+    name="description"
+    content="Centro de control de Musi. Abre el mapa, revisa tu perfil, entra al studio o administra tu partida."
+  />
+  <meta name="theme-color" content="#2d5bff" />
+
+  <!-- Estilos -->
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/ui.css" />
+
+  <!-- Fuente -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+
+  <link rel="icon" href="assets/favicon.png" />
+
+  <style>
+    :root {
+      --menu-bg-1: #0f172a;
+      --menu-bg-2: #17357d;
+      --menu-primary: #2d5bff;
+      --menu-primary-dark: #1d4ed8;
+      --menu-violet: #7c4dff;
+      --menu-cyan: #11c5d9;
+      --menu-gold: #ffd166;
+      --menu-danger: #ef4444;
+      --menu-success: #22c55e;
+      --menu-warning: #f59e0b;
+
+      --menu-text: #ffffff;
+      --menu-text-soft: rgba(255, 255, 255, 0.76);
+      --menu-text-faint: rgba(255, 255, 255, 0.58);
+
+      --menu-card: rgba(255, 255, 255, 0.10);
+      --menu-card-strong: rgba(255, 255, 255, 0.14);
+      --menu-border: rgba(255, 255, 255, 0.14);
+
+      --menu-shadow: 0 24px 70px rgba(0, 0, 0, 0.25);
+      --menu-shadow-soft: 0 14px 28px rgba(0, 0, 0, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body.menu-page {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Poppins", sans-serif;
+      color: var(--menu-text);
+      background:
+        radial-gradient(circle at 16% 16%, rgba(45, 91, 255, 0.22), transparent 18%),
+        radial-gradient(circle at 84% 22%, rgba(124, 77, 255, 0.18), transparent 20%),
+        radial-gradient(circle at 50% 100%, rgba(17, 197, 217, 0.12), transparent 24%),
+        linear-gradient(160deg, #0f172a 0%, #17357d 44%, #101d40 100%);
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    body.menu-page.is-routing {
+      overflow: hidden;
+      cursor: progress;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .menu-bg {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .menu-glow {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(42px);
+      opacity: 0.58;
+    }
+
+    .menu-glow.glow-1 {
+      width: 280px;
+      height: 280px;
+      top: -40px;
+      left: -50px;
+      background: rgba(45, 91, 255, 0.20);
+      animation: floatGlow 12s ease-in-out infinite;
+    }
+
+    .menu-glow.glow-2 {
+      width: 320px;
+      height: 320px;
+      right: -90px;
+      bottom: -20px;
+      background: rgba(124, 77, 255, 0.18);
+      animation: floatGlow 15s ease-in-out infinite reverse;
+    }
+
+    .menu-glow.glow-3 {
+      width: 180px;
+      height: 180px;
+      top: 34%;
+      right: 18%;
+      background: rgba(17, 197, 217, 0.14);
+      animation: floatGlow 10s ease-in-out infinite;
+    }
+
+    .menu-stars {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .menu-star {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.94);
+      box-shadow: 0 0 14px rgba(255,255,255,0.92);
+      animation: twinkle 2.8s ease-in-out infinite;
+    }
+
+    .menu-star.s1 { top: 14%; left: 18%; }
+    .menu-star.s2 { top: 26%; right: 18%; animation-delay: 0.8s; }
+    .menu-star.s3 { top: 64%; left: 12%; animation-delay: 1.6s; }
+    .menu-star.s4 { bottom: 16%; right: 20%; animation-delay: 1.1s; }
+
+    .menu-shell {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      width: min(100% - 24px, 1180px);
+      margin: 0 auto;
+      padding: 20px 0;
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 18px;
+      align-items: center;
+    }
+
+    .menu-hero,
+    .menu-card {
+      border-radius: 30px;
+      background: var(--menu-card);
+      border: 1px solid var(--menu-border);
+      box-shadow: var(--menu-shadow);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    .menu-hero {
+      min-height: 700px;
+      padding: 28px;
+      display: grid;
+      align-content: space-between;
+      overflow: hidden;
+      position: relative;
+      isolation: isolate;
+    }
+
+    .menu-hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 24% 24%, rgba(45, 91, 255, 0.14), transparent 24%),
+        radial-gradient(circle at 78% 22%, rgba(124, 77, 255, 0.14), transparent 24%),
+        radial-gradient(circle at 50% 78%, rgba(17, 197, 217, 0.12), transparent 26%);
+      z-index: -1;
+    }
+
+    .menu-brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      width: fit-content;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.10);
+      border: 1px solid rgba(255,255,255,0.12);
+      box-shadow: var(--menu-shadow-soft);
+    }
+
+    .menu-brand-mark {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--menu-primary), var(--menu-violet));
+      color: white;
+      font-weight: 800;
+      box-shadow: 0 10px 20px rgba(45, 91, 255, 0.20);
+    }
+
+    .menu-brand-text {
+      display: grid;
+      gap: 1px;
+    }
+
+    .menu-brand-label {
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.70);
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .menu-brand-title {
+      font-size: 0.98rem;
+      color: white;
+      font-weight: 700;
+    }
+
+    .menu-kicker {
+      margin: 18px 0 0;
+      color: #9ec2ff;
+      font-size: 0.86rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .menu-title {
+      margin: 10px 0 0;
+      font-size: clamp(2.4rem, 5vw, 4rem);
+      line-height: 0.95;
+      letter-spacing: -0.05em;
+      color: white;
+    }
+
+    .menu-description {
+      max-width: 560px;
+      margin: 16px 0 0;
+      color: var(--menu-text-soft);
+      font-size: 1rem;
+      line-height: 1.78;
+    }
+
+    .menu-world {
+      position: relative;
+      min-height: 320px;
+      display: grid;
+      place-items: center;
+    }
+
+    .menu-world-glow {
+      position: absolute;
+      width: 320px;
+      height: 320px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(45, 91, 255, 0.18), transparent 65%);
+      filter: blur(12px);
+      opacity: 0.92;
+    }
+
+    .menu-orb {
+      position: relative;
+      width: min(100%, 360px);
+      aspect-ratio: 1 / 1;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 36% 28%, rgba(255,255,255,0.82), rgba(255,255,255,0) 18%),
+        linear-gradient(160deg, #2d5bff, #7c4dff 56%, #11c5d9);
+      box-shadow:
+        inset -22px -26px 48px rgba(17, 24, 39, 0.16),
+        0 22px 56px rgba(45, 91, 255, 0.22);
+      overflow: hidden;
+      animation: menuFloat 4.4s ease-in-out infinite;
+    }
+
+    .menu-orb::before {
+      content: "";
+      position: absolute;
+      inset: 16% 14%;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 30% 36%, rgba(255,255,255,0.20), transparent 18%),
+        radial-gradient(circle at 68% 30%, rgba(255,255,255,0.16), transparent 16%),
+        radial-gradient(circle at 52% 72%, rgba(255,255,255,0.16), transparent 18%);
+    }
+
+    .menu-orbit {
+      position: absolute;
+      inset: -26px;
+      border-radius: 50%;
+      border: 1px dashed rgba(255,255,255,0.16);
+      animation: menuSpin 18s linear infinite;
+    }
+
+    .menu-musi {
+      position: absolute;
+      top: 14%;
+      right: 10%;
+      width: 78px;
+      height: 78px;
+      border-radius: 24px;
+      display: grid;
+      place-items: center;
+      background: rgba(255,255,255,0.88);
+      color: var(--menu-primary);
+      font-size: 2rem;
+      font-weight: 800;
+      box-shadow: 0 16px 30px rgba(15, 23, 42, 0.12);
+      animation: musiDrift 5s ease-in-out infinite;
+    }
+
+    .menu-highlights {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .menu-highlight {
+      padding: 14px;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.10);
+      border: 1px solid rgba(255,255,255,0.12);
+      box-shadow: var(--menu-shadow-soft);
+    }
+
+    .menu-highlight-icon {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.12);
+      font-size: 1.15rem;
+      margin-bottom: 10px;
+    }
+
+    .menu-highlight h3 {
+      margin: 0 0 4px;
+      font-size: 0.95rem;
+      color: white;
+    }
+
+    .menu-highlight p {
+      margin: 0;
+      color: var(--menu-text-soft);
+      font-size: 0.84rem;
+      line-height: 1.55;
+    }
+
+    .menu-card {
+      min-height: 700px;
+      padding: 26px 24px 22px;
+      display: grid;
+      grid-template-rows: auto auto auto auto 1fr auto;
+      gap: 18px;
+    }
+
+    .menu-card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .menu-card-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 40px;
+      padding: 0.6rem 0.95rem;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.10);
+      color: #dbeafe;
+      border: 1px solid rgba(255,255,255,0.10);
+      font-size: 0.86rem;
+      font-weight: 700;
+    }
+
+    .menu-top-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .menu-top-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 40px;
+      padding: 0.7rem 0.95rem;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.10);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: white;
+      font-size: 0.9rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.22s ease;
+    }
+
+    .menu-top-link:hover {
+      transform: translateY(-2px);
+      background: rgba(255,255,255,0.14);
+    }
+
+    .menu-section-title {
+      margin: 0;
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
+      line-height: 1.05;
+      color: white;
+    }
+
+    .menu-section-text {
+      margin: 10px 0 0;
+      color: var(--menu-text-soft);
+      line-height: 1.7;
+      font-size: 0.95rem;
+    }
+
+    .menu-user {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 14px;
+      align-items: center;
+      padding: 16px;
+      border-radius: 22px;
+      background: rgba(255,255,255,0.10);
+      border: 1px solid rgba(255,255,255,0.12);
+      box-shadow: var(--menu-shadow-soft);
+    }
+
+    .menu-avatar {
+      width: 58px;
+      height: 58px;
+      border-radius: 18px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--menu-primary), var(--menu-violet));
+      color: white;
+      font-size: 1.15rem;
+      font-weight: 800;
+      box-shadow: 0 12px 22px rgba(45, 91, 255, 0.20);
+      overflow: hidden;
+      text-transform: uppercase;
+    }
+
+    .menu-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .menu-user-text {
+      display: grid;
+      gap: 4px;
+      min-width: 0;
+    }
+
+    .menu-user-label {
+      color: rgba(255,255,255,0.68);
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+
+    .menu-user-name {
+      color: white;
+      font-size: 1rem;
+      font-weight: 700;
+      overflow-wrap: anywhere;
+    }
+
+    .menu-user-meta {
+      color: var(--menu-text-soft);
+      font-size: 0.88rem;
+      overflow-wrap: anywhere;
+    }
+
+    .menu-status-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .menu-status-card {
+      padding: 14px;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.10);
+      border: 1px solid rgba(255,255,255,0.12);
+      box-shadow: var(--menu-shadow-soft);
+      display: grid;
+      gap: 4px;
+    }
+
+    .menu-status-label {
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.68);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      font-weight: 700;
+    }
+
+    .menu-status-value {
+      font-size: 1rem;
+      color: white;
+      font-weight: 700;
+      overflow-wrap: anywhere;
+    }
+
+    .menu-actions {
+      display: grid;
+      gap: 12px;
+      align-content: start;
+    }
+
+    .menu-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      min-height: 54px;
+      padding: 0.98rem 1rem;
+      border-radius: 18px;
+      font-family: inherit;
+      font-size: 0.98rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.22s ease;
+      border: none;
+    }
+
+    .menu-btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .menu-btn:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 4px rgba(255,255,255,0.12);
+    }
+
+    .menu-btn-primary {
+      background: linear-gradient(135deg, var(--menu-primary), #4f76ff);
+      color: white;
+      box-shadow: 0 14px 26px rgba(45, 91, 255, 0.22);
+    }
+
+    .menu-btn-primary:hover {
+      box-shadow: 0 18px 34px rgba(45, 91, 255, 0.28);
+    }
+
+    .menu-btn-secondary {
+      background: rgba(255,255,255,0.12);
+      color: white;
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .menu-btn-secondary:hover {
+      background: rgba(255,255,255,0.16);
+    }
+
+    .menu-btn-danger {
+      background: rgba(239, 68, 68, 0.14);
+      color: #fecaca;
+      border: 1px solid rgba(239, 68, 68, 0.14);
+    }
+
+    .menu-btn-danger:hover {
+      background: rgba(239, 68, 68, 0.18);
+    }
+
+    .menu-btn[disabled] {
+      opacity: 0.48;
+      cursor: not-allowed;
+      pointer-events: none;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .menu-note {
+      display: grid;
+      gap: 10px;
+      padding: 16px;
+      border-radius: 22px;
+      background: rgba(255,255,255,0.10);
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .menu-note-title {
+      margin: 0;
+      color: white;
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+
+    .menu-note-text {
+      margin: 0;
+      color: var(--menu-text-soft);
+      font-size: 0.9rem;
+      line-height: 1.65;
+    }
+
+    .menu-alert {
+      min-height: 52px;
+      padding: 0.95rem 1rem;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.10);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: var(--menu-text-soft);
+      font-size: 0.92rem;
+      line-height: 1.6;
+    }
+
+    .menu-alert.is-success {
+      background: rgba(34, 197, 94, 0.14);
+      border-color: rgba(34, 197, 94, 0.18);
+      color: #dcfce7;
+    }
+
+    .menu-alert.is-warning {
+      background: rgba(245, 158, 11, 0.14);
+      border-color: rgba(245, 158, 11, 0.18);
+      color: #fde68a;
+    }
+
+    .menu-footer {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      text-align: center;
+      color: var(--menu-text-faint);
+      font-size: 0.84rem;
+    }
+
+    .route-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+      background:
+        radial-gradient(circle at top, rgba(45, 91, 255, 0.18), transparent 24%),
+        linear-gradient(180deg, rgba(10, 17, 35, 0.82), rgba(10, 17, 35, 0.92));
+      color: #fff;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 0.24s ease, visibility 0.24s ease;
+    }
+
+    .route-overlay.show {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+    .route-card {
+      width: min(100%, 420px);
+      padding: 28px 24px;
+      border-radius: 26px;
+      text-align: center;
+      background: rgba(19, 28, 52, 0.78);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.26);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+
+    .route-spinner {
+      width: 58px;
+      height: 58px;
+      margin: 0 auto 18px;
+      border-radius: 50%;
+      border: 4px solid rgba(255, 255, 255, 0.18);
+      border-top-color: #ffffff;
+      animation: spin 0.95s linear infinite;
+    }
+
+    .route-title {
+      margin: 0;
+      font-size: 1.16rem;
+      font-weight: 700;
+    }
+
+    .route-text {
+      margin: 10px 0 0;
+      color: rgba(229, 236, 255, 0.82);
+      line-height: 1.6;
+      font-size: 0.95rem;
+    }
+
+    @keyframes menuFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    @keyframes menuSpin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes musiDrift {
+      0%, 100% { transform: translateY(0) rotate(-3deg); }
+      50% { transform: translateY(-10px) rotate(4deg); }
+    }
+
+    @keyframes twinkle {
+      0%, 100% {
+        opacity: 0.28;
+        transform: scale(0.88);
+      }
+      50% {
+        opacity: 1;
+        transform: scale(1.18);
+      }
+    }
+
+    @keyframes floatGlow {
+      0%, 100% { transform: translateY(0) translateX(0); }
+      50% { transform: translateY(-12px) translateX(12px); }
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 1080px) {
+      .menu-shell {
+        grid-template-columns: 1fr;
+      }
+
+      .menu-hero,
+      .menu-card {
+        min-height: auto;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .menu-shell {
+        width: min(100% - 16px, 1180px);
+        padding: 14px 0;
+      }
+
+      .menu-hero,
+      .menu-card {
+        border-radius: 22px;
+        padding: 18px 16px;
+      }
+
+      .menu-highlights,
+      .menu-status-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .menu-card-top {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .menu-top-actions {
+        width: 100%;
+      }
+
+      .menu-top-link {
+        width: fit-content;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .menu-orb,
+      .menu-orbit,
+      .menu-musi,
+      .menu-star,
+      .route-spinner {
+        animation: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body class="menu-page">
+  <div class="menu-bg" aria-hidden="true">
+    <div class="menu-glow glow-1"></div>
+    <div class="menu-glow glow-2"></div>
+    <div class="menu-glow glow-3"></div>
+
+    <div class="menu-stars">
+      <span class="menu-star s1"></span>
+      <span class="menu-star s2"></span>
+      <span class="menu-star s3"></span>
+      <span class="menu-star s4"></span>
+    </div>
+  </div>
+
+  <main class="menu-shell">
+    <section class="menu-hero" aria-labelledby="menuVisualTitle">
+      <div>
+        <div class="menu-brand" aria-label="Marca del juego">
+          <div class="menu-brand-mark" aria-hidden="true">M</div>
+          <div class="menu-brand-text">
+            <span class="menu-brand-label">Centro de control</span>
+            <span class="menu-brand-title">Musi</span>
+          </div>
+        </div>
+
+        <p class="menu-kicker">Espacio secundario</p>
+
+        <h1 id="menuVisualTitle" class="menu-title">
+          Administra tu viaje sin romper el flujo
+        </h1>
+
+        <p class="menu-description">
+          Este espacio ya no pretende ser el verdadero corazón del juego. El centro real del recorrido
+          es el mapa. Aquí solo administras tu partida: revisar perfil, entrar al studio, continuar,
+          reiniciar o cerrar sesión. Cada pantalla haciendo su trabajo. La ingeniería social del orden.
+        </p>
+      </div>
+
+      <div class="menu-world" aria-hidden="true">
+        <div class="menu-world-glow"></div>
+
+        <div class="menu-orb">
+          <div class="menu-orbit"></div>
+          <div class="menu-musi">🎵</div>
+        </div>
+      </div>
+
+      <div class="menu-highlights">
+        <article class="menu-highlight">
+          <div class="menu-highlight-icon" aria-hidden="true">🗺️</div>
+          <h3>Mapa real</h3>
+          <p>El viaje principal vive en el mapa, no en esta pantalla.</p>
+        </article>
+
+        <article class="menu-highlight">
+          <div class="menu-highlight-icon" aria-hidden="true">🧪</div>
+          <h3>Studio</h3>
+          <p>Accede a pruebas, expansiones o espacios alternos del universo Musi.</p>
+        </article>
+
+        <article class="menu-highlight">
+          <div class="menu-highlight-icon" aria-hidden="true">👤</div>
+          <h3>Cuenta y perfil</h3>
+          <p>Consulta quién está jugando y cómo va el avance actual.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="menu-card" aria-labelledby="menuCardTitle">
+      <div class="menu-card-top">
+        <div class="menu-card-badge">
+          <span>●</span>
+          <span>Centro de control</span>
+        </div>
+
+        <div class="menu-top-actions">
+          <a href="index.html" class="menu-top-link">Inicio</a>
+          <a href="mapa.html" class="menu-top-link">Mapa</a>
+        </div>
+      </div>
+
+      <header>
+        <h2 id="menuCardTitle" class="menu-section-title">
+          Elige tu siguiente paso
+        </h2>
+        <p class="menu-section-text">
+          Desde aquí puedes retomar el recorrido, abrir el mapa, revisar tu perfil o reiniciar
+          la partida. Sin adelantar pantallas que no tocan, que ya aprendimos la lección a las malas.
+        </p>
+      </header>
+
+      <div class="menu-user">
+        <div class="menu-avatar" id="userAvatar">M</div>
+
+        <div class="menu-user-text">
+          <span class="menu-user-label">Jugador actual</span>
+          <span class="menu-user-name" id="userName">Jugador</span>
+          <span class="menu-user-meta" id="userMeta">Sesión local activa</span>
+        </div>
+      </div>
+
+      <div class="menu-status-grid" aria-label="Estado del progreso">
+        <article class="menu-status-card">
+          <span class="menu-status-label">Estado</span>
+          <span class="menu-status-value" id="statusGame">Sin iniciar</span>
+        </article>
+
+        <article class="menu-status-card">
+          <span class="menu-status-label">XP</span>
+          <span class="menu-status-value" id="statusXp">0</span>
+        </article>
+
+        <article class="menu-status-card">
+          <span class="menu-status-label">Regiones</span>
+          <span class="menu-status-value" id="statusRegions">0</span>
+        </article>
+      </div>
+
+      <div class="menu-actions">
+        <button class="menu-btn menu-btn-primary" id="continueBtn" type="button">
+          <span aria-hidden="true">▶</span>
+          <span>Continuar en el mapa</span>
+        </button>
+
+        <button class="menu-btn menu-btn-secondary" id="mapBtn" type="button">
+          <span aria-hidden="true">🗺️</span>
+          <span>Abrir mapa</span>
+        </button>
+
+        <button class="menu-btn menu-btn-secondary" id="studioBtn" type="button">
+          <span aria-hidden="true">🧪</span>
+          <span>Entrar al studio</span>
+        </button>
+
+        <button class="menu-btn menu-btn-secondary" id="profileBtn" type="button">
+          <span aria-hidden="true">👤</span>
+          <span>Ver perfil</span>
+        </button>
+
+        <button class="menu-btn menu-btn-secondary" id="newGameBtn" type="button">
+          <span aria-hidden="true">✨</span>
+          <span>Nueva partida</span>
+        </button>
+
+        <button class="menu-btn menu-btn-danger" id="logoutBtn" type="button">
+          <span aria-hidden="true">↩</span>
+          <span>Cerrar sesión</span>
+        </button>
+      </div>
+
+      <section class="menu-note">
+        <h3 class="menu-note-title">Qué hace cada opción</h3>
+        <p class="menu-note-text">
+          <strong>Continuar en el mapa</strong> retoma el viaje desde el hub real.
+          <strong>Abrir mapa</strong> entra directamente al recorrido.
+          <strong>Studio</strong> abre experiencias paralelas.
+          <strong>Perfil</strong> muestra la información del jugador.
+          <strong>Nueva partida</strong> reinicia el viaje narrativo y el progreso local.
+        </p>
+      </section>
+
+      <div id="menuMessage" class="menu-alert" aria-live="polite">
+        Centro de control listo. Puedes volver al mapa o administrar tu partida.
+      </div>
+
+      <footer class="menu-footer">
+        <span>Musicala</span>
+        <span>•</span>
+        <span>Musi © 2026</span>
+      </footer>
+    </section>
+  </main>
+
+  <div id="routeOverlay" class="route-overlay" aria-hidden="true">
+    <div class="route-card" role="status" aria-live="polite" aria-atomic="true">
+      <div class="route-spinner" aria-hidden="true"></div>
+      <p class="route-title">Preparando ruta</p>
+      <p id="routeText" class="route-text">
+        Abriendo el siguiente punto del viaje.
+      </p>
+    </div>
+  </div>
+
+  <script type="module">
+    const ROUTES = {
+      map: "mapa.html",
+      studio: "studio.html",
+      profile: "perfil.html",
+      login: "login.html",
+      home: "index.html",
+      boot: "boot.html"
+    };
+
+    const STORAGE_KEYS = {
+      progress: "musi_progress",
+      userSession: "musi_user_session",
+      userProfile: "musi_user_profile",
+      bootSeen: "musi_boot_seen",
+      titleSeen: "musi_title_seen",
+      introSeen: "musi_intro_seen"
+    };
+
+    const continueBtn = document.getElementById("continueBtn");
+    const mapBtn = document.getElementById("mapBtn");
+    const studioBtn = document.getElementById("studioBtn");
+    const profileBtn = document.getElementById("profileBtn");
+    const newGameBtn = document.getElementById("newGameBtn");
+    const logoutBtn = document.getElementById("logoutBtn");
+
+    const userAvatar = document.getElementById("userAvatar");
+    const userName = document.getElementById("userName");
+    const userMeta = document.getElementById("userMeta");
+
+    const statusGame = document.getElementById("statusGame");
+    const statusXp = document.getElementById("statusXp");
+    const statusRegions = document.getElementById("statusRegions");
+
+    const menuMessage = document.getElementById("menuMessage");
+    const routeOverlay = document.getElementById("routeOverlay");
+    const routeText = document.getElementById("routeText");
+
+    let isRouting = false;
+
+    function setMessage(message, type = "") {
+      if (!menuMessage) return;
+
+      menuMessage.textContent = message;
+      menuMessage.classList.remove("is-success", "is-warning");
+
+      if (type === "success") {
+        menuMessage.classList.add("is-success");
+      }
+
+      if (type === "warning") {
+        menuMessage.classList.add("is-warning");
+      }
+    }
+
+    function getStoredJSON(key) {
+      try {
+        const raw = localStorage.getItem(key);
+        if (!raw) return null;
+        return JSON.parse(raw);
+      } catch (error) {
+        return null;
+      }
+    }
+
+    function getCurrentUser() {
+      return getStoredJSON(STORAGE_KEYS.userProfile);
+    }
+
+    function getCurrentSession() {
+      return getStoredJSON(STORAGE_KEYS.userSession);
+    }
+
+    function getCurrentProgress() {
+      return getStoredJSON(STORAGE_KEYS.progress);
+    }
+
+    function hasStoredValue(key) {
+      const value = localStorage.getItem(key);
+      return value !== null && value !== "";
+    }
+
+    function hasSession() {
+      return hasStoredValue(STORAGE_KEYS.userSession) || hasStoredValue(STORAGE_KEYS.userProfile);
+    }
+
+    function getUserInitial(user) {
+      const raw =
+        user?.displayName ||
+        user?.name ||
+        user?.email ||
+        "M";
+
+      return String(raw).trim().charAt(0).toUpperCase() || "M";
+    }
+
+    function updateUserUI() {
+      const user = getCurrentUser();
+      const session = getCurrentSession();
+
+      if (!user && !session) {
+        userAvatar.textContent = "M";
+        userName.textContent = "Invitado";
+        userMeta.textContent = "Sin sesión activa";
+        return;
+      }
+
+      if (user?.photoURL) {
+        userAvatar.innerHTML = `<img src="${user.photoURL}" alt="Avatar de ${user.displayName || "usuario"}">`;
+      } else {
+        userAvatar.textContent = getUserInitial(user || session);
+      }
+
+      userName.textContent =
+        user?.displayName ||
+        user?.name ||
+        session?.displayName ||
+        session?.name ||
+        (user?.isAnonymous || session?.isAnonymous ? "Invitado" : "Jugador");
+
+      userMeta.textContent =
+        user?.email ||
+        session?.email ||
+        (user?.isAnonymous || session?.isAnonymous ? "Sesión como invitado" : "Sesión local activa");
+    }
+
+    function hasMeaningfulProgress(progress) {
+      if (!progress || typeof progress !== "object") return false;
+
+      if (Array.isArray(progress.unlockedRegions) && progress.unlockedRegions.length > 0) {
+        return true;
+      }
+
+      if (typeof progress.currentRegion === "string" && progress.currentRegion.trim()) {
+        return true;
+      }
+
+      if (typeof progress.xp === "number" && progress.xp > 0) {
+        return true;
+      }
+
+      if (typeof progress.level === "number" && progress.level > 1) {
+        return true;
+      }
+
+      return false;
+    }
+
+    function updateProgressUI() {
+      const progress = getCurrentProgress();
+      const hasProgress = hasMeaningfulProgress(progress);
+
+      if (!hasProgress) {
+        statusGame.textContent = "Sin avance";
+        statusXp.textContent = "0";
+        statusRegions.textContent = "0";
+        continueBtn.disabled = true;
+        setMessage(
+          "No se encontró progreso relevante. Puedes abrir el mapa directamente o iniciar una nueva partida.",
+          "warning"
+        );
+        return;
+      }
+
+      const unlockedRegions = Array.isArray(progress.unlockedRegions)
+        ? progress.unlockedRegions.length
+        : 0;
+
+      const xp = Number(progress.xp || 0);
+
+      statusGame.textContent = progress.currentRegion
+        ? `En ${String(progress.currentRegion)}`
+        : "En curso";
+
+      statusXp.textContent = String(xp);
+      statusRegions.textContent = String(unlockedRegions);
+
+      continueBtn.disabled = false;
+      setMessage(
+        "Se detectó progreso guardado. Puedes retomar el viaje desde el mapa.",
+        "success"
+      );
+    }
+
+    function showRouteOverlay(message) {
+      if (isRouting) return;
+
+      isRouting = true;
+      document.body.classList.add("is-routing");
+      routeOverlay.classList.add("show");
+      routeOverlay.setAttribute("aria-hidden", "false");
+      routeText.textContent = message;
+    }
+
+    function navigateTo(url, message = "Abriendo el siguiente punto del viaje.") {
+      if (isRouting) return;
+
+      showRouteOverlay(message);
+
+      window.setTimeout(() => {
+        window.location.href = url;
+      }, 320);
+    }
+
+    function clearProgress() {
+      localStorage.removeItem(STORAGE_KEYS.progress);
+    }
+
+    function clearFlowFlags() {
+      localStorage.removeItem(STORAGE_KEYS.bootSeen);
+      localStorage.removeItem(STORAGE_KEYS.titleSeen);
+      localStorage.removeItem(STORAGE_KEYS.introSeen);
+    }
+
+    function clearSession() {
+      localStorage.removeItem(STORAGE_KEYS.userSession);
+      localStorage.removeItem(STORAGE_KEYS.userProfile);
+    }
+
+    continueBtn?.addEventListener("click", () => {
+      navigateTo(ROUTES.map, "Retomando el viaje desde el mapa.");
+    });
+
+    mapBtn?.addEventListener("click", () => {
+      navigateTo(ROUTES.map, "Abriendo el mapa del recorrido.");
+    });
+
+    studioBtn?.addEventListener("click", () => {
+      navigateTo(ROUTES.studio, "Entrando al studio de Musi.");
+    });
+
+    profileBtn?.addEventListener("click", () => {
+      if (!hasSession()) {
+        navigateTo(ROUTES.login, "Necesitas una sesión para abrir el perfil.");
+        return;
+      }
+
+      navigateTo(ROUTES.profile, "Abriendo el perfil del jugador.");
+    });
+
+    newGameBtn?.addEventListener("click", () => {
+      clearProgress();
+      clearFlowFlags();
+
+      navigateTo(
+        ROUTES.boot,
+        "Reiniciando el viaje desde el principio."
+      );
+    });
+
+    logoutBtn?.addEventListener("click", () => {
+      clearSession();
+
+      navigateTo(
+        ROUTES.home,
+        "Cerrando sesión y volviendo al inicio del juego."
+      );
+    });
+
+    updateUserUI();
+    updateProgressUI();
+  </script>
+</body>
+</html>

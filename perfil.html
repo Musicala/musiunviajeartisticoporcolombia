@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Musi | Perfil del jugador</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta
+    name="description"
+    content="Consulta el perfil del jugador en Musi, revisa tu nivel, experiencia, regiones exploradas, rutas desbloqueadas y minijuegos completados."
+  />
+  <meta name="theme-color" content="#2d5bff" />
+
+  <!-- Estilos -->
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/ui.css" />
+
+  <!-- Fuentes -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Favicon -->
+  <link rel="icon" href="assets/favicon.png" />
+
+  <style>
+    .profile-page {
+      min-height: 100vh;
+      margin: 0;
+      position: relative;
+      overflow-x: hidden;
+      background:
+        radial-gradient(circle at 16% 14%, rgba(45, 91, 255, 0.10), transparent 22%),
+        radial-gradient(circle at 84% 18%, rgba(124, 77, 255, 0.10), transparent 22%),
+        radial-gradient(circle at 50% 100%, rgba(17, 197, 217, 0.08), transparent 28%),
+        linear-gradient(180deg, #f8fbff 0%, #eef4ff 100%);
+      font-family: "Poppins", sans-serif;
+      color: #182236;
+    }
+
+    .profile-page.is-routing {
+      overflow: hidden;
+      cursor: progress;
+    }
+
+    .profile-page::before,
+    .profile-page::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(72px);
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.62;
+    }
+
+    .profile-page::before {
+      width: 300px;
+      height: 300px;
+      left: -50px;
+      top: 8%;
+      background: rgba(45, 91, 255, 0.10);
+    }
+
+    .profile-page::after {
+      width: 320px;
+      height: 320px;
+      right: -60px;
+      bottom: 8%;
+      background: rgba(124, 77, 255, 0.10);
+    }
+
+    .profile-shell {
+      position: relative;
+      z-index: 1;
+      width: min(100% - 24px, 1180px);
+      margin: 0 auto;
+      padding: 20px 0 28px;
+      display: grid;
+      gap: 18px;
+    }
+
+    .profile-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 18px;
+      border-radius: 24px;
+      background: rgba(255, 255, 255, 0.62);
+      border: 1px solid rgba(255, 255, 255, 0.80);
+      box-shadow: 0 16px 40px rgba(15, 23, 42, 0.08);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+
+    .profile-topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-width: 0;
+      flex-wrap: wrap;
+    }
+
+    .profile-back-link,
+    .profile-nav-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 42px;
+      padding: 0.7rem 1rem;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.82);
+      border: 1px solid rgba(148, 163, 184, 0.18);
+      color: #111827;
+      font-size: 0.92rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: transform 0.22s ease, background 0.22s ease;
+      box-shadow: 0 10px 20px rgba(15, 23, 42, 0.05);
+    }
+
+    .profile-back-link:hover,
+    .profile-nav-link:hover {
+      transform: translateY(-2px);
+      background: rgba(255,255,255,0.96);
+    }
+
+    .profile-brand {
+      display: grid;
+      gap: 4px;
+      min-width: 0;
+    }
+
+    .profile-brand-kicker {
+      margin: 0;
+      color: #2d5bff;
+      font-size: 0.82rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .profile-brand-title {
+      margin: 0;
+      font-size: clamp(1.2rem, 3vw, 1.8rem);
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      color: #111827;
+    }
+
+    .profile-brand-subtitle {
+      margin: 0;
+      color: #64748b;
+      font-size: 0.92rem;
+      line-height: 1.55;
+      max-width: 62ch;
+    }
+
+    .profile-topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .profile-hero {
+      border-radius: 30px;
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid rgba(255, 255, 255, 0.84);
+      box-shadow: 0 24px 60px rgba(15, 23, 42, 0.10);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      padding: 24px;
+      display: grid;
+      gap: 20px;
+    }
+
+    .profile-main-top {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .profile-avatar {
+      width: 86px;
+      height: 86px;
+      border-radius: 24px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, #2d5bff, #7c4dff);
+      color: white;
+      font-size: 2rem;
+      font-weight: 800;
+      box-shadow: 0 16px 30px rgba(45, 91, 255, 0.22);
+      overflow: hidden;
+      text-transform: uppercase;
+    }
+
+    .profile-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .profile-main-info {
+      display: grid;
+      gap: 6px;
+      min-width: 0;
+    }
+
+    .profile-label {
+      margin: 0;
+      color: #2d5bff;
+      font-size: 0.84rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .profile-name {
+      margin: 0;
+      color: #111827;
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      line-height: 1;
+      letter-spacing: -0.04em;
+      overflow-wrap: anywhere;
+    }
+
+    .profile-email {
+      margin: 0;
+      color: #64748b;
+      font-size: 0.96rem;
+      line-height: 1.5;
+      overflow-wrap: anywhere;
+    }
+
+    .player-status-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 36px;
+      padding: 0.55rem 0.85rem;
+      border-radius: 999px;
+      font-size: 0.86rem;
+      font-weight: 700;
+      border: 1px solid transparent;
+      white-space: nowrap;
+    }
+
+    .status-online {
+      background: rgba(34, 197, 94, 0.12);
+      color: #166534;
+      border-color: rgba(34, 197, 94, 0.12);
+    }
+
+    .status-world {
+      background: rgba(45, 91, 255, 0.10);
+      color: #2d5bff;
+      border-color: rgba(45, 91, 255, 0.10);
+    }
+
+    .profile-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .stat-card {
+      padding: 16px;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.84);
+      border: 1px solid rgba(148, 163, 184, 0.16);
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.05);
+      display: grid;
+      gap: 6px;
+    }
+
+    .stat-label {
+      margin: 0;
+      color: #64748b;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+
+    .stat-value {
+      color: #111827;
+      font-size: 1.35rem;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .profile-xp-progress {
+      display: grid;
+      gap: 10px;
+      padding-top: 2px;
+    }
+
+    .panel-kicker {
+      margin: 0;
+      color: #2d5bff;
+      font-size: 0.82rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 14px;
+      border-radius: 999px;
+      background: rgba(148, 163, 184, 0.18);
+      overflow: hidden;
+      box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.10);
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #2d5bff, #7c4dff, #11c5d9);
+      box-shadow: 0 0 18px rgba(45, 91, 255, 0.22);
+      transition: width 0.35s ease;
+    }
+
+    .progress-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      color: #64748b;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .profile-quick-strip {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .map-stat-card {
+      padding: 16px;
+      border-radius: 22px;
+      background: rgba(255,255,255,0.78);
+      border: 1px solid rgba(255,255,255,0.84);
+      box-shadow: 0 14px 28px rgba(15, 23, 42, 0.06);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .map-stat-icon {
+      width: 46px;
+      height: 46px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, rgba(45, 91, 255, 0.12), rgba(124, 77, 255, 0.12));
+      font-size: 1.25rem;
+      flex-shrink: 0;
+    }
+
+    .map-stat-label {
+      margin: 0 0 4px;
+      color: #64748b;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+
+    .map-stat-card strong {
+      color: #111827;
+      font-size: 1rem;
+      line-height: 1.2;
+      overflow-wrap: anywhere;
+    }
+
+    .profile-content-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .profile-panel {
+      padding: 20px;
+      border-radius: 26px;
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid rgba(255,255,255,0.84);
+      box-shadow: 0 20px 44px rgba(15, 23, 42, 0.08);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      display: grid;
+      gap: 16px;
+    }
+
+    .profile-panel-highlight {
+      background: linear-gradient(180deg, rgba(255,255,255,0.76), rgba(245,248,255,0.76));
+    }
+
+    .panel-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .panel-head h3 {
+      margin: 4px 0 0;
+      color: #111827;
+      font-size: 1.15rem;
+      line-height: 1.2;
+    }
+
+    .panel-badge {
+      min-width: 38px;
+      min-height: 38px;
+      padding: 0.5rem 0.75rem;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(45, 91, 255, 0.10);
+      color: #2d5bff;
+      font-weight: 800;
+      font-size: 0.92rem;
+      flex-shrink: 0;
+    }
+
+    .profile-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 10px;
+    }
+
+    .profile-list li {
+      padding: 14px 16px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.84);
+      border: 1px solid rgba(148, 163, 184, 0.14);
+      box-shadow: 0 8px 18px rgba(15, 23, 42, 0.04);
+      color: #475569;
+      line-height: 1.6;
+      font-size: 0.94rem;
+    }
+
+    .profile-list li strong {
+      color: #111827;
+    }
+
+    .empty-state {
+      color: #64748b !important;
+      font-style: italic;
+    }
+
+    .last-activity-box {
+      padding: 18px;
+      border-radius: 22px;
+      background: rgba(255,255,255,0.84);
+      border: 1px solid rgba(148, 163, 184, 0.14);
+      box-shadow: 0 10px 22px rgba(15, 23, 42, 0.05);
+      display: grid;
+      gap: 8px;
+    }
+
+    .last-activity-title {
+      margin: 0;
+      color: #111827;
+      font-size: 1.05rem;
+      font-weight: 700;
+    }
+
+    .last-activity-meta {
+      margin: 0;
+      color: #64748b;
+      font-size: 0.92rem;
+      line-height: 1.55;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 18px;
+      transform: translateX(-50%);
+      z-index: 50;
+      min-width: min(92vw, 420px);
+      padding: 0.95rem 1rem;
+      border-radius: 18px;
+      background: rgba(17, 24, 39, 0.92);
+      color: #fff;
+      box-shadow: 0 16px 40px rgba(15, 23, 42, 0.24);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      text-align: center;
+      font-size: 0.94rem;
+      line-height: 1.5;
+    }
+
+    .toast.hidden {
+      display: none;
+    }
+
+    .route-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 40;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+      background:
+        radial-gradient(circle at top, rgba(45, 91, 255, 0.18), transparent 24%),
+        linear-gradient(180deg, rgba(10, 17, 35, 0.82), rgba(10, 17, 35, 0.92));
+      color: #fff;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 0.24s ease, visibility 0.24s ease;
+    }
+
+    .route-overlay.show {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+    .route-card {
+      width: min(100%, 420px);
+      padding: 28px 24px;
+      border-radius: 26px;
+      text-align: center;
+      background: rgba(19, 28, 52, 0.78);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.26);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+
+    .route-spinner {
+      width: 58px;
+      height: 58px;
+      margin: 0 auto 18px;
+      border-radius: 50%;
+      border: 4px solid rgba(255, 255, 255, 0.18);
+      border-top-color: #ffffff;
+      animation: spin 0.95s linear infinite;
+    }
+
+    .route-title {
+      margin: 0;
+      font-size: 1.16rem;
+      font-weight: 700;
+    }
+
+    .route-text {
+      margin: 10px 0 0;
+      color: rgba(229, 236, 255, 0.82);
+      line-height: 1.6;
+      font-size: 0.95rem;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    @media (max-width: 980px) {
+      .profile-stats-grid,
+      .profile-quick-strip,
+      .profile-content-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .profile-shell {
+        width: min(100% - 16px, 1180px);
+        padding: 14px 0 22px;
+      }
+
+      .profile-topbar {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 14px;
+        border-radius: 20px;
+      }
+
+      .profile-topbar-right {
+        width: 100%;
+        justify-content: flex-start;
+      }
+
+      .profile-hero,
+      .profile-panel {
+        border-radius: 22px;
+      }
+
+      .profile-hero {
+        padding: 18px 16px;
+      }
+
+      .profile-panel {
+        padding: 18px 16px;
+      }
+
+      .profile-main-top {
+        grid-template-columns: 1fr;
+      }
+
+      .profile-stats-grid,
+      .profile-quick-strip,
+      .profile-content-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .profile-avatar {
+        width: 74px;
+        height: 74px;
+        border-radius: 20px;
+        font-size: 1.7rem;
+      }
+
+      .profile-back-link,
+      .profile-nav-link {
+        width: 100%;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .route-spinner,
+      .progress-bar-fill {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body class="profile-page game-profile-page">
+  <div class="background background-profile" aria-hidden="true"></div>
+
+  <!-- =========================
+       DECORACIÓN DE ESCENA
+  ========================== -->
+  <div class="map-scene-decor" aria-hidden="true">
+    <span class="scene-cloud cloud-1"></span>
+    <span class="scene-cloud cloud-2"></span>
+    <span class="scene-glow glow-1"></span>
+    <span class="scene-glow glow-2"></span>
+    <span class="scene-star star-1"></span>
+    <span class="scene-star star-2"></span>
+    <span class="scene-star star-3"></span>
+  </div>
+
+  <main class="profile-shell">
+    <!-- =========================
+         HEADER / TOPBAR
+    ========================== -->
+    <header class="profile-topbar" aria-label="Barra superior del perfil">
+      <div class="profile-topbar-left">
+        <a href="menu.html" class="profile-back-link" aria-label="Volver al menú principal">
+          <span aria-hidden="true">←</span>
+          <span>Menú</span>
+        </a>
+
+        <div class="profile-brand">
+          <p class="profile-brand-kicker">MUSI · PERFIL DEL JUGADOR</p>
+          <h1 class="profile-brand-title">Tu bitácora de viaje</h1>
+          <p class="profile-brand-subtitle">
+            Revisa tu experiencia, regiones descubiertas, minijuegos completados y el avance de tu aventura sonora por Colombia.
+          </p>
+        </div>
+      </div>
+
+      <div class="profile-topbar-right">
+        <a href="mapa.html" class="profile-nav-link">
+          Ir al mapa
+        </a>
+      </div>
+    </header>
+
+    <!-- =========================
+         HERO / RESUMEN DEL JUGADOR
+    ========================== -->
+    <section class="profile-hero player-summary-card">
+      <div class="profile-main-top player-summary-header">
+        <div class="profile-avatar avatar-circle" id="profileAvatar" aria-hidden="true">M</div>
+
+        <div class="profile-main-info">
+          <p class="profile-label player-label">Explorador sonoro</p>
+          <h2 class="profile-name player-summary-title" id="profileName">Invitado</h2>
+          <p class="profile-email player-summary-subtitle" id="profileEmail">
+            Sin correo registrado
+          </p>
+
+          <div class="player-status-strip">
+            <span class="status-pill status-online">Perfil activo</span>
+            <span class="status-pill status-world">Aventura en curso</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="profile-stats-grid player-stats-grid">
+        <article class="stat-card player-stat-card">
+          <p class="stat-label player-stat-card-label">XP acumulada</p>
+          <strong class="stat-value player-stat-card-value" id="profileXP">0</strong>
+        </article>
+
+        <article class="stat-card player-stat-card">
+          <p class="stat-label player-stat-card-label">Nivel</p>
+          <strong class="stat-value player-stat-card-value" id="profileLevel">1</strong>
+        </article>
+
+        <article class="stat-card player-stat-card">
+          <p class="stat-label player-stat-card-label">Regiones visitadas</p>
+          <strong class="stat-value player-stat-card-value" id="profileVisitedCount">0</strong>
+        </article>
+
+        <article class="stat-card player-stat-card">
+          <p class="stat-label player-stat-card-label">Minijuegos completados</p>
+          <strong class="stat-value player-stat-card-value" id="profileCompletedCount">0</strong>
+        </article>
+      </div>
+
+      <div class="profile-xp-progress">
+        <div class="panel-kicker">Progreso del nivel</div>
+        <div class="progress-bar" aria-label="Progreso del nivel actual">
+          <div
+            class="progress-bar-fill"
+            id="profileLevelProgressFill"
+            style="width: 0%;"
+          ></div>
+        </div>
+        <div class="progress-meta">
+          <span id="profileLevelProgressText">0 / 100 XP</span>
+          <span id="profileNextLevelText">Siguiente nivel</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================
+         STRIP RÁPIDO DE ESTADO
+    ========================== -->
+    <section class="profile-quick-strip" aria-label="Resumen rápido del jugador">
+      <article class="map-stat-card">
+        <span class="map-stat-icon">🧭</span>
+        <div>
+          <p class="map-stat-label">Ruta actual</p>
+          <strong id="profileCurrentRoute">Exploración inicial</strong>
+        </div>
+      </article>
+
+      <article class="map-stat-card">
+        <span class="map-stat-icon">🌍</span>
+        <div>
+          <p class="map-stat-label">Regiones abiertas</p>
+          <strong id="profileUnlockedCountText">1 región</strong>
+        </div>
+      </article>
+
+      <article class="map-stat-card">
+        <span class="map-stat-icon">🎮</span>
+        <div>
+          <p class="map-stat-label">Estado del jugador</p>
+          <strong id="profileJourneyStatus">Listo para jugar</strong>
+        </div>
+      </article>
+    </section>
+
+    <!-- =========================
+         GRID DE CONTENIDO
+    ========================== -->
+    <section class="profile-content-grid">
+      <article class="profile-panel panel">
+        <div class="panel-head">
+          <div>
+            <p class="panel-kicker">Exploración</p>
+            <h3>Regiones visitadas</h3>
+          </div>
+          <span class="panel-badge" id="regionsBadge">0</span>
+        </div>
+
+        <ul class="profile-list ui-list" id="visitedRegionsList">
+          <li class="empty-state">Aún no has visitado regiones.</li>
+        </ul>
+      </article>
+
+      <article class="profile-panel panel">
+        <div class="panel-head">
+          <div>
+            <p class="panel-kicker">Desbloqueos</p>
+            <h3>Regiones desbloqueadas</h3>
+          </div>
+          <span class="panel-badge" id="unlockedBadge">1</span>
+        </div>
+
+        <ul class="profile-list ui-list" id="unlockedRegionsList">
+          <li class="empty-state">Aún no hay regiones desbloqueadas registradas.</li>
+        </ul>
+      </article>
+
+      <article class="profile-panel panel">
+        <div class="panel-head">
+          <div>
+            <p class="panel-kicker">Logros</p>
+            <h3>Minijuegos completados</h3>
+          </div>
+          <span class="panel-badge" id="gamesBadge">0</span>
+        </div>
+
+        <ul class="profile-list ui-list" id="completedGamesList">
+          <li class="empty-state">Todavía no has completado minijuegos.</li>
+        </ul>
+      </article>
+
+      <article class="profile-panel profile-panel-highlight panel">
+        <div class="panel-head">
+          <div>
+            <p class="panel-kicker">Bitácora</p>
+            <h3>Última actividad</h3>
+          </div>
+        </div>
+
+        <div class="last-activity-box ui-card ui-card-md" id="lastActivityBox">
+          <p class="last-activity-title ui-list-item-title" id="lastGameName">
+            Sin actividad reciente
+          </p>
+          <p class="last-activity-meta ui-list-item-meta" id="lastGameRegion">
+            Región: -
+          </p>
+          <p class="last-activity-meta ui-list-item-meta" id="lastGameXP">
+            XP ganada: 0
+          </p>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <!-- =========================
+       TOAST
+  ========================== -->
+  <div
+    class="toast hidden"
+    id="toastMessage"
+    role="status"
+    aria-live="polite"
+  ></div>
+
+  <!-- =========================
+       OVERLAY DE RUTA
+  ========================== -->
+  <div id="routeOverlay" class="route-overlay" aria-hidden="true">
+    <div class="route-card" role="status" aria-live="polite" aria-atomic="true">
+      <div class="route-spinner" aria-hidden="true"></div>
+      <p class="route-title">Preparando ruta</p>
+      <p id="routeText" class="route-text">
+        Abriendo el siguiente punto del viaje.
+      </p>
+    </div>
+  </div>
+
+  <p id="srProfileStatus" class="sr-only" aria-live="polite"></p>
+
+  <!-- =========================
+       SCRIPTS
+  ========================== -->
+  <script type="module" src="js/app.js"></script>
+  <script type="module" src="js/profile.js"></script>
+</body>
+</html>

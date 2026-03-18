@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Musi | Iniciando...</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta
+    name="description"
+    content="Pantalla de arranque de Musi: Un viaje sonoro por Colombia."
+  />
+  <meta name="theme-color" content="#2d5bff" />
+
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/ui.css" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+
+  <link rel="icon" href="assets/favicon.png" />
+  <link rel="preload" as="image" href="assets/logo.png" />
+
+  <style>
+    :root {
+      --boot-bg-1: #f8fbff;
+      --boot-bg-2: #eef4ff;
+      --boot-bg-3: #fffdf9;
+
+      --boot-text: #111827;
+      --boot-text-soft: #6b7280;
+
+      --boot-primary: #2d5bff;
+      --boot-primary-dark: #2147cf;
+      --boot-violet: #7c4dff;
+      --boot-cyan: #11c5d9;
+      --boot-gold: #ffca5c;
+
+      --boot-card: rgba(255, 255, 255, 0.72);
+      --boot-card-border: rgba(255, 255, 255, 0.8);
+
+      --boot-console-bg-1: rgba(15, 23, 42, 0.96);
+      --boot-console-bg-2: rgba(24, 33, 54, 0.98);
+      --boot-console-text: #e5edff;
+
+      --boot-shadow: 0 24px 60px rgba(15, 23, 42, 0.10);
+      --boot-shadow-strong: 0 16px 34px rgba(15, 23, 42, 0.18);
+
+      --boot-radius-xl: 28px;
+      --boot-radius-lg: 22px;
+      --boot-radius-md: 18px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body.boot-page {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Poppins", sans-serif;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      color: var(--boot-text);
+      background:
+        radial-gradient(circle at top left, rgba(45, 91, 255, 0.10), transparent 26%),
+        radial-gradient(circle at top right, rgba(255, 202, 92, 0.08), transparent 22%),
+        radial-gradient(circle at bottom right, rgba(124, 77, 255, 0.10), transparent 24%),
+        linear-gradient(180deg, var(--boot-bg-1) 0%, var(--boot-bg-2) 60%, var(--boot-bg-3) 100%);
+      overflow: hidden;
+      position: relative;
+    }
+
+    body.boot-page.is-checking-auth {
+      cursor: progress;
+    }
+
+    .boot-page::before,
+    .boot-page::after {
+      content: "";
+      position: fixed;
+      border-radius: 50%;
+      pointer-events: none;
+      filter: blur(34px);
+      opacity: 0.55;
+      z-index: 0;
+    }
+
+    .boot-page::before {
+      width: 260px;
+      height: 260px;
+      top: 6%;
+      left: -60px;
+      background: rgba(45, 91, 255, 0.14);
+      animation: bootFloatGlow 12s ease-in-out infinite;
+    }
+
+    .boot-page::after {
+      width: 320px;
+      height: 320px;
+      right: -90px;
+      bottom: 0;
+      background: rgba(124, 77, 255, 0.14);
+      animation: bootFloatGlow 15s ease-in-out infinite reverse;
+    }
+
+    .boot-stars {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .boot-star {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255, 226, 163, 0.95);
+      box-shadow: 0 0 14px rgba(255, 226, 163, 0.85);
+      animation: bootTwinkle 3.6s ease-in-out infinite;
+    }
+
+    .boot-star.s1 { top: 14%; left: 16%; }
+    .boot-star.s2 { top: 24%; right: 18%; animation-delay: 0.8s; }
+    .boot-star.s3 { top: 72%; left: 12%; animation-delay: 1.2s; }
+    .boot-star.s4 { top: 64%; right: 14%; animation-delay: 0.4s; }
+    .boot-star.s5 { top: 38%; left: 82%; animation-delay: 1.7s; }
+
+    .boot-shell {
+      position: relative;
+      z-index: 1;
+      width: min(100%, 800px);
+      border-radius: var(--boot-radius-xl);
+      background: var(--boot-card);
+      border: 1px solid var(--boot-card-border);
+      box-shadow: var(--boot-shadow);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      padding: 28px 24px;
+      overflow: hidden;
+      transition: opacity 0.35s ease, transform 0.35s ease, filter 0.35s ease;
+    }
+
+    .boot-shell.is-leaving {
+      opacity: 0;
+      transform: translateY(-8px) scale(0.985);
+      filter: blur(4px);
+      pointer-events: none;
+    }
+
+    .boot-shell::before {
+      content: "";
+      position: absolute;
+      inset: auto -10% -30% auto;
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(45, 91, 255, 0.10), transparent 68%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .boot-top,
+    .boot-main {
+      position: relative;
+      z-index: 1;
+    }
+
+    .boot-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .boot-brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .boot-brand-mark {
+      width: 50px;
+      height: 50px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--boot-primary), var(--boot-violet));
+      box-shadow: 0 12px 24px rgba(45, 91, 255, 0.22);
+      flex-shrink: 0;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .boot-brand-mark img {
+      width: 30px;
+      height: 30px;
+      object-fit: contain;
+    }
+
+    .boot-brand-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .boot-brand-label {
+      font-size: 0.82rem;
+      color: var(--boot-text-soft);
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .boot-brand-title {
+      font-size: 1rem;
+      color: var(--boot-text);
+      font-weight: 700;
+    }
+
+    .boot-status-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 38px;
+      padding: 0.55rem 0.9rem;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.86);
+      border: 1px solid rgba(148, 163, 184, 0.18);
+      color: var(--boot-primary-dark);
+      font-size: 0.88rem;
+      font-weight: 700;
+      white-space: nowrap;
+      box-shadow: 0 8px 18px rgba(15, 23, 42, 0.05);
+    }
+
+    .boot-status-dot {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #22c55e;
+      box-shadow: 0 0 12px rgba(34, 197, 94, 0.35);
+      animation: bootPulseDot 1.6s ease-in-out infinite;
+    }
+
+    .boot-status-dot.is-waiting {
+      background: #f59e0b;
+      box-shadow: 0 0 12px rgba(245, 158, 11, 0.3);
+    }
+
+    .boot-main {
+      display: grid;
+      gap: 18px;
+    }
+
+    .boot-title {
+      margin: 0;
+      font-size: clamp(2rem, 5vw, 3rem);
+      line-height: 1;
+      color: var(--boot-text);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+    }
+
+    .boot-subtitle {
+      margin: 0;
+      color: var(--boot-text-soft);
+      font-size: 1rem;
+      max-width: 640px;
+      line-height: 1.7;
+    }
+
+    .boot-console {
+      position: relative;
+      border-radius: var(--boot-radius-lg);
+      background: linear-gradient(180deg, var(--boot-console-bg-1), var(--boot-console-bg-2));
+      color: var(--boot-console-text);
+      padding: 20px 18px 18px;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.04),
+        var(--boot-shadow-strong);
+      overflow: hidden;
+    }
+
+    .boot-console::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(
+          to bottom,
+          rgba(255,255,255,0.03) 0%,
+          rgba(255,255,255,0) 18%,
+          rgba(255,255,255,0.02) 100%
+        );
+      pointer-events: none;
+    }
+
+    .boot-console::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        repeating-linear-gradient(
+          to bottom,
+          rgba(255,255,255,0.018) 0px,
+          rgba(255,255,255,0.018) 1px,
+          transparent 2px,
+          transparent 4px
+        );
+      opacity: 0.18;
+      pointer-events: none;
+      mix-blend-mode: screen;
+    }
+
+    .boot-console-head {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .boot-console-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+    }
+
+    .boot-console-dot.is-red {
+      background: #ff6b6b;
+    }
+
+    .boot-console-dot.is-yellow {
+      background: #ffd166;
+    }
+
+    .boot-console-dot.is-green {
+      background: #22c55e;
+    }
+
+    .boot-console-label {
+      margin-left: 8px;
+      font-size: 0.82rem;
+      color: rgba(229, 237, 255, 0.66);
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+
+    .boot-lines {
+      display: grid;
+      gap: 10px;
+      min-height: 154px;
+    }
+
+    .boot-line {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      opacity: 0.42;
+      transform: translateY(4px);
+      transition:
+        opacity 0.35s ease,
+        transform 0.35s ease,
+        color 0.35s ease;
+      font-size: 0.96rem;
+      line-height: 1.55;
+    }
+
+    .boot-line.is-active,
+    .boot-line.is-done {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .boot-prompt {
+      color: #7dd3fc;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .boot-line .boot-text {
+      color: rgba(229, 237, 255, 0.84);
+    }
+
+    .boot-line.is-done .boot-text {
+      color: #dbeafe;
+    }
+
+    .boot-line.is-active .boot-text {
+      color: #ffffff;
+    }
+
+    .boot-line.is-final .boot-text,
+    .boot-line.is-success .boot-text {
+      color: #86efac;
+      font-weight: 600;
+    }
+
+    .boot-loading {
+      display: grid;
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .boot-progress {
+      width: 100%;
+      height: 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.08);
+      overflow: hidden;
+      box-shadow: inset 0 1px 2px rgba(0,0,0,0.24);
+    }
+
+    .boot-progress-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--boot-primary), var(--boot-violet), var(--boot-cyan), var(--boot-gold));
+      box-shadow: 0 0 16px rgba(45, 91, 255, 0.35);
+      transition: width 0.14s linear;
+    }
+
+    .boot-loading-text {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      font-size: 0.9rem;
+      color: rgba(229, 237, 255, 0.72);
+    }
+
+    .boot-loading-text strong {
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    .boot-footer {
+      margin-top: 18px;
+      font-size: 0.86rem;
+      color: var(--boot-text-soft);
+      text-align: center;
+      line-height: 1.6;
+    }
+
+    .boot-skip {
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    .boot-skip button {
+      appearance: none;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      color: var(--boot-primary);
+      font-size: 0.9rem;
+      font-weight: 600;
+      padding: 8px 12px;
+      border-radius: 999px;
+      transition: background 0.2s ease, transform 0.2s ease, color 0.2s ease, opacity 0.2s ease;
+    }
+
+    .boot-skip button:hover {
+      background: rgba(45, 91, 255, 0.08);
+      transform: translateY(-1px);
+    }
+
+    .boot-skip button:focus-visible {
+      outline: 3px solid rgba(45, 91, 255, 0.22);
+      outline-offset: 3px;
+    }
+
+    .boot-skip button:disabled {
+      opacity: 0.45;
+      cursor: default;
+      transform: none;
+      background: transparent;
+    }
+
+    .boot-auth-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 5;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+      background:
+        radial-gradient(circle at top, rgba(45, 91, 255, 0.16), transparent 24%),
+        linear-gradient(180deg, rgba(10, 17, 35, 0.78), rgba(10, 17, 35, 0.88));
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 0.24s ease, visibility 0.24s ease;
+    }
+
+    .boot-auth-overlay.show {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+    .boot-auth-card {
+      width: min(100%, 420px);
+      padding: 24px 22px;
+      border-radius: 24px;
+      background: rgba(19, 28, 52, 0.8);
+      border: 1px solid rgba(255,255,255,0.14);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.26);
+      color: #fff;
+      text-align: center;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+
+    .boot-auth-spinner {
+      width: 54px;
+      height: 54px;
+      margin: 0 auto 16px;
+      border-radius: 50%;
+      border: 4px solid rgba(255, 255, 255, 0.18);
+      border-top-color: #ffffff;
+      animation: spin 0.95s linear infinite;
+    }
+
+    .boot-auth-title {
+      margin: 0;
+      font-size: 1.08rem;
+      font-weight: 700;
+    }
+
+    .boot-auth-text {
+      margin: 10px 0 0;
+      color: rgba(229, 236, 255, 0.82);
+      line-height: 1.6;
+      font-size: 0.94rem;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    @keyframes bootFloatGlow {
+      0%, 100% {
+        transform: translateY(0) translateX(0);
+      }
+      50% {
+        transform: translateY(-14px) translateX(10px);
+      }
+    }
+
+    @keyframes bootPulseDot {
+      0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+      50% {
+        transform: scale(1.15);
+        opacity: 0.75;
+      }
+    }
+
+    @keyframes bootTwinkle {
+      0%, 100% {
+        opacity: 0.45;
+        transform: scale(0.9);
+      }
+      50% {
+        opacity: 1;
+        transform: scale(1.15);
+      }
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .boot-shell {
+        padding: 20px 16px;
+        border-radius: 22px;
+      }
+
+      .boot-top {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .boot-status-chip {
+        align-self: flex-start;
+      }
+
+      .boot-console {
+        padding: 16px 14px;
+        border-radius: 18px;
+      }
+
+      .boot-line {
+        align-items: flex-start;
+        font-size: 0.92rem;
+      }
+
+      .boot-loading-text {
+        flex-direction: column;
+        gap: 4px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .boot-page::before,
+      .boot-page::after,
+      .boot-status-dot,
+      .boot-star,
+      .boot-auth-spinner {
+        animation: none !important;
+      }
+
+      .boot-shell,
+      .boot-line,
+      .boot-progress-fill,
+      .boot-auth-overlay {
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body class="boot-page is-checking-auth">
+  <div class="boot-stars" aria-hidden="true">
+    <span class="boot-star s1"></span>
+    <span class="boot-star s2"></span>
+    <span class="boot-star s3"></span>
+    <span class="boot-star s4"></span>
+    <span class="boot-star s5"></span>
+  </div>
+
+  <div id="bootAuthOverlay" class="boot-auth-overlay show" aria-hidden="false">
+    <div class="boot-auth-card" role="status" aria-live="polite" aria-atomic="true">
+      <div class="boot-auth-spinner" aria-hidden="true"></div>
+      <p class="boot-auth-title">Validando sesión</p>
+      <p id="bootAuthText" class="boot-auth-text">
+        Revisando tu acceso antes de iniciar el arranque del juego.
+      </p>
+    </div>
+  </div>
+
+  <main id="bootShell" class="boot-shell" aria-labelledby="bootTitle">
+    <div class="boot-top">
+      <div class="boot-brand" aria-label="Marca del juego">
+        <div class="boot-brand-mark" aria-hidden="true">
+          <img src="assets/logo.png" alt="" />
+        </div>
+        <div class="boot-brand-text">
+          <span class="boot-brand-label">Iniciando</span>
+          <span class="boot-brand-title">Musi</span>
+        </div>
+      </div>
+
+      <div class="boot-status-chip" aria-live="polite">
+        <span id="bootStatusDot" class="boot-status-dot boot-status-dot is-waiting" aria-hidden="true"></span>
+        <span id="bootChipText">Validando sesión</span>
+      </div>
+    </div>
+
+    <section class="boot-main">
+      <h1 id="bootTitle" class="boot-title">
+        Preparando el viaje sonoro
+      </h1>
+
+      <p id="bootSubtitle" class="boot-subtitle">
+        Cargando entorno, recursos visuales, ritmo de juego y secuencia narrativa para iniciar correctamente la experiencia de Musi.
+      </p>
+
+      <div class="boot-console" role="status" aria-live="polite" aria-atomic="true">
+        <div class="boot-console-head" aria-hidden="true">
+          <span class="boot-console-dot is-red"></span>
+          <span class="boot-console-dot is-yellow"></span>
+          <span class="boot-console-dot is-green"></span>
+          <span class="boot-console-label">Musi Boot Loader</span>
+        </div>
+
+        <div class="boot-lines" id="bootLines">
+          <div class="boot-line" data-step="0">
+            <span class="boot-prompt">></span>
+            <span class="boot-text">Inicializando sistema creativo...</span>
+          </div>
+
+          <div class="boot-line" data-step="1">
+            <span class="boot-prompt">></span>
+            <span class="boot-text">Cargando territorios, atmósferas y recursos del viaje...</span>
+          </div>
+
+          <div class="boot-line" data-step="2">
+            <span class="boot-prompt">></span>
+            <span class="boot-text">Sincronizando interfaz, ritmo y narrativa principal...</span>
+          </div>
+
+          <div class="boot-line is-final" data-step="3">
+            <span class="boot-prompt">></span>
+            <span class="boot-text">Todo listo. Abriendo la historia de Musi...</span>
+          </div>
+        </div>
+
+        <div class="boot-loading" aria-hidden="true">
+          <div class="boot-progress">
+            <div id="bootProgressFill" class="boot-progress-fill"></div>
+          </div>
+
+          <div class="boot-loading-text">
+            <span>Estado: <strong id="bootStateLabel">esperando validación</strong></span>
+            <span id="bootCountdown">--.-s</span>
+          </div>
+        </div>
+      </div>
+
+      <p class="boot-footer">
+        Una experiencia interactiva de Musicala
+      </p>
+
+      <div class="boot-skip">
+        <button id="skipBootBtn" type="button" disabled>
+          Omitir arranque
+        </button>
+      </div>
+    </section>
+  </main>
+
+  <p id="srBootStatus" class="sr-only" aria-live="polite"></p>
+
+  <script type="module">
+    import {
+      waitForAuthReady,
+      setPostLoginRedirect
+    } from "./js/auth.js";
+
+    const NEXT_SCREEN_URL = "story.html";
+    const LOGIN_URL = "login.html";
+    const BOOT_DURATION_MS = 2800;
+    const EXIT_DELAY_MS = 220;
+
+    const STORAGE_KEYS = {
+      bootSeen: "musi_boot_seen"
+    };
+
+    const BOOT_STEPS = [
+      {
+        at: 0.08,
+        state: "inicializando",
+        chip: "Arranque del sistema",
+        subtitle: "Activando módulos base y preparando la estructura principal de la experiencia.",
+        sr: "Inicializando sistema creativo."
+      },
+      {
+        at: 0.34,
+        state: "cargando territorios",
+        chip: "Cargando recursos",
+        subtitle: "Organizando territorios, recursos visuales y atmósferas del viaje artístico por Colombia.",
+        sr: "Cargando territorios y recursos del viaje."
+      },
+      {
+        at: 0.66,
+        state: "sincronizando",
+        chip: "Sincronizando interfaz",
+        subtitle: "Ajustando interfaz, ritmo, transiciones y secuencia narrativa para iniciar correctamente.",
+        sr: "Sincronizando interfaz, ritmo y narrativa."
+      },
+      {
+        at: 0.94,
+        state: "carga completa",
+        chip: "Sistema listo",
+        subtitle: "Todo está listo. Abriendo la historia de Musi antes de entrar al mapa principal.",
+        sr: "Arranque completado. Abriendo la historia de Musi."
+      }
+    ];
+
+    const body = document.body;
+    const bootShell = document.getElementById("bootShell");
+    const skipBootBtn = document.getElementById("skipBootBtn");
+    const bootCountdown = document.getElementById("bootCountdown");
+    const srBootStatus = document.getElementById("srBootStatus");
+    const bootProgressFill = document.getElementById("bootProgressFill");
+    const bootStateLabel = document.getElementById("bootStateLabel");
+    const bootChipText = document.getElementById("bootChipText");
+    const bootSubtitle = document.getElementById("bootSubtitle");
+    const bootLines = Array.from(document.querySelectorAll(".boot-line"));
+    const bootAuthOverlay = document.getElementById("bootAuthOverlay");
+    const bootAuthText = document.getElementById("bootAuthText");
+    const bootStatusDot = document.getElementById("bootStatusDot");
+
+    let redirected = false;
+    let redirectTimer = null;
+    let countdownTimer = null;
+    let stepIndex = -1;
+    let startedAt = 0;
+    let bootReady = false;
+
+    function markBootAsSeen() {
+      try {
+        localStorage.setItem(STORAGE_KEYS.bootSeen, "true");
+      } catch (error) {
+        console.warn("No se pudo guardar el estado del boot en localStorage.", error);
+      }
+    }
+
+    function clearBootTimers() {
+      if (redirectTimer) {
+        window.clearTimeout(redirectTimer);
+        redirectTimer = null;
+      }
+
+      if (countdownTimer) {
+        window.clearInterval(countdownTimer);
+        countdownTimer = null;
+      }
+    }
+
+    function clamp(value, min, max) {
+      return Math.min(Math.max(value, min), max);
+    }
+
+    function setStep(index) {
+      if (index === stepIndex || index < 0 || index >= BOOT_STEPS.length) return;
+      stepIndex = index;
+
+      const step = BOOT_STEPS[index];
+
+      if (bootStateLabel) bootStateLabel.textContent = step.state;
+      if (bootChipText) bootChipText.textContent = step.chip;
+      if (bootSubtitle) bootSubtitle.textContent = step.subtitle;
+      if (srBootStatus) srBootStatus.textContent = step.sr;
+
+      bootLines.forEach((line, lineIndex) => {
+        line.classList.remove("is-active", "is-done", "is-success");
+
+        if (lineIndex < index) {
+          line.classList.add("is-done");
+        } else if (lineIndex === index) {
+          line.classList.add("is-active");
+        }
+
+        if (index === BOOT_STEPS.length - 1 && lineIndex === index) {
+          line.classList.add("is-success");
+        }
+      });
+    }
+
+    function updateBootUI() {
+      if (!bootReady || !startedAt) return;
+
+      const elapsed = performance.now() - startedAt;
+      const progress = clamp(elapsed / BOOT_DURATION_MS, 0, 1);
+      const remaining = Math.max(0, BOOT_DURATION_MS - elapsed);
+      const seconds = (remaining / 1000).toFixed(1);
+
+      if (bootCountdown) {
+        bootCountdown.textContent = `${seconds}s`;
+      }
+
+      if (bootProgressFill) {
+        bootProgressFill.style.width = `${(progress * 100).toFixed(1)}%`;
+      }
+
+      for (let i = BOOT_STEPS.length - 1; i >= 0; i--) {
+        if (progress >= BOOT_STEPS[i].at) {
+          setStep(i);
+          break;
+        }
+      }
+
+      if (remaining <= 0 && !redirected) {
+        goNext();
+      }
+    }
+
+    function showAuthCheckingState(message = "Revisando tu acceso antes de iniciar el arranque del juego.") {
+      body.classList.add("is-checking-auth");
+      bootAuthOverlay?.classList.add("show");
+      bootAuthOverlay?.setAttribute("aria-hidden", "false");
+      if (bootAuthText) bootAuthText.textContent = message;
+      if (bootChipText) bootChipText.textContent = "Validando sesión";
+      if (bootStateLabel) bootStateLabel.textContent = "esperando validación";
+      if (bootCountdown) bootCountdown.textContent = "--.-s";
+      if (bootStatusDot) bootStatusDot.classList.add("is-waiting");
+      if (skipBootBtn) skipBootBtn.disabled = true;
+    }
+
+    function hideAuthCheckingState() {
+      body.classList.remove("is-checking-auth");
+      bootAuthOverlay?.classList.remove("show");
+      bootAuthOverlay?.setAttribute("aria-hidden", "true");
+      if (bootStatusDot) bootStatusDot.classList.remove("is-waiting");
+      if (skipBootBtn) skipBootBtn.disabled = false;
+    }
+
+    function navigateToLogin() {
+      if (redirected) return;
+      redirected = true;
+
+      clearBootTimers();
+      showAuthCheckingState("No encontramos una sesión activa. Te llevaremos al acceso para continuar correctamente.");
+      setPostLoginRedirect("boot.html");
+
+      if (srBootStatus) {
+        srBootStatus.textContent = "No hay sesión activa. Redirigiendo al acceso.";
+      }
+
+      window.setTimeout(() => {
+        window.location.replace(LOGIN_URL);
+      }, 240);
+    }
+
+    function goNext() {
+      if (redirected || !bootReady) return;
+      redirected = true;
+
+      clearBootTimers();
+      markBootAsSeen();
+
+      if (bootCountdown) {
+        bootCountdown.textContent = "0.0s";
+      }
+
+      if (bootProgressFill) {
+        bootProgressFill.style.width = "100%";
+      }
+
+      setStep(BOOT_STEPS.length - 1);
+
+      if (skipBootBtn) {
+        skipBootBtn.disabled = true;
+      }
+
+      if (srBootStatus) {
+        srBootStatus.textContent = "Arranque completado. Redirigiendo a la historia de Musi.";
+      }
+
+      bootShell?.classList.add("is-leaving");
+
+      window.setTimeout(() => {
+        window.location.href = NEXT_SCREEN_URL;
+      }, EXIT_DELAY_MS);
+    }
+
+    function startBootSequence() {
+      bootReady = true;
+      startedAt = performance.now();
+      stepIndex = -1;
+
+      hideAuthCheckingState();
+      setStep(0);
+      updateBootUI();
+
+      countdownTimer = window.setInterval(updateBootUI, 100);
+      redirectTimer = window.setTimeout(goNext, BOOT_DURATION_MS);
+    }
+
+    skipBootBtn?.addEventListener("click", () => {
+      if (!bootReady) return;
+      goNext();
+    });
+
+    window.addEventListener("keydown", (event) => {
+      if (!bootReady) return;
+
+      const ignoredKeys = new Set([
+        "Shift",
+        "Control",
+        "Alt",
+        "Meta",
+        "CapsLock",
+        "Tab"
+      ]);
+
+      if (!ignoredKeys.has(event.key)) {
+        goNext();
+      }
+    });
+
+    window.addEventListener("beforeunload", clearBootTimers);
+
+    async function initBoot() {
+      showAuthCheckingState();
+
+      try {
+        const user = await waitForAuthReady();
+
+        if (!user?.uid) {
+          navigateToLogin();
+          return;
+        }
+
+        startBootSequence();
+      } catch (error) {
+        console.error("[boot] Error validando sesión:", error);
+        navigateToLogin();
+      }
+    }
+
+    initBoot();
+  </script>
+</body>
+</html>

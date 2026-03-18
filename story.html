@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Historia | Musi</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <meta
+    name="description"
+    content="Descubre la historia de Musi antes de continuar el viaje sonoro por Colombia."
+  />
+  <meta name="theme-color" content="#2d5bff" />
+
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/ui.css" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+
+  <link rel="icon" href="assets/favicon.png" />
+
+  <style>
+    :root {
+      --story-bg-1: #f8fbff;
+      --story-bg-2: #eef4ff;
+      --story-text: #111827;
+      --story-text-soft: #64748b;
+      --story-primary: #2d5bff;
+      --story-primary-dark: #2148d8;
+      --story-violet: #7c4dff;
+      --story-cyan: #11c5d9;
+      --story-card: rgba(255, 255, 255, 0.72);
+      --story-card-border: rgba(255, 255, 255, 0.84);
+      --story-shadow: 0 24px 60px rgba(15, 23, 42, 0.10);
+      --story-shadow-soft: 0 16px 40px rgba(15, 23, 42, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    .story-page {
+      min-height: 100vh;
+      margin: 0;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 18% 15%, rgba(45, 91, 255, 0.12), transparent 22%),
+        radial-gradient(circle at 80% 18%, rgba(124, 77, 255, 0.12), transparent 22%),
+        radial-gradient(circle at 50% 100%, rgba(17, 197, 217, 0.10), transparent 30%),
+        linear-gradient(180deg, var(--story-bg-1) 0%, var(--story-bg-2) 100%);
+      position: relative;
+      font-family: "Poppins", sans-serif;
+      color: var(--story-text);
+    }
+
+    .story-page.is-routing {
+      overflow: hidden;
+      cursor: progress;
+    }
+
+    .story-page::before,
+    .story-page::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.65;
+    }
+
+    .story-page::before {
+      width: 300px;
+      height: 300px;
+      left: -40px;
+      top: 8%;
+      background: rgba(45, 91, 255, 0.12);
+    }
+
+    .story-page::after {
+      width: 320px;
+      height: 320px;
+      right: -50px;
+      bottom: 8%;
+      background: rgba(124, 77, 255, 0.12);
+    }
+
+    .story-shell {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      width: min(100% - 24px, 1100px);
+      margin: 0 auto;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 18px;
+      padding: 20px 0 24px;
+    }
+
+    .story-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 18px;
+      border-radius: 24px;
+      background: rgba(255, 255, 255, 0.62);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      box-shadow: var(--story-shadow-soft);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+
+    .story-brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .story-brand-mark {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--story-primary), var(--story-violet));
+      color: white;
+      font-weight: 800;
+      box-shadow: 0 12px 24px rgba(45, 91, 255, 0.22);
+      flex-shrink: 0;
+    }
+
+    .story-brand-text {
+      display: grid;
+      gap: 2px;
+    }
+
+    .story-brand-label {
+      font-size: 0.82rem;
+      color: #63708a;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .story-brand-title {
+      font-size: 1rem;
+      color: var(--story-text);
+      font-weight: 700;
+    }
+
+    .story-progress-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 42px;
+      padding: 0.6rem 0.95rem;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.82);
+      border: 1px solid rgba(148, 163, 184, 0.18);
+      box-shadow: 0 10px 20px rgba(15, 23, 42, 0.05);
+      color: var(--story-primary);
+      font-size: 0.92rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .story-main {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 18px;
+      min-height: 0;
+    }
+
+    .story-visual,
+    .story-card {
+      min-height: 0;
+      border-radius: 30px;
+      background: var(--story-card);
+      border: 1px solid var(--story-card-border);
+      box-shadow: var(--story-shadow);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    .story-visual {
+      position: relative;
+      overflow: hidden;
+      padding: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      isolation: isolate;
+    }
+
+    .story-visual::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 50% 50%, rgba(45, 91, 255, 0.18), transparent 32%),
+        radial-gradient(circle at 30% 28%, rgba(124, 77, 255, 0.16), transparent 24%),
+        radial-gradient(circle at 70% 75%, rgba(17, 197, 217, 0.16), transparent 24%);
+      z-index: -1;
+    }
+
+    .story-planet {
+      position: relative;
+      width: min(100%, 360px);
+      aspect-ratio: 1 / 1;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 35% 30%, rgba(255,255,255,0.85), rgba(255,255,255,0) 20%),
+        linear-gradient(160deg, #2d5bff, #7c4dff 55%, #11c5d9);
+      box-shadow:
+        inset -20px -24px 45px rgba(17, 24, 39, 0.16),
+        0 22px 55px rgba(45, 91, 255, 0.24);
+      animation: storyFloat 4s ease-in-out infinite;
+      overflow: hidden;
+    }
+
+    .story-planet::before {
+      content: "";
+      position: absolute;
+      inset: 18% 15%;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 30% 35%, rgba(255,255,255,0.24), transparent 18%),
+        radial-gradient(circle at 70% 28%, rgba(255,255,255,0.18), transparent 16%),
+        radial-gradient(circle at 48% 72%, rgba(255,255,255,0.14), transparent 18%);
+      opacity: 0.8;
+    }
+
+    .story-orbit {
+      position: absolute;
+      inset: -30px;
+      border-radius: 50%;
+      border: 1px dashed rgba(45, 91, 255, 0.18);
+      animation: slowSpin 16s linear infinite;
+    }
+
+    .story-musi {
+      position: absolute;
+      top: 10%;
+      right: 10%;
+      width: 76px;
+      height: 76px;
+      border-radius: 24px;
+      display: grid;
+      place-items: center;
+      background: rgba(255,255,255,0.86);
+      color: var(--story-primary);
+      font-size: 2rem;
+      font-weight: 800;
+      box-shadow: 0 16px 30px rgba(15, 23, 42, 0.12);
+      animation: musiDrift 5s ease-in-out infinite;
+    }
+
+    .story-stars {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .story-star {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.96);
+      box-shadow: 0 0 14px rgba(255,255,255,0.92);
+      animation: twinkleStory 2.4s ease-in-out infinite;
+    }
+
+    .story-star.s1 { top: 16%; left: 18%; }
+    .story-star.s2 { top: 28%; right: 18%; animation-delay: 0.6s; }
+    .story-star.s3 { bottom: 20%; left: 22%; animation-delay: 1.2s; }
+    .story-star.s4 { bottom: 14%; right: 20%; animation-delay: 1.8s; }
+
+    .story-card {
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      padding: 22px 22px 20px;
+      gap: 18px;
+    }
+
+    .story-card-head {
+      display: grid;
+      gap: 10px;
+    }
+
+    .story-kicker {
+      margin: 0;
+      color: var(--story-primary);
+      font-size: 0.84rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .story-title {
+      margin: 0;
+      font-size: clamp(1.8rem, 4vw, 2.7rem);
+      line-height: 1;
+      letter-spacing: -0.04em;
+      color: var(--story-text);
+    }
+
+    .story-subtitle {
+      margin: 0;
+      color: var(--story-text-soft);
+      font-size: 0.98rem;
+      line-height: 1.6;
+    }
+
+    .story-slide-wrap {
+      position: relative;
+      min-height: 0;
+      display: grid;
+      align-items: center;
+    }
+
+    .story-slide {
+      display: none;
+      animation: fadeSlideIn 360ms ease;
+    }
+
+    .story-slide.active {
+      display: block;
+    }
+
+    .story-slide-inner {
+      display: grid;
+      gap: 14px;
+    }
+
+    .story-slide-number {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 48px;
+      min-height: 32px;
+      padding: 0.4rem 0.7rem;
+      border-radius: 999px;
+      background: rgba(45, 91, 255, 0.10);
+      color: var(--story-primary);
+      font-size: 0.84rem;
+      font-weight: 700;
+      width: fit-content;
+    }
+
+    .story-slide-title {
+      margin: 0;
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      line-height: 1.1;
+      color: var(--story-text);
+    }
+
+    .story-slide-text {
+      color: #475569;
+      font-size: 1rem;
+      line-height: 1.75;
+      max-width: 52ch;
+      margin: 0;
+    }
+
+    .story-emphasis {
+      color: var(--story-primary);
+      font-weight: 700;
+    }
+
+    .story-slide-quote {
+      margin-top: 4px;
+      padding: 14px 16px;
+      border-radius: 18px;
+      background: rgba(124, 77, 255, 0.08);
+      border: 1px solid rgba(124, 77, 255, 0.12);
+      color: #55406f;
+      font-style: italic;
+      line-height: 1.7;
+    }
+
+    .story-card-footer {
+      display: grid;
+      gap: 14px;
+    }
+
+    .story-indicators {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .story-indicator {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: rgba(148, 163, 184, 0.26);
+      border: 1px solid transparent;
+      transition: all 0.22s ease;
+      cursor: pointer;
+    }
+
+    .story-indicator.active {
+      transform: scale(1.12);
+      background: var(--story-primary);
+      border-color: rgba(45, 91, 255, 0.18);
+      box-shadow: 0 0 0 4px rgba(45, 91, 255, 0.10);
+    }
+
+    .story-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .story-actions-left,
+    .story-actions-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .story-btn {
+      min-height: 48px;
+      padding: 0.9rem 1.15rem;
+      border-radius: 999px;
+      font-family: inherit;
+      font-size: 0.94rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.22s ease;
+      border: none;
+    }
+
+    .story-btn:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 4px rgba(45, 91, 255, 0.12);
+    }
+
+    .story-btn-primary {
+      background: linear-gradient(135deg, var(--story-primary), #4e77ff);
+      color: white;
+      box-shadow: 0 14px 26px rgba(45, 91, 255, 0.22);
+    }
+
+    .story-btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 18px 32px rgba(45, 91, 255, 0.28);
+    }
+
+    .story-btn-secondary {
+      background: rgba(255, 255, 255, 0.86);
+      color: var(--story-text);
+      border: 1px solid rgba(148, 163, 184, 0.18);
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.05);
+    }
+
+    .story-btn-secondary:hover {
+      transform: translateY(-2px);
+      background: rgba(255, 255, 255, 0.98);
+    }
+
+    .story-btn.hidden {
+      display: none;
+    }
+
+    .story-btn[disabled] {
+      opacity: 0.45;
+      cursor: not-allowed;
+      transform: none !important;
+      box-shadow: none !important;
+    }
+
+    .story-helper {
+      color: var(--story-text-soft);
+      font-size: 0.88rem;
+    }
+
+    .story-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      color: var(--story-text-soft);
+      font-size: 0.88rem;
+      text-align: center;
+    }
+
+    .route-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+      background:
+        radial-gradient(circle at top, rgba(45, 91, 255, 0.18), transparent 24%),
+        linear-gradient(180deg, rgba(10, 17, 35, 0.82), rgba(10, 17, 35, 0.92));
+      color: #fff;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition:
+        opacity 0.24s ease,
+        visibility 0.24s ease;
+    }
+
+    .route-overlay.show {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+    .route-card {
+      width: min(100%, 420px);
+      padding: 28px 24px;
+      border-radius: 26px;
+      text-align: center;
+      background: rgba(19, 28, 52, 0.78);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.26);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+
+    .route-spinner {
+      width: 58px;
+      height: 58px;
+      margin: 0 auto 18px;
+      border-radius: 50%;
+      border: 4px solid rgba(255, 255, 255, 0.18);
+      border-top-color: #ffffff;
+      animation: spin 0.95s linear infinite;
+    }
+
+    .route-title {
+      margin: 0;
+      font-size: 1.16rem;
+      font-weight: 700;
+    }
+
+    .route-text {
+      margin: 10px 0 0;
+      color: rgba(229, 236, 255, 0.82);
+      line-height: 1.6;
+      font-size: 0.95rem;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    @keyframes fadeSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes storyFloat {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+
+    @keyframes musiDrift {
+      0%, 100% {
+        transform: translateY(0) rotate(-3deg);
+      }
+      50% {
+        transform: translateY(-10px) rotate(4deg);
+      }
+    }
+
+    @keyframes slowSpin {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes twinkleStory {
+      0%, 100% {
+        opacity: 0.3;
+        transform: scale(0.9);
+      }
+      50% {
+        opacity: 1;
+        transform: scale(1.18);
+      }
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    @media (max-width: 960px) {
+      .story-main {
+        grid-template-columns: 1fr;
+      }
+
+      .story-visual {
+        min-height: 280px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .story-shell {
+        width: min(100% - 16px, 1100px);
+        gap: 14px;
+        padding: 14px 0 18px;
+      }
+
+      .story-topbar {
+        padding: 12px 14px;
+        border-radius: 20px;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .story-card,
+      .story-visual {
+        border-radius: 22px;
+      }
+
+      .story-card {
+        padding: 18px 16px 16px;
+      }
+
+      .story-visual {
+        padding: 20px;
+      }
+
+      .story-planet {
+        width: min(100%, 280px);
+      }
+
+      .story-musi {
+        width: 64px;
+        height: 64px;
+        border-radius: 20px;
+        font-size: 1.7rem;
+      }
+
+      .story-actions {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .story-actions-left,
+      .story-actions-right {
+        width: 100%;
+      }
+
+      .story-actions-left > *,
+      .story-actions-right > * {
+        width: 100%;
+      }
+
+      .story-btn {
+        width: 100%;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .story-planet,
+      .story-orbit,
+      .story-musi,
+      .story-star,
+      .story-slide,
+      .route-spinner {
+        animation: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body class="story-page">
+  <main class="story-shell">
+    <header class="story-topbar" aria-label="Barra superior de historia">
+      <div class="story-brand">
+        <div class="story-brand-mark" aria-hidden="true">M</div>
+        <div class="story-brand-text">
+          <span class="story-brand-label">Historia</span>
+          <span class="story-brand-title">Musi</span>
+        </div>
+      </div>
+
+      <div class="story-progress-chip" aria-live="polite">
+        <span id="storyProgressText">Escena 1 de 5</span>
+      </div>
+    </header>
+
+    <section class="story-main" aria-labelledby="storyTitle">
+      <aside class="story-visual" aria-hidden="true">
+        <div class="story-stars">
+          <span class="story-star s1"></span>
+          <span class="story-star s2"></span>
+          <span class="story-star s3"></span>
+          <span class="story-star s4"></span>
+        </div>
+
+        <div class="story-planet">
+          <div class="story-orbit"></div>
+          <div class="story-musi">🎵</div>
+        </div>
+      </aside>
+
+      <article class="story-card">
+        <div class="story-card-head">
+          <p class="story-kicker">Capítulo narrativo</p>
+          <h1 id="storyTitle" class="story-title">La historia de Musi</h1>
+          <p class="story-subtitle">
+            Antes de continuar por el mapa, hay algo que deben recordar: los territorios también guardan memoria, sonidos y energía creativa.
+          </p>
+        </div>
+
+        <div class="story-slide-wrap">
+          <section class="story-slide active" data-slide="0" aria-label="Escena 1">
+            <div class="story-slide-inner">
+              <span class="story-slide-number">01</span>
+              <h2 class="story-slide-title">Colombia vibra en cada región</h2>
+              <p class="story-slide-text">
+                Entre montañas, ríos, selvas, costas y llanuras, existen ritmos, movimientos, colores y saberes que hacen de Colombia un territorio profundamente diverso.
+              </p>
+              <p class="story-slide-quote">
+                “Cada región guarda una forma distinta de sentir el arte.”
+              </p>
+            </div>
+          </section>
+
+          <section class="story-slide" data-slide="1" aria-label="Escena 2">
+            <div class="story-slide-inner">
+              <span class="story-slide-number">02</span>
+              <h2 class="story-slide-title">Pero algo empezó a apagarse</h2>
+              <p class="story-slide-text">
+                Con el paso del tiempo, parte de esa energía creativa comenzó a dispersarse. Algunas melodías dejaron de escucharse con claridad y muchos caminos artísticos quedaron dormidos.
+              </p>
+              <p class="story-slide-text">
+                No desaparecieron del todo. Solo quedaron esperando a alguien que pudiera volver a encontrarlas.
+              </p>
+            </div>
+          </section>
+
+          <section class="story-slide" data-slide="2" aria-label="Escena 3">
+            <div class="story-slide-inner">
+              <span class="story-slide-number">03</span>
+              <h2 class="story-slide-title">Entonces apareció Musi</h2>
+              <p class="story-slide-text">
+                Musi no llegó como heroína perfecta ni como experta que ya lo sabe todo. Llegó con curiosidad, sensibilidad y ganas de escuchar.
+              </p>
+              <p class="story-slide-text">
+                Su viaje no consiste en conquistar el territorio, sino en <span class="story-emphasis">conectarse con él</span>.
+              </p>
+            </div>
+          </section>
+
+          <section class="story-slide" data-slide="3" aria-label="Escena 4">
+            <div class="story-slide-inner">
+              <span class="story-slide-number">04</span>
+              <h2 class="story-slide-title">Cada juego despierta una memoria</h2>
+              <p class="story-slide-text">
+                En cada región, Musi encontrará desafíos, minijuegos y experiencias inspiradas en la música, la danza, las artes y la cultura del territorio.
+              </p>
+              <p class="story-slide-text">
+                Superarlos no solo da puntos. También ayuda a reactivar rutas creativas, sonidos dormidos y nuevas posibilidades de encuentro.
+              </p>
+            </div>
+          </section>
+
+          <section class="story-slide" data-slide="4" aria-label="Escena 5">
+            <div class="story-slide-inner">
+              <span class="story-slide-number">05</span>
+              <h2 class="story-slide-title">El viaje está por continuar</h2>
+              <p class="story-slide-text">
+                Ahora Musi necesita avanzar por el mapa, descubrir regiones, sumar experiencia y recuperar la energía creativa que sigue viva en Colombia.
+              </p>
+              <p class="story-slide-text">
+                El resto ya no lo cuenta la historia sola. <span class="story-emphasis">Lo juegan ustedes.</span>
+              </p>
+              <p class="story-slide-quote">
+                “Comienza el viaje sonoro por Colombia.”
+              </p>
+            </div>
+          </section>
+        </div>
+
+        <div class="story-card-footer">
+          <div class="story-indicators" id="storyIndicators" aria-label="Indicadores de progreso de la historia">
+            <span class="story-indicator active" data-indicator="0" tabindex="0" role="button" aria-label="Ir a escena 1"></span>
+            <span class="story-indicator" data-indicator="1" tabindex="0" role="button" aria-label="Ir a escena 2"></span>
+            <span class="story-indicator" data-indicator="2" tabindex="0" role="button" aria-label="Ir a escena 3"></span>
+            <span class="story-indicator" data-indicator="3" tabindex="0" role="button" aria-label="Ir a escena 4"></span>
+            <span class="story-indicator" data-indicator="4" tabindex="0" role="button" aria-label="Ir a escena 5"></span>
+          </div>
+
+          <div class="story-actions">
+            <div class="story-actions-left">
+              <button class="story-btn story-btn-secondary" id="prevSlideBtn" type="button" disabled>
+                Anterior
+              </button>
+            </div>
+
+            <div class="story-actions-right">
+              <span class="story-helper" id="storyHelperText">Usa siguiente para avanzar</span>
+              <button class="story-btn story-btn-secondary" id="skipStoryBtn" type="button">
+                Omitir historia
+              </button>
+              <button class="story-btn story-btn-primary" id="nextSlideBtn" type="button">
+                Siguiente
+              </button>
+              <button
+                class="story-btn story-btn-primary hidden"
+                id="storyContinueBtn"
+                type="button"
+                data-complete-story
+              >
+                Ir al mapa
+              </button>
+            </div>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <footer class="story-bottom">
+      <span>Musicala • Experiencia interactiva</span>
+      <span>•</span>
+      <span>Capítulo narrativo del viaje</span>
+    </footer>
+  </main>
+
+  <div id="routeOverlay" class="route-overlay" aria-hidden="true">
+    <div class="route-card" role="status" aria-live="polite" aria-atomic="true">
+      <div class="route-spinner" aria-hidden="true"></div>
+      <p class="route-title">Abriendo el mapa</p>
+      <p id="routeText" class="route-text">
+        Preparando la siguiente etapa del viaje de Musi.
+      </p>
+    </div>
+  </div>
+
+  <p id="srStoryStatus" class="sr-only" aria-live="polite"></p>
+
+  <script type="module">
+    import {
+      completeStoryAndGoToMap,
+      goToMap
+    } from "./js/app.js";
+
+    const slides = Array.from(document.querySelectorAll(".story-slide"));
+    const indicators = Array.from(document.querySelectorAll(".story-indicator"));
+
+    const prevSlideBtn = document.getElementById("prevSlideBtn");
+    const nextSlideBtn = document.getElementById("nextSlideBtn");
+    const skipStoryBtn = document.getElementById("skipStoryBtn");
+    const storyContinueBtn = document.getElementById("storyContinueBtn");
+    const storyProgressText = document.getElementById("storyProgressText");
+    const storyHelperText = document.getElementById("storyHelperText");
+    const routeOverlay = document.getElementById("routeOverlay");
+    const routeText = document.getElementById("routeText");
+    const srStoryStatus = document.getElementById("srStoryStatus");
+
+    let currentIndex = 0;
+    let isRouting = false;
+    const totalSlides = slides.length;
+
+    function updateStoryUI() {
+      slides.forEach((slide, index) => {
+        slide.classList.toggle("active", index === currentIndex);
+      });
+
+      indicators.forEach((dot, index) => {
+        dot.classList.toggle("active", index === currentIndex);
+        dot.setAttribute("aria-pressed", String(index === currentIndex));
+      });
+
+      storyProgressText.textContent = `Escena ${currentIndex + 1} de ${totalSlides}`;
+
+      const isFirst = currentIndex === 0;
+      const isLast = currentIndex === totalSlides - 1;
+
+      prevSlideBtn.disabled = isFirst;
+      nextSlideBtn.classList.toggle("hidden", isLast);
+      storyContinueBtn.classList.toggle("hidden", !isLast);
+
+      if (isLast) {
+        storyHelperText.textContent = "Todo listo para abrir el mapa";
+      } else {
+        storyHelperText.textContent = "Usa siguiente para avanzar";
+      }
+    }
+
+    function goNextSlide() {
+      if (isRouting) return;
+      if (currentIndex < totalSlides - 1) {
+        currentIndex += 1;
+        updateStoryUI();
+      }
+    }
+
+    function goPrevSlide() {
+      if (isRouting) return;
+      if (currentIndex > 0) {
+        currentIndex -= 1;
+        updateStoryUI();
+      }
+    }
+
+    function showRouteOverlay(message) {
+      if (isRouting) return;
+      isRouting = true;
+
+      document.body.classList.add("is-routing");
+      routeOverlay.classList.add("show");
+      routeOverlay.setAttribute("aria-hidden", "false");
+      routeText.textContent = message;
+      srStoryStatus.textContent = message;
+    }
+
+    async function finishStory() {
+      if (isRouting) return;
+
+      showRouteOverlay("Historia completada. Abriendo el mapa principal.");
+
+      try {
+        await completeStoryAndGoToMap();
+      } catch (error) {
+        console.error("[story] Error al completar historia:", error);
+        goToMap();
+      }
+    }
+
+    prevSlideBtn?.addEventListener("click", goPrevSlide);
+    nextSlideBtn?.addEventListener("click", goNextSlide);
+    storyContinueBtn?.addEventListener("click", finishStory);
+    skipStoryBtn?.addEventListener("click", finishStory);
+
+    indicators.forEach((dot, index) => {
+      dot.addEventListener("click", () => {
+        if (isRouting) return;
+        currentIndex = index;
+        updateStoryUI();
+      });
+
+      dot.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          if (isRouting) return;
+          currentIndex = index;
+          updateStoryUI();
+        }
+      });
+    });
+
+    window.addEventListener("keydown", async (event) => {
+      if (isRouting) return;
+
+      if (event.key === "ArrowRight") {
+        event.preventDefault();
+        goNextSlide();
+      }
+
+      if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        goPrevSlide();
+      }
+
+      if (event.key === "Enter" || event.key === " ") {
+        if (currentIndex === totalSlides - 1) {
+          event.preventDefault();
+          await finishStory();
+        }
+      }
+
+      if (event.key === "Escape") {
+        event.preventDefault();
+        await finishStory();
+      }
+    });
+
+    updateStoryUI();
+  </script>
+</body>
+</html>

@@ -1,0 +1,1731 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Musi | Un viaje sonoro por Colombia</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta
+    name="description"
+    content="Explora Colombia con Musi a través de minijuegos artísticos, cultura, biodiversidad y experiencias interactivas inspiradas en el territorio."
+  />
+  <meta name="theme-color" content="#2d5bff" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Musi | Un viaje sonoro por Colombia" />
+  <meta
+    property="og:description"
+    content="Una experiencia interactiva de Musicala para explorar Colombia a través del arte, la música, el juego y la cultura."
+  />
+  <meta property="og:type" content="website" />
+
+  <!-- Estilos globales -->
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/ui.css" />
+
+  <!-- Fuentes -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+
+  <link rel="icon" href="assets/favicon.png" />
+  <link rel="preload" as="image" href="assets/logo.png" />
+  <link rel="preload" as="image" href="assets/musi.png" />
+
+  <style>
+    :root {
+      --index-bg-1: #f7f9ff;
+      --index-bg-2: #edf3ff;
+      --index-bg-3: #fffdf9;
+
+      --index-text: #182135;
+      --index-text-soft: #5f6c88;
+      --index-text-muted: #7d89a3;
+
+      --index-primary: #2d5bff;
+      --index-primary-dark: #2148d8;
+      --index-secondary: #6f5eff;
+      --index-accent: #ffca5c;
+      --index-accent-soft: #fff2c9;
+
+      --index-card: rgba(255, 255, 255, 0.82);
+      --index-card-strong: rgba(255, 255, 255, 0.92);
+      --index-border: rgba(255, 255, 255, 0.72);
+      --index-border-soft: #dbe6ff;
+
+      --index-shadow: 0 24px 80px rgba(45, 91, 255, 0.14);
+      --index-shadow-soft: 0 14px 38px rgba(24, 33, 53, 0.08);
+      --index-shadow-hover: 0 18px 40px rgba(45, 91, 255, 0.18);
+
+      --index-radius-xl: 28px;
+      --index-radius-lg: 20px;
+      --index-radius-md: 14px;
+      --index-radius-sm: 12px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body.home-index {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Poppins", sans-serif;
+      color: var(--index-text);
+      background:
+        radial-gradient(circle at top left, rgba(45, 91, 255, 0.12), transparent 28%),
+        radial-gradient(circle at top right, rgba(111, 94, 255, 0.11), transparent 28%),
+        radial-gradient(circle at bottom center, rgba(255, 202, 92, 0.08), transparent 30%),
+        linear-gradient(180deg, var(--index-bg-1) 0%, var(--index-bg-2) 52%, var(--index-bg-3) 100%);
+      overflow-x: hidden;
+    }
+
+    body.modal-open,
+    body.is-routing {
+      overflow: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .index-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .index-glow,
+    .index-ring,
+    .index-star,
+    .index-cloud {
+      position: absolute;
+      pointer-events: none;
+    }
+
+    .index-glow {
+      border-radius: 50%;
+      filter: blur(40px);
+      opacity: 0.55;
+    }
+
+    .index-glow-1 {
+      width: 280px;
+      height: 280px;
+      top: 4%;
+      left: -40px;
+      background: rgba(45, 91, 255, 0.16);
+      animation: floatGlow 12s ease-in-out infinite;
+    }
+
+    .index-glow-2 {
+      width: 320px;
+      height: 320px;
+      right: -90px;
+      bottom: 4%;
+      background: rgba(111, 94, 255, 0.14);
+      animation: floatGlow 14s ease-in-out infinite reverse;
+    }
+
+    .index-glow-3 {
+      width: 180px;
+      height: 180px;
+      left: 48%;
+      top: 22%;
+      background: rgba(255, 202, 92, 0.14);
+      animation: floatGlow 16s ease-in-out infinite;
+    }
+
+    .index-ring {
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.34);
+      opacity: 0.45;
+    }
+
+    .index-ring-1 {
+      width: 440px;
+      height: 440px;
+      right: -120px;
+      top: -80px;
+    }
+
+    .index-ring-2 {
+      width: 240px;
+      height: 240px;
+      left: -70px;
+      bottom: 80px;
+    }
+
+    .index-cloud {
+      width: 140px;
+      height: 48px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.54);
+      box-shadow:
+        28px -12px 0 6px rgba(255, 255, 255, 0.40),
+        62px 4px 0 0 rgba(255, 255, 255, 0.44);
+      opacity: 0.55;
+      filter: blur(1px);
+      animation: driftCloud 26s linear infinite;
+    }
+
+    .cloud-a {
+      top: 14%;
+      left: -12%;
+    }
+
+    .cloud-b {
+      top: 28%;
+      left: -20%;
+      transform: scale(0.84);
+      animation-duration: 32s;
+    }
+
+    .index-star {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(255, 220, 145, 0.98);
+      box-shadow: 0 0 12px rgba(255, 220, 145, 0.85);
+      animation: twinkle 3.6s ease-in-out infinite;
+    }
+
+    .star-a {
+      top: 18%;
+      right: 19%;
+    }
+
+    .star-b {
+      top: 32%;
+      right: 29%;
+      animation-delay: 0.8s;
+    }
+
+    .star-c {
+      top: 16%;
+      left: 18%;
+      animation-delay: 1.2s;
+    }
+
+    .site-shell {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .home-header {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 18px 0 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand-mini {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      min-height: 44px;
+    }
+
+    .brand-mini-mark {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, rgba(45, 91, 255, 0.16) 0%, rgba(111, 94, 255, 0.16) 100%);
+      box-shadow: 0 12px 28px rgba(45, 91, 255, 0.16);
+      border: 1px solid rgba(255, 255, 255, 0.72);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+
+    .brand-mini-logo {
+      width: 26px;
+      height: 26px;
+      object-fit: contain;
+    }
+
+    .brand-mini-text {
+      display: grid;
+      gap: 1px;
+      line-height: 1.1;
+    }
+
+    .brand-mini-name {
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      font-size: 0.98rem;
+    }
+
+    .brand-mini-sub {
+      font-size: 0.76rem;
+      color: var(--index-text-soft);
+      font-weight: 600;
+    }
+
+    .home-nav {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .ghost-btn,
+    .primary-btn,
+    .secondary-btn {
+      appearance: none;
+      border: none;
+      cursor: pointer;
+      transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease,
+        opacity 0.2s ease;
+    }
+
+    .ghost-btn {
+      min-height: 42px;
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.56);
+      color: var(--index-text);
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      box-shadow: var(--index-shadow-soft);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      font-weight: 600;
+    }
+
+    .ghost-btn:disabled,
+    .secondary-btn:disabled {
+      opacity: 0.48;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .primary-btn:hover,
+    .secondary-btn:hover,
+    .ghost-btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .primary-btn:focus-visible,
+    .secondary-btn:focus-visible,
+    .ghost-btn:focus-visible,
+    .info-close:focus-visible,
+    .press-start-btn:focus-visible {
+      outline: 3px solid rgba(45, 91, 255, 0.22);
+      outline-offset: 3px;
+    }
+
+    .home-main {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 14px 0 48px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .hero-panel {
+      position: relative;
+      overflow: hidden;
+      padding: clamp(24px, 4vw, 40px);
+      border-radius: var(--index-radius-xl);
+      background: var(--index-card);
+      border: 1px solid var(--index-border);
+      box-shadow: var(--index-shadow);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.9fr);
+      gap: clamp(20px, 4vw, 36px);
+      align-items: center;
+    }
+
+    .hero-panel::before {
+      content: "";
+      position: absolute;
+      inset: auto -10% -40% auto;
+      width: 340px;
+      height: 340px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(45, 91, 255, 0.12), transparent 65%);
+      pointer-events: none;
+    }
+
+    .hero-copy,
+    .hero-side {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      padding: 10px 14px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.62);
+      border: 1px solid rgba(255, 255, 255, 0.78);
+      box-shadow: 0 10px 24px rgba(24, 33, 53, 0.05);
+      margin-bottom: 16px;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    .hero-brand-logo {
+      width: 52px;
+      height: 52px;
+      object-fit: contain;
+      flex-shrink: 0;
+    }
+
+    .hero-brand-text {
+      display: grid;
+      gap: 4px;
+    }
+
+    .hero-brand-kicker {
+      margin: 0;
+      font-size: 0.76rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--index-text-soft);
+      font-weight: 700;
+    }
+
+    .hero-brand-name {
+      margin: 0;
+      font-size: 0.98rem;
+      font-weight: 800;
+      color: var(--index-text);
+    }
+
+    .hero-kicker {
+      margin: 0 0 10px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--index-primary);
+      letter-spacing: 0.03em;
+    }
+
+    .game-title {
+      margin: 0;
+      font-size: clamp(2.8rem, 7vw, 5.2rem);
+      line-height: 0.95;
+      letter-spacing: -0.04em;
+      color: var(--index-primary);
+    }
+
+    .game-subtitle {
+      margin: 12px 0 0;
+      font-size: clamp(1.15rem, 2.5vw, 1.9rem);
+      line-height: 1.15;
+      color: #32415f;
+      font-weight: 700;
+    }
+
+    .game-description {
+      margin: 18px 0 0;
+      max-width: 62ch;
+      font-size: 1rem;
+      line-height: 1.75;
+      color: var(--index-text-soft);
+    }
+
+    .hero-badges {
+      margin-top: 22px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 38px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.8);
+      border: 1px solid rgba(226, 232, 255, 0.92);
+      color: #34425f;
+      font-size: 0.94rem;
+      font-weight: 600;
+      box-shadow: 0 8px 20px rgba(23, 32, 51, 0.05);
+    }
+
+    .hero-side {
+      display: grid;
+      gap: 16px;
+    }
+
+    .musi-preview,
+    .flow-card {
+      border-radius: var(--index-radius-lg);
+      background: rgba(255, 255, 255, 0.76);
+      border: 1px solid rgba(255, 255, 255, 0.84);
+      box-shadow: var(--index-shadow-soft);
+    }
+
+    .musi-preview {
+      padding: 18px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .musi-character-wrap {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 220px;
+      position: relative;
+      isolation: isolate;
+    }
+
+    .musi-character-wrap::before {
+      content: "";
+      position: absolute;
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(111, 94, 255, 0.16), transparent 70%);
+      z-index: 0;
+      filter: blur(10px);
+    }
+
+    .musi-character {
+      position: relative;
+      z-index: 1;
+      width: min(240px, 92%);
+      max-height: 250px;
+      object-fit: contain;
+      filter: drop-shadow(0 22px 36px rgba(45, 91, 255, 0.18));
+      animation: orbFloat 5s ease-in-out infinite;
+    }
+
+    .musi-preview-copy {
+      text-align: center;
+    }
+
+    .musi-preview-copy h3 {
+      margin: 0;
+      font-size: 1.1rem;
+    }
+
+    .musi-preview-copy p {
+      margin: 8px 0 0;
+      color: var(--index-text-soft);
+      line-height: 1.6;
+      font-size: 0.95rem;
+    }
+
+    .flow-card {
+      padding: 18px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .flow-label {
+      margin: 0;
+      font-size: 0.84rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--index-primary);
+      font-weight: 700;
+    }
+
+    .flow-text {
+      margin: 0;
+      color: var(--index-text-soft);
+      line-height: 1.6;
+      font-size: 0.94rem;
+    }
+
+    .flow-steps {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .flow-step {
+      min-height: 34px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: #f4f7ff;
+      border: 1px solid #dde7ff;
+      color: #4260a8;
+      font-size: 0.88rem;
+      font-weight: 600;
+    }
+
+    .action-panel {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .menu-card,
+    .status-card,
+    .home-highlights {
+      padding: clamp(20px, 3vw, 28px);
+      border-radius: var(--index-radius-xl);
+      background: rgba(255, 255, 255, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.84);
+      box-shadow: var(--index-shadow-soft);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+
+    .menu-card {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .primary-btn,
+    .secondary-btn {
+      min-height: 52px;
+      padding: 14px 20px;
+      border-radius: 16px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .primary-btn {
+      color: #fff;
+      background: linear-gradient(135deg, var(--index-primary) 0%, var(--index-secondary) 100%);
+      box-shadow: 0 16px 32px rgba(45, 91, 255, 0.24);
+    }
+
+    .primary-btn:hover {
+      box-shadow: 0 20px 36px rgba(45, 91, 255, 0.28);
+    }
+
+    .secondary-btn {
+      color: #28406f;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid #dce6ff;
+      box-shadow: 0 8px 20px rgba(23, 32, 51, 0.06);
+    }
+
+    .button-note {
+      margin: 0;
+      color: var(--index-text-soft);
+      font-size: 0.95rem;
+      line-height: 1.6;
+      flex: 1 1 260px;
+    }
+
+    .status-card {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .status-text-wrap {
+      display: grid;
+      gap: 6px;
+      min-width: min(100%, 540px);
+    }
+
+    .status-title {
+      margin: 0;
+      font-size: 1rem;
+      font-weight: 700;
+    }
+
+    .status-text {
+      margin: 0;
+      color: var(--index-text-soft);
+      line-height: 1.6;
+      font-size: 0.95rem;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 40px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: #eef4ff;
+      border: 1px solid #dbe6ff;
+      color: #3054ab;
+      font-weight: 700;
+      font-size: 0.92rem;
+      white-space: nowrap;
+    }
+
+    .home-highlights {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .highlight-card {
+      padding: 18px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.76);
+      border: 1px solid rgba(226, 232, 255, 0.92);
+    }
+
+    .highlight-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, rgba(45, 91, 255, 0.12), rgba(111, 94, 255, 0.12));
+      font-size: 1.4rem;
+      margin-bottom: 14px;
+    }
+
+    .highlight-card h3 {
+      margin: 0 0 8px;
+      font-size: 1.06rem;
+    }
+
+    .highlight-card p {
+      margin: 0;
+      color: var(--index-text-soft);
+      line-height: 1.65;
+      font-size: 0.95rem;
+    }
+
+    .footer {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 8px 0 28px;
+      color: var(--index-text-soft);
+      font-size: 0.92rem;
+      text-align: center;
+    }
+
+    .press-start-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+      background:
+        radial-gradient(circle at top, rgba(111, 94, 255, 0.18), transparent 26%),
+        linear-gradient(180deg, rgba(10, 17, 35, 0.90), rgba(9, 15, 29, 0.96));
+      transition: opacity 0.34s ease, visibility 0.34s ease;
+    }
+
+    .press-start-overlay.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .press-start-card {
+      width: min(100%, 620px);
+      padding: clamp(28px, 5vw, 42px);
+      border-radius: 30px;
+      background: rgba(16, 24, 46, 0.74);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+      text-align: center;
+      color: #fff;
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .press-start-brand {
+      display: grid;
+      justify-items: center;
+      gap: 10px;
+      margin-bottom: 6px;
+    }
+
+    .press-start-logo-wrap {
+      width: 84px;
+      height: 84px;
+      display: grid;
+      place-items: center;
+      border-radius: 24px;
+      background: linear-gradient(135deg, rgba(45, 91, 255, 0.14), rgba(111, 94, 255, 0.14));
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 16px 36px rgba(45, 91, 255, 0.18);
+    }
+
+    .press-start-logo {
+      width: 54px;
+      height: 54px;
+      object-fit: contain;
+    }
+
+    .press-start-kicker {
+      margin: 0;
+      color: rgba(215, 226, 255, 0.86);
+      font-size: 0.98rem;
+      letter-spacing: 0.04em;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .press-start-title {
+      margin: 10px 0 0;
+      font-size: clamp(2.8rem, 8vw, 5.4rem);
+      line-height: 0.92;
+      letter-spacing: -0.05em;
+    }
+
+    .press-start-desc {
+      margin: 14px auto 0;
+      max-width: 30ch;
+      color: rgba(230, 236, 255, 0.9);
+      line-height: 1.6;
+      font-size: 1.05rem;
+    }
+
+    .press-start-btn {
+      margin-top: 24px;
+      min-width: min(100%, 280px);
+      animation: pulseButton 1.8s ease-in-out infinite;
+    }
+
+    .press-start-hint {
+      margin: 14px 0 0;
+      font-size: 0.92rem;
+      color: rgba(215, 226, 255, 0.72);
+    }
+
+    .info-panel {
+      position: fixed;
+      inset: 0;
+      z-index: 1100;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+      background: rgba(12, 20, 36, 0.52);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      transition: opacity 0.24s ease, visibility 0.24s ease;
+    }
+
+    .info-panel.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .info-panel-card {
+      width: min(100%, 680px);
+      position: relative;
+      padding: clamp(24px, 4vw, 34px);
+      border-radius: 26px;
+      background: #ffffff;
+      color: var(--index-text);
+      box-shadow: 0 28px 80px rgba(23, 32, 51, 0.18);
+    }
+
+    .info-close {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 1px solid #dde6fb;
+      background: #f7f9ff;
+      color: #3b4b6a;
+      font-size: 1.4rem;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .info-kicker {
+      margin: 0;
+      color: var(--index-primary);
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .info-panel-card h3 {
+      margin: 10px 0 0;
+      font-size: clamp(1.5rem, 4vw, 2.2rem);
+      line-height: 1.1;
+    }
+
+    .info-panel-card p {
+      margin: 14px 0 0;
+      color: var(--index-text-soft);
+      line-height: 1.75;
+    }
+
+    .info-list {
+      margin: 18px 0 0;
+      padding-left: 18px;
+      color: var(--index-text-soft);
+      display: grid;
+      gap: 10px;
+      line-height: 1.7;
+    }
+
+    .info-actions {
+      margin-top: 22px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .route-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 1200;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+      background:
+        radial-gradient(circle at top, rgba(45, 91, 255, 0.18), transparent 24%),
+        linear-gradient(180deg, rgba(10, 17, 35, 0.82), rgba(10, 17, 35, 0.92));
+      color: #fff;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 0.24s ease, visibility 0.24s ease;
+    }
+
+    .route-overlay.show {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+    .route-overlay-card {
+      width: min(100%, 440px);
+      padding: 28px 24px;
+      border-radius: 26px;
+      text-align: center;
+      background: rgba(19, 28, 52, 0.74);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.26);
+    }
+
+    .route-spinner {
+      width: 58px;
+      height: 58px;
+      margin: 0 auto 18px;
+      border-radius: 50%;
+      border: 4px solid rgba(255, 255, 255, 0.18);
+      border-top-color: #ffffff;
+      animation: spin 0.95s linear infinite;
+    }
+
+    .route-overlay-title {
+      margin: 0;
+      font-size: 1.18rem;
+      font-weight: 700;
+    }
+
+    .route-overlay-text {
+      margin: 10px 0 0;
+      color: rgba(229, 236, 255, 0.82);
+      line-height: 1.6;
+      font-size: 0.95rem;
+    }
+
+    @keyframes driftCloud {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(135vw); }
+    }
+
+    @keyframes twinkle {
+      0%, 100% {
+        opacity: 0.45;
+        transform: scale(0.92);
+      }
+      50% {
+        opacity: 1;
+        transform: scale(1.12);
+      }
+    }
+
+    @keyframes floatGlow {
+      0%, 100% {
+        transform: translateY(0px) translateX(0px);
+      }
+      50% {
+        transform: translateY(-14px) translateX(10px);
+      }
+    }
+
+    @keyframes orbFloat {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+
+    @keyframes pulseButton {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.02); }
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 980px) {
+      .hero-panel {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-side {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .home-highlights {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .home-header {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .home-nav {
+        width: 100%;
+        justify-content: flex-start;
+      }
+
+      .hero-side {
+        grid-template-columns: 1fr;
+      }
+
+      .menu-card {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .status-card {
+        align-items: flex-start;
+      }
+
+      .primary-btn,
+      .secondary-btn {
+        width: 100%;
+      }
+
+      .info-actions {
+        justify-content: stretch;
+      }
+
+      .info-actions .secondary-btn {
+        width: 100%;
+      }
+
+      .hero-brand {
+        width: 100%;
+        justify-content: flex-start;
+      }
+
+      .press-start-logo-wrap {
+        width: 76px;
+        height: 76px;
+      }
+
+      .press-start-logo {
+        width: 48px;
+        height: 48px;
+      }
+
+      .musi-character-wrap {
+        min-height: 180px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+
+<body class="home-index modal-open">
+  <div class="index-bg" aria-hidden="true">
+    <div class="index-glow index-glow-1"></div>
+    <div class="index-glow index-glow-2"></div>
+    <div class="index-glow index-glow-3"></div>
+
+    <div class="index-ring index-ring-1"></div>
+    <div class="index-ring index-ring-2"></div>
+
+    <div class="index-cloud cloud-a"></div>
+    <div class="index-cloud cloud-b"></div>
+
+    <div class="index-star star-a"></div>
+    <div class="index-star star-b"></div>
+    <div class="index-star star-c"></div>
+  </div>
+
+  <!-- Overlay inicial -->
+  <div
+    id="pressStartOverlay"
+    class="press-start-overlay"
+    aria-hidden="false"
+  >
+    <div
+      class="press-start-card"
+      role="dialog"
+      aria-labelledby="pressStartTitle"
+      aria-describedby="pressStartDesc"
+    >
+      <div class="press-start-brand" aria-label="Identidad Musicala">
+        <div class="press-start-logo-wrap" aria-hidden="true">
+          <img src="assets/logo.png" alt="" class="press-start-logo" />
+        </div>
+        <p class="press-start-kicker">Musicala presenta</p>
+      </div>
+
+      <h1 id="pressStartTitle" class="press-start-title">Musi</h1>
+      <p id="pressStartDesc" class="press-start-desc">
+        Un viaje sonoro por Colombia. Entra, despierta el recorrido y sigue el rastro de Musi por el mapa.
+      </p>
+
+      <button
+        id="pressStartBtn"
+        class="primary-btn press-start-btn"
+        type="button"
+      >
+        Entrar al viaje
+      </button>
+
+      <p class="press-start-hint">
+        También puedes usar cualquier tecla o tocar la pantalla
+      </p>
+    </div>
+  </div>
+
+  <!-- Overlay de navegación -->
+  <div
+    id="routeOverlay"
+    class="route-overlay"
+    aria-hidden="true"
+  >
+    <div
+      class="route-overlay-card"
+      role="status"
+      aria-live="polite"
+      aria-atomic="true"
+    >
+      <div class="route-spinner" aria-hidden="true"></div>
+      <p class="route-overlay-title">Preparando el viaje</p>
+      <p id="routeOverlayText" class="route-overlay-text">
+        Estamos llevando a Musi al siguiente punto del recorrido.
+      </p>
+    </div>
+  </div>
+
+  <div class="site-shell">
+    <header class="home-header">
+      <a class="brand-mini" href="index.html" aria-label="Ir al inicio de Musi">
+        <span class="brand-mini-mark" aria-hidden="true">
+          <img src="assets/logo.png" alt="" class="brand-mini-logo" />
+        </span>
+
+        <span class="brand-mini-text">
+          <span class="brand-mini-name">Musi</span>
+          <span class="brand-mini-sub">Musicala</span>
+        </span>
+      </a>
+
+      <nav class="home-nav" aria-label="Navegación principal">
+        <button id="howBtnTop" class="ghost-btn" type="button">
+          Qué encontrarás
+        </button>
+
+        <button id="continueBtnTop" class="ghost-btn" type="button">
+          Retomar viaje
+        </button>
+      </nav>
+    </header>
+
+    <main class="home-main">
+      <section class="hero-panel" aria-labelledby="gameTitle">
+        <div class="hero-copy">
+          <div class="hero-brand" aria-label="Identidad del proyecto">
+            <img src="assets/logo.png" alt="Logo de Musicala" class="hero-brand-logo" />
+            <div class="hero-brand-text">
+              <p class="hero-brand-kicker">Musicala presenta</p>
+              <p class="hero-brand-name">Universo transmedia Musi</p>
+            </div>
+          </div>
+
+          <p class="hero-kicker">Experiencia interactiva</p>
+
+          <h1 id="gameTitle" class="game-title">Musi</h1>
+
+          <h2 class="game-subtitle">
+            Un viaje sonoro por Colombia
+          </h2>
+
+          <p class="game-description">
+            Esta es la puerta de entrada al universo de Musi. Desde aquí puedes comenzar el recorrido desde cero
+            o retomar tu avance guardado. Primero sentirás el arranque del juego, luego conocerás la historia
+            de Musi y después entrarás al mapa para explorar regiones, minijuegos y experiencias artísticas.
+          </p>
+
+          <div class="hero-badges" aria-label="Características principales del juego">
+            <span class="hero-badge">🎮 Minijuegos</span>
+            <span class="hero-badge">🌎 Regiones</span>
+            <span class="hero-badge">🎵 Cultura y arte</span>
+            <span class="hero-badge">⭐ Progreso guardado</span>
+          </div>
+        </div>
+
+        <div class="hero-side">
+          <article class="musi-preview" aria-label="Presentación de Musi">
+            <div class="musi-character-wrap">
+              <img
+                src="assets/musi.png"
+                alt="Musi, personaje guía del viaje"
+                class="musi-character"
+              />
+            </div>
+
+            <div class="musi-preview-copy">
+              <h3>Un arranque más claro</h3>
+              <p>
+                El viaje ahora tiene una ruta simple: inicio, boot con sensación de videojuego, historia principal
+                y mapa. Menos vueltas, menos pantallas repitiendo lo mismo, más sentido.
+              </p>
+            </div>
+          </article>
+
+          <article class="flow-card" aria-label="Información del recorrido">
+            <p class="flow-label">Flujo del viaje</p>
+            <p id="flowStatusText" class="flow-text">
+              Empezarás con el arranque del juego, conocerás la historia de Musi y luego entrarás al mapa para explorar.
+            </p>
+
+            <div class="flow-steps" aria-hidden="true">
+              <span class="flow-step">Inicio</span>
+              <span class="flow-step">Boot</span>
+              <span class="flow-step">Historia</span>
+              <span class="flow-step">Mapa</span>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="action-panel">
+        <div class="menu-card" aria-label="Menú principal del inicio">
+          <button id="startBtn" class="primary-btn" type="button">
+            Comenzar viaje
+          </button>
+
+          <button id="continueBtn" class="secondary-btn" type="button">
+            Retomar viaje
+          </button>
+
+          <button id="newGameBtn" class="secondary-btn" type="button">
+            Empezar de nuevo
+          </button>
+
+          <button id="howBtn" class="secondary-btn" type="button">
+            Qué encontrarás
+          </button>
+
+          <p class="button-note">
+            <strong>Comenzar viaje</strong> inicia desde el arranque del juego.
+            <strong>Retomar viaje</strong> abre la parte que te falte o tu mapa.
+            <strong>Empezar de nuevo</strong> reinicia el recorrido guardado en este dispositivo.
+          </p>
+        </div>
+
+        <div class="status-card" aria-label="Estado del recorrido actual">
+          <div class="status-text-wrap">
+            <p class="status-title">Tu estado actual</p>
+            <p id="statusText" class="status-text">
+              Revisando si esta es tu primera entrada o si ya existe un avance guardado.
+            </p>
+          </div>
+
+          <div id="statusPill" class="status-pill" aria-live="polite">
+            Revisando viaje…
+          </div>
+        </div>
+      </section>
+
+      <section class="home-highlights" aria-label="Aspectos destacados del juego">
+        <article class="highlight-card">
+          <div class="highlight-icon" aria-hidden="true">🌎</div>
+          <h3>Explora</h3>
+          <p>
+            Recorre regiones de Colombia e ingresa a experiencias inspiradas en sus paisajes,
+            culturas, memorias y sonidos.
+          </p>
+        </article>
+
+        <article class="highlight-card">
+          <div class="highlight-icon" aria-hidden="true">🎨</div>
+          <h3>Aprende jugando</h3>
+          <p>
+            Conecta música, danza, artes y territorio desde una experiencia amable,
+            visual y pensada para descubrir haciendo.
+          </p>
+        </article>
+
+        <article class="highlight-card">
+          <div class="highlight-icon" aria-hidden="true">🧭</div>
+          <h3>Avanza con claridad</h3>
+          <p>
+            Todo está organizado para que entiendas dónde estás, qué viene después
+            y cómo regresar al recorrido sin perderte.
+          </p>
+        </article>
+      </section>
+
+      <!-- Modal guía -->
+      <section
+        id="howPanel"
+        class="info-panel hidden"
+        aria-hidden="true"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="howTitle"
+      >
+        <div class="info-panel-card">
+          <button
+            id="closeInfo"
+            class="info-close"
+            aria-label="Cerrar panel"
+            type="button"
+          >
+            ×
+          </button>
+
+          <p class="info-kicker">Guía rápida</p>
+
+          <h3 id="howTitle">Qué encontrarás en Musi</h3>
+
+          <p>
+            En Musi recorrerás distintas regiones de Colombia a través de experiencias inspiradas
+            en la música, las artes, la cultura y la biodiversidad del territorio.
+          </p>
+
+          <ul class="info-list">
+            <li>Si es tu primera vez, pasarás por el boot y luego por la historia principal antes de llegar al mapa.</li>
+            <li>Si ya habías empezado, podrás retomar exactamente el punto narrativo o interactivo que te falte.</li>
+            <li>En el mapa encontrarás regiones, actividades y minijuegos para seguir explorando.</li>
+            <li>Cada experiencia está pensada para aprender jugando y descubrir el país desde el arte.</li>
+            <li>Tu progreso puede guardarse para continuar después desde este mismo dispositivo.</li>
+          </ul>
+
+          <div class="info-actions">
+            <button id="closeInfoAlt" class="secondary-btn" type="button">
+              Cerrar
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>Proyecto educativo interactivo • Musicala</p>
+    </footer>
+  </div>
+
+  <p id="srRouteMessage" class="sr-only" aria-live="polite"></p>
+
+  <script type="module">
+    import {
+      waitForAuthReady,
+      getCurrentUser,
+      onUserChange,
+      setPostLoginRedirect
+    } from "./js/auth.js";
+
+    const ROUTES = {
+      login: "login.html",
+      boot: "boot.html",
+      story: "story.html",
+      mapa: "mapa.html"
+    };
+
+    const STORAGE_KEYS = {
+      bootSeen: "musi_boot_seen",
+      titleSeen: "musi_title_seen",
+      introSeen: "musi_intro_seen",
+      storySeen: "musi_story_seen"
+    };
+
+    const body = document.body;
+
+    const pressStartOverlay = document.getElementById("pressStartOverlay");
+    const pressStartBtn = document.getElementById("pressStartBtn");
+
+    const startBtn = document.getElementById("startBtn");
+    const continueBtn = document.getElementById("continueBtn");
+    const continueBtnTop = document.getElementById("continueBtnTop");
+    const newGameBtn = document.getElementById("newGameBtn");
+
+    const howBtn = document.getElementById("howBtn");
+    const howBtnTop = document.getElementById("howBtnTop");
+
+    const closeInfo = document.getElementById("closeInfo");
+    const closeInfoAlt = document.getElementById("closeInfoAlt");
+    const howPanel = document.getElementById("howPanel");
+
+    const statusText = document.getElementById("statusText");
+    const statusPill = document.getElementById("statusPill");
+    const flowStatusText = document.getElementById("flowStatusText");
+
+    const routeOverlay = document.getElementById("routeOverlay");
+    const routeOverlayText = document.getElementById("routeOverlayText");
+    const srRouteMessage = document.getElementById("srRouteMessage");
+
+    let homeUnlocked = false;
+    let currentUser = null;
+
+    function readFlag(key) {
+      try {
+        return localStorage.getItem(key) === "true";
+      } catch {
+        return false;
+      }
+    }
+
+    function hasStoryBeenSeen() {
+      return readFlag(STORAGE_KEYS.storySeen) || readFlag(STORAGE_KEYS.introSeen);
+    }
+
+    function getJourneyState() {
+      const bootSeen = readFlag(STORAGE_KEYS.bootSeen);
+      const storySeen = hasStoryBeenSeen();
+      const session = Boolean(currentUser?.uid);
+
+      return {
+        bootSeen,
+        storySeen,
+        session,
+        canContinue: session
+      };
+    }
+
+    function resolveContinueRoute() {
+      const state = getJourneyState();
+
+      if (!state.bootSeen) return ROUTES.boot;
+      if (!state.storySeen) return ROUTES.story;
+      return ROUTES.mapa;
+    }
+
+    function setContinueAvailability() {
+      const state = getJourneyState();
+      const canContinue = state.canContinue;
+
+      continueBtn.disabled = !canContinue;
+      continueBtnTop.disabled = !canContinue;
+
+      const continueLabel = canContinue
+        ? "Retomar viaje"
+        : "Inicia sesión para continuar";
+
+      continueBtn.setAttribute("aria-label", continueLabel);
+      continueBtnTop.setAttribute("aria-label", continueLabel);
+    }
+
+    function setStatusUI() {
+      const state = getJourneyState();
+
+      if (!state.session) {
+        statusPill.textContent = "Acceso requerido";
+        statusText.textContent =
+          "Para comenzar o retomar el viaje debes iniciar sesión primero. La sesión real se valida con Firebase y desde aquí solo se te enviará al acceso para luego devolverte al paso correcto.";
+        flowStatusText.textContent =
+          "Flujo esperado: index → login → boot → story → mapa.";
+        return;
+      }
+
+      if (!state.bootSeen) {
+        statusPill.textContent = "Inicio pendiente";
+        statusText.textContent =
+          "Tu sesión ya está activa. El siguiente paso correcto es pasar por el arranque del juego.";
+        flowStatusText.textContent =
+          "Tu recorrido continuará en boot antes de entrar a la historia.";
+        return;
+      }
+
+      if (!state.storySeen) {
+        statusPill.textContent = "Historia pendiente";
+        statusText.textContent =
+          "El arranque ya fue completado, pero todavía falta la historia principal antes de llegar al mapa.";
+        flowStatusText.textContent =
+          "Tu siguiente paso correcto es story.";
+        return;
+      }
+
+      statusPill.textContent = "Listo para explorar";
+      statusText.textContent =
+        "La sesión está activa y el flujo inicial ya fue completado. Ya puedes entrar directo al mapa principal.";
+      flowStatusText.textContent =
+        "Tu siguiente paso correcto es mapa.";
+    }
+
+    function unlockHome() {
+      if (homeUnlocked) return;
+
+      homeUnlocked = true;
+      pressStartOverlay.classList.add("hidden");
+      pressStartOverlay.setAttribute("aria-hidden", "true");
+      body.classList.remove("modal-open");
+    }
+
+    function openHowPanel() {
+      howPanel.classList.remove("hidden");
+      howPanel.setAttribute("aria-hidden", "false");
+      body.classList.add("modal-open");
+    }
+
+    function closeHowPanel() {
+      howPanel.classList.add("hidden");
+      howPanel.setAttribute("aria-hidden", "true");
+
+      if (homeUnlocked) {
+        body.classList.remove("modal-open");
+      }
+    }
+
+    function showRouteOverlay(message) {
+      routeOverlay.classList.add("show");
+      routeOverlay.setAttribute("aria-hidden", "false");
+      routeOverlayText.textContent = message;
+      srRouteMessage.textContent = message;
+      body.classList.add("is-routing");
+    }
+
+    function hideRouteOverlay() {
+      routeOverlay.classList.remove("show");
+      routeOverlay.setAttribute("aria-hidden", "true");
+      body.classList.remove("is-routing");
+    }
+
+    function navigateTo(url, message = "Preparando la siguiente parte del viaje...") {
+      showRouteOverlay(message);
+
+      window.setTimeout(() => {
+        window.location.href = url;
+      }, 340);
+    }
+
+    function goToLoginWithRedirect(targetRoute, message) {
+      setPostLoginRedirect(targetRoute);
+      navigateTo(ROUTES.login, message);
+    }
+
+    function refreshHomeUI() {
+      setContinueAvailability();
+      setStatusUI();
+    }
+
+    function handleInitialStart() {
+      unlockHome();
+      refreshHomeUI();
+    }
+
+    function clearNarrativeFlowState() {
+      try {
+        localStorage.removeItem(STORAGE_KEYS.bootSeen);
+        localStorage.removeItem(STORAGE_KEYS.titleSeen);
+        localStorage.removeItem(STORAGE_KEYS.introSeen);
+        localStorage.removeItem(STORAGE_KEYS.storySeen);
+      } catch (error) {
+        console.warn("No se pudieron limpiar las banderas narrativas.", error);
+      }
+    }
+
+    function startJourney() {
+      if (!currentUser?.uid) {
+        goToLoginWithRedirect(
+          ROUTES.boot,
+          "Necesitas iniciar sesión antes de comenzar el viaje."
+        );
+        return;
+      }
+
+      clearNarrativeFlowState();
+
+      navigateTo(
+        ROUTES.boot,
+        "Comenzando el viaje desde el inicio."
+      );
+    }
+
+    function continueJourney() {
+      const state = getJourneyState();
+
+      if (!state.session) {
+        const targetRoute = resolveContinueRoute();
+        goToLoginWithRedirect(
+          targetRoute,
+          "Primero validaremos tu sesión para retomar el viaje."
+        );
+        return;
+      }
+
+      const nextRoute = resolveContinueRoute();
+
+      let message = "Retomando tu recorrido.";
+
+      if (nextRoute === ROUTES.boot) {
+        message = "Volviendo al arranque del juego.";
+      } else if (nextRoute === ROUTES.story) {
+        message = "Entrando a la historia principal de Musi.";
+      } else if (nextRoute === ROUTES.mapa) {
+        message = "Entrando al mapa para seguir explorando.";
+      }
+
+      navigateTo(nextRoute, message);
+    }
+
+    function startNewGame() {
+      if (!currentUser?.uid) {
+        goToLoginWithRedirect(
+          ROUTES.boot,
+          "Debes iniciar sesión antes de reiniciar el viaje."
+        );
+        return;
+      }
+
+      clearNarrativeFlowState();
+      refreshHomeUI();
+
+      navigateTo(
+        ROUTES.boot,
+        "Reiniciando el viaje desde el principio."
+      );
+    }
+
+    pressStartBtn?.addEventListener("click", handleInitialStart);
+
+    pressStartOverlay?.addEventListener("click", (event) => {
+      if (event.target === pressStartOverlay) {
+        handleInitialStart();
+      }
+    });
+
+    startBtn?.addEventListener("click", startJourney);
+    continueBtn?.addEventListener("click", continueJourney);
+    continueBtnTop?.addEventListener("click", continueJourney);
+    newGameBtn?.addEventListener("click", startNewGame);
+
+    howBtn?.addEventListener("click", openHowPanel);
+    howBtnTop?.addEventListener("click", openHowPanel);
+
+    closeInfo?.addEventListener("click", closeHowPanel);
+    closeInfoAlt?.addEventListener("click", closeHowPanel);
+
+    howPanel?.addEventListener("click", (event) => {
+      if (event.target === howPanel) {
+        closeHowPanel();
+      }
+    });
+
+    window.addEventListener("keydown", (event) => {
+      const isHowOpen = !howPanel.classList.contains("hidden");
+      const isOverlayVisible = !pressStartOverlay.classList.contains("hidden");
+
+      if (event.key === "Escape" && isHowOpen) {
+        closeHowPanel();
+        return;
+      }
+
+      if (isOverlayVisible) {
+        const ignoredKeys = new Set([
+          "Shift",
+          "Control",
+          "Alt",
+          "Meta",
+          "CapsLock",
+          "Tab"
+        ]);
+
+        if (!ignoredKeys.has(event.key)) {
+          handleInitialStart();
+        }
+      }
+    });
+
+    async function initIndexSession() {
+      currentUser = await waitForAuthReady();
+      refreshHomeUI();
+      hideRouteOverlay();
+    }
+
+    onUserChange(async (user) => {
+      currentUser = user;
+      refreshHomeUI();
+    });
+
+    window.addEventListener("load", initIndexSession);
+  </script>
+</body>
+</html>
