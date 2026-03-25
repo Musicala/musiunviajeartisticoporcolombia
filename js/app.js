@@ -2,7 +2,9 @@
 // MUSI
 // app.js
 // Orquestador principal de la aplicación
-// Versión mejorada y alineada al flujo actual real
+// Versión saneada para el flujo real:
+// index -> boot -> story -> mapa -> perfil
+// Sin menu/login/title/intro fantasmas
 // ======================================
 
 import {
@@ -40,24 +42,16 @@ const APP_EVENT_NAMESPACE = "musi";
 const PAGE_NAMES = {
   INDEX: "index",
   BOOT: "boot",
-  TITLE: "title",
-  INTRO: "intro",
-  LOGIN: "login",
+  STORY: "story",
   MAPA: "mapa",
-  MENU: "menu",
-  PERFIL: "perfil",
-  STORY: "story"
+  PERFIL: "perfil"
 };
 
 const GAME_ROUTES = {
   home: "index.html",
   boot: "boot.html",
-  title: "title.html",
-  intro: "intro.html",
   story: "story.html",
-  login: "login.html",
   mapa: "mapa.html",
-  menu: "menu.html",
   profile: "perfil.html"
 };
 
@@ -72,8 +66,6 @@ const REGION_LABELS = {
 
 const STORAGE_KEYS = {
   bootSeen: "musi_boot_seen",
-  titleSeen: "musi_title_seen",
-  introSeen: "musi_intro_seen",
   storySeen: "musi_story_seen"
 };
 
@@ -134,13 +126,21 @@ function hideElement(selector) {
   el.setAttribute("aria-hidden", "true");
 }
 
+function escapeHTML(value = "") {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
+}
+
 function setAvatarContent(selector, { initials = "M", photoURL = "", label = "" } = {}) {
   const el = typeof selector === "string" ? $(selector) : selector;
   if (!el) return;
 
   if (photoURL) {
-    el.textContent = "";
-    el.innerHTML = `<img src="${photoURL}" alt="${label || "Avatar"}">`;
+    el.innerHTML = `<img src="${escapeHTML(photoURL)}" alt="${escapeHTML(label || "Avatar")}">`;
   } else {
     el.innerHTML = "";
     el.textContent = initials;
@@ -197,14 +197,13 @@ function getLevelProgress(xp = 0) {
   const safeXp = Math.max(0, toNumber(xp, 0));
   const level = calculateLevel(safeXp);
   const currentLevelBase = getLevelBaseXp(level);
-  const nextLevelBase = getLevelBaseXp(level + 1);
   const progressInLevel = safeXp - currentLevelBase;
   const percent = Math.max(0, Math.min(100, Math.round((progressInLevel / 100) * 100)));
 
   return {
     level,
     currentLevelBase,
-    nextLevelBase,
+    nextLevelBase: getLevelBaseXp(level + 1),
     progressInLevel,
     percent
   };
@@ -283,12 +282,8 @@ function isHomePage() {
   return isPage(PAGE_NAMES.INDEX);
 }
 
-function isIntroPage() {
-  return isPage(PAGE_NAMES.INTRO, PAGE_NAMES.STORY);
-}
-
-function isLoginPage() {
-  return isPage(PAGE_NAMES.LOGIN);
+function isStoryPage() {
+  return isPage(PAGE_NAMES.STORY);
 }
 
 function isMapPage() {
@@ -371,7 +366,7 @@ async function markStoryAsCompleted() {
     await syncIntroSeenToProfile(uid);
   }
 
-  notifyStateChange("intro-completed");
+  notifyStateChange("story-completed");
 }
 
 async function ensureNavigationRules(user) {
@@ -381,20 +376,13 @@ async function ensureNavigationRules(user) {
   updateHasSeenIntroState(introSeen);
   appState.navigationReady = true;
 
-  const requiresAuth =
-    isMapPage() ||
-    isProfilePage() ||
-    isPage(PAGE_NAMES.MENU) ||
-    isPage(PAGE_NAMES.STORY) ||
-    isPage(PAGE_NAMES.INTRO);
+  // El flujo actual ya no obliga login para story/mapa/perfil.
+  // Se permite invitado y sesión autenticada.
+  // Solo guardamos una posible redirección útil si alguien luego inicia sesión.
+  const currentFile = window.location.pathname.split("/").pop() || GAME_ROUTES.home;
 
-  if (requiresAuth && !normalizedUser?.uid) {
-    const currentFile =
-      window.location.pathname.split("/").pop() || GAME_ROUTES.home;
-
+  if (normalizedUser?.uid) {
     setPostLoginRedirect(currentFile);
-    safeNavigate(GAME_ROUTES.login, { replace: true });
-    return false;
   }
 
   return true;
@@ -412,14 +400,10 @@ function resetBodyStateClasses() {
     "has-progress",
     "app-ready",
     "app-loading",
-    "page-home",
+    "page-index",
     "page-boot",
-    "page-title",
-    "page-login",
-    "page-intro",
     "page-story",
     "page-mapa",
-    "page-menu",
     "page-perfil",
     "has-seen-intro",
     "needs-intro"
@@ -542,6 +526,7 @@ function updateLastActivityUI(lastGame) {
     setText("#lastGameName", "Sin actividad reciente");
     setText("#lastGameRegion", "Región: -");
     setText("#lastGameXP", "XP ganada: 0");
+    setText("#lastGameTime", "Último registro: sin datos");
     return;
   }
 
@@ -552,6 +537,32 @@ function updateLastActivityUI(lastGame) {
   setText("#lastGameName", gameName);
   setText("#lastGameRegion", `Región: ${region}`);
   setText("#lastGameXP", `XP ganada: ${xp}`);
+
+  if (lastGame.completedAt) {
+    try {
+      const date = new Date(lastGame.completedAt);
+      const formatted = Number.isNaN(date.getTime())
+        ? "Último registro: sin fecha"
+        : `Último registro: ${date.toLocaleString("es-CO")}`;
+      setText("#lastGameTime", formatted);
+    } catch {
+      setText("#lastGameTime", "Último registro: sin fecha");
+    }
+  }
+}
+
+function renderRegionsList(selector, items = [], formatter = (item) => item, emptyText = "Sin datos.") {
+  const list = $(selector);
+  if (!list) return;
+
+  if (!items.length) {
+    list.innerHTML = `<li class="empty-state">${escapeHTML(emptyText)}</li>`;
+    return;
+  }
+
+  list.innerHTML = items
+    .map((item) => `<li>${formatter(item)}</li>`)
+    .join("");
 }
 
 function updateXPProgressUI(progress) {
@@ -576,6 +587,7 @@ function updateGlobalProgressUI(progress) {
   const visitedRegions = normalizeArray(normalized.visitedRegions);
   const completedGames = normalizeArray(normalized.completedGames);
   const unlockedRegions = normalizeArray(normalized.unlockedRegions);
+  const completedRegions = normalizeArray(normalized.completedRegions);
 
   setText("#xpValue", xp);
   setText("#profileXP", xp);
@@ -599,11 +611,9 @@ function updateGlobalProgressUI(progress) {
     `${unlockedRegions.length} ${unlockedRegions.length === 1 ? "región" : "regiones"}`
   );
 
-  const nextRoute = unlockedRegions[0]
-    ? getRegionLabel(unlockedRegions[0])
-    : getRegionLabel(DEFAULT_REGION);
-
-  setText("#profileCurrentRoute", `Ruta disponible: ${nextRoute}`);
+  const currentRouteRegion = normalized.currentRegion || unlockedRegions[0] || DEFAULT_REGION;
+  setText("#profileCurrentRoute", getRegionLabel(currentRouteRegion));
+  setText("#currentRouteLabel", getRegionLabel(currentRouteRegion));
 
   if (!completedGames.length) {
     setText("#profileJourneyStatus", "Listo para jugar");
@@ -613,8 +623,60 @@ function updateGlobalProgressUI(progress) {
     setText("#profileJourneyStatus", "Aventura en curso");
   }
 
+  const latestReward = toNumber(normalized.lastGame?.xp, 0);
+  setText("#profileLatestReward", `${latestReward} XP`);
+
   updateXPProgressUI(normalized);
   updateLastActivityUI(normalized.lastGame);
+
+  renderRegionsList(
+    "#visitedRegionsList",
+    visitedRegions,
+    (region) => `<strong>${escapeHTML(getRegionLabel(region))}</strong> · Región explorada`,
+    "Aún no has visitado regiones."
+  );
+
+  renderRegionsList(
+    "#unlockedRegionsList",
+    unlockedRegions,
+    (region) => `<strong>${escapeHTML(getRegionLabel(region))}</strong> · Disponible para jugar`,
+    "Aún no hay regiones desbloqueadas registradas."
+  );
+
+  renderRegionsList(
+    "#completedGamesList",
+    completedGames,
+    (gameId) => `<strong>${escapeHTML(prettifyGameId(gameId))}</strong> · Completado`,
+    "Todavía no has completado minijuegos."
+  );
+
+  const guestPill = $("#guestStatusPill");
+  if (guestPill) {
+    if (appState.user?.uid && !appState.user?.isAnonymous) {
+      guestPill.textContent = "Sesión guardada";
+    } else if (appState.user?.isAnonymous) {
+      guestPill.textContent = "Modo invitado";
+    } else {
+      guestPill.textContent = "Sin iniciar sesión";
+    }
+  }
+
+  const currentRegionHotspots = document.querySelectorAll(".map-hotspot");
+  currentRegionHotspots.forEach((hotspot) => {
+    hotspot.classList.toggle("is-current", hotspot.dataset.region === currentRouteRegion);
+  });
+
+  const traveler = $("#mapTravelerIndicator");
+  if (traveler) {
+    const currentHotspot = $(`.map-hotspot[data-region="${currentRouteRegion}"]`);
+    if (currentHotspot?.style.top && currentHotspot?.style.left) {
+      traveler.style.top = currentHotspot.style.top;
+      traveler.style.left = currentHotspot.style.left;
+      traveler.dataset.currentRegion = currentRouteRegion;
+    }
+  }
+
+  setText("#quickCardTitle", getRegionLabel(currentRouteRegion));
 }
 
 function resetGlobalProgressUI() {
@@ -736,21 +798,21 @@ async function registerLoginEventIfNeeded(user) {
   }
 }
 
-async function registerIntroCompletedEvent(user) {
+async function registerStoryCompletedEvent(user) {
   try {
     const uid = user?.uid || "anonymous";
-    const key = `musi_intro_completed_${uid}`;
+    const key = `musi_story_completed_${uid}`;
 
     if (sessionStorage.getItem(key)) return;
 
-    await trackCustomEvent("intro_completed_musi", {
+    await trackCustomEvent("story_completed_musi", {
       uid,
       page: appState.pageName
     });
 
     sessionStorage.setItem(key, "1");
   } catch (error) {
-    console.warn("[app] No se pudo registrar intro_completed_musi:", error);
+    console.warn("[app] No se pudo registrar story_completed_musi:", error);
   }
 }
 
@@ -768,28 +830,40 @@ async function loadUserProgress(uid) {
 
 function applyGuestSessionState() {
   appState.user = null;
-  appState.progress = null;
+  appState.progress = normalizeProgress({
+    xp: 0,
+    level: 1,
+    completedGames: [],
+    unlockedRegions: [DEFAULT_REGION],
+    visitedRegions: [],
+    completedRegions: [],
+    currentRegion: DEFAULT_REGION,
+    lastGame: null
+  });
   appState.authReady = true;
-  appState.progressReady = false;
+  appState.progressReady = true;
   appState.lastBootstrappedUid = "";
 
   updateGlobalUserUI(null);
-  resetGlobalProgressUI();
+  updateGlobalProgressUI(appState.progress);
 
   showGuestState();
+  showProgressReadyState();
   showAppReady();
   hideAppLoading();
 
   notifyStateChange("guest-session");
+  notifyProgressReady(appState.progress);
   notifyAppReady();
+
+  return appState.progress;
 }
 
 async function bootstrapUserSession(user) {
   const normalizedUser = normalizeUser(user);
 
   if (!normalizedUser?.uid) {
-    applyGuestSessionState();
-    return null;
+    return applyGuestSessionState();
   }
 
   if (
@@ -808,8 +882,21 @@ async function bootstrapUserSession(user) {
   showLoggedInState();
 
   try {
-    await ensureUserDocument(normalizedUser);
-    const progress = await loadUserProgress(normalizedUser.uid);
+    // ensureUserDocument es opcional: un fallo de permisos no debe matar la sesión
+    try {
+      await ensureUserDocument(normalizedUser);
+    } catch (docError) {
+      console.warn("[app] ensureUserDocument falló (continuando con estado local):", docError);
+    }
+
+    // loadUserProgress también puede fallar — si falla, usamos progreso vacío
+    let progress;
+    try {
+      progress = await loadUserProgress(normalizedUser.uid);
+    } catch (progressError) {
+      console.warn("[app] loadUserProgress falló (usando progreso local vacío):", progressError);
+      progress = normalizeProgress({});
+    }
 
     appState.user = {
       ...normalizedUser,
@@ -834,26 +921,26 @@ async function bootstrapUserSession(user) {
 
     return progress;
   } catch (error) {
-    console.error("[app] Error en bootstrapUserSession:", error);
-    showToast("No se pudo cargar la sesión del usuario.", "warning");
-    throw error;
+    // Fallo total inesperado: caer a sesión invitado en vez de lanzar
+    console.error("[app] Error en bootstrapUserSession (fallback a invitado):", error);
+    showToast("Hubo un problema al cargar tu sesión. Continuando como invitado.", "warning");
+    return applyGuestSessionState();
   } finally {
     appState.bootstrapping = false;
   }
 }
 
 /* ======================================
-   INTRO / STORY HELPERS
+   STORY HELPERS
 ====================================== */
 
-function setupIntroCompletionBindings() {
+function setupStoryCompletionBindings() {
   const completeSelectors = [
-    "[data-complete-intro]",
     "[data-complete-story]",
+    "[data-complete-intro]",
     "#completeStoryBtn",
     "#startJourneyBtn",
     "#storyContinueBtn",
-    "#continueJourneyBtn",
     "#skipToMapBtn"
   ];
 
@@ -864,20 +951,51 @@ function setupIntroCompletionBindings() {
   const uniqueElements = [...new Set(elements)];
 
   for (const el of uniqueElements) {
-    if (el.dataset.introBound === "true") continue;
-    el.dataset.introBound = "true";
+    if (el.dataset.storyBound === "true") continue;
+    el.dataset.storyBound = "true";
 
-    el.addEventListener("click", async () => {
+    el.addEventListener("click", async (event) => {
+      const explicitTarget = el.dataset.nextRoute || el.getAttribute("href");
+
+      if (explicitTarget && explicitTarget.endsWith(".html")) {
+        event.preventDefault();
+      }
+
       try {
         await markStoryAsCompleted();
-        await registerIntroCompletedEvent(appState.user);
+        await registerStoryCompletedEvent(appState.user);
         safeNavigate(GAME_ROUTES.mapa);
       } catch (error) {
-        console.error("[app] No se pudo completar la introducción:", error);
+        console.error("[app] No se pudo completar la historia:", error);
         showToast("No se pudo continuar al mapa.", "warning");
       }
     });
   }
+}
+
+function setupQuickNavigationBindings() {
+  const bindings = [
+    { selector: '[data-go-map]', url: GAME_ROUTES.mapa },
+    { selector: '[data-go-profile]', url: GAME_ROUTES.profile },
+    { selector: '[data-go-story]', url: GAME_ROUTES.story },
+    { selector: '[data-go-home]', url: GAME_ROUTES.home },
+    { selector: "#continueJourneyBtn", url: GAME_ROUTES.mapa }
+  ];
+
+  bindings.forEach(({ selector, url }) => {
+    document.querySelectorAll(selector).forEach((el) => {
+      if (el.dataset.navBound === "true") return;
+      el.dataset.navBound = "true";
+
+      el.addEventListener("click", (event) => {
+        const tag = el.tagName.toLowerCase();
+        if (tag === "a" && el.getAttribute("href")) {
+          event.preventDefault();
+        }
+        safeNavigate(url);
+      });
+    });
+  });
 }
 
 /* ======================================
@@ -963,7 +1081,8 @@ async function initApp() {
   try {
     await initCurrentSession();
     setupAuthSubscription();
-    setupIntroCompletionBindings();
+    setupStoryCompletionBindings();
+    setupQuickNavigationBindings();
 
     appState.initialized = true;
   } catch (error) {
@@ -1093,8 +1212,7 @@ export async function reloadAppSession() {
   const currentUser = getCurrentUser();
 
   if (!currentUser?.uid) {
-    applyGuestSessionState();
-    return null;
+    return applyGuestSessionState();
   }
 
   const progress = await bootstrapUserSession(currentUser);
@@ -1121,13 +1239,13 @@ export function navigateToNextGameStep() {
 
 export async function completeStoryAndGoToMap() {
   await markStoryAsCompleted();
-  await registerIntroCompletedEvent(appState.user);
+  await registerStoryCompletedEvent(appState.user);
   safeNavigate(GAME_ROUTES.mapa);
 }
 
 export async function rememberStorySeen() {
   await markStoryAsCompleted();
-  await registerIntroCompletedEvent(appState.user);
+  await registerStoryCompletedEvent(appState.user);
   return true;
 }
 
@@ -1141,27 +1259,23 @@ export function resetStoryProgress() {
   }
 
   updateHasSeenIntroState(false);
-  notifyStateChange("intro-reset");
+  notifyStateChange("story-reset");
 }
 
 export function goToMap() {
   safeNavigate(GAME_ROUTES.mapa);
 }
 
-export function goToIntro() {
-  safeNavigate(GAME_ROUTES.intro);
-}
-
 export function goToStory() {
   safeNavigate(GAME_ROUTES.story);
 }
 
-export function goToLogin() {
-  safeNavigate(GAME_ROUTES.login);
-}
-
 export function goToProfile() {
   safeNavigate(GAME_ROUTES.profile);
+}
+
+export function goToHome() {
+  safeNavigate(GAME_ROUTES.home);
 }
 
 export function destroyApp() {

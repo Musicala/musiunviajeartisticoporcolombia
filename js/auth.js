@@ -340,8 +340,9 @@ export async function ensureUserDocument(user) {
       introSeen: hasSeenIntro()
     };
   } catch (error) {
-    console.error("[auth] Error asegurando documento de usuario:", error);
-    throw normalizeAuthError(error);
+    // No re-lanzar: un fallo de permisos en Firestore no debe bloquear la app
+    console.warn("[auth] Error asegurando documento de usuario (no bloqueante):", error);
+    return null;
   }
 }
 

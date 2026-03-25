@@ -822,8 +822,9 @@ async function openMinigame(gameLinkOrConfig) {
     finalUrl.searchParams.set("guest", "1");
   }
 
-  try {
-    if (state.user?.uid) {
+  // ── PASO 1: Registro en Firebase (opcional, nunca bloquea la navegación) ──
+  if (state.user?.uid) {
+    try {
       const next = await registerMinigameOpen(state.user.uid, {
         gameId: game.id,
         region: regionId,
@@ -835,20 +836,23 @@ async function openMinigame(gameLinkOrConfig) {
         state.progress = normalizeProgress(next);
         updateAppProgress(state.progress);
       }
+    } catch (firebaseError) {
+      // El guardado de progreso falló (permisos, red, etc.)
+      // Se registra como advertencia pero NO se bloquea la navegación
+      console.warn("[mapa] registerMinigameOpen falló (el juego abrirá de todas formas):", firebaseError);
     }
-
-    safeCall(trackOpenMinigame, {
-      regionId,
-      regionName: region.name,
-      gameId: game.id,
-      gameLabel: game.label
-    });
-
-    navigateTo(finalUrl.toString(), `Entrando a ${game.label}.`);
-  } catch (error) {
-    console.error("openMinigame error:", error);
-    showToast("No se pudo abrir el minijuego.", "warning");
   }
+
+  // ── PASO 2: Analytics (opcional, falla silenciosamente) ──
+  safeCall(trackOpenMinigame, {
+    regionId,
+    regionName: region.name,
+    gameId: game.id,
+    gameLabel: game.label
+  });
+
+  // ── PASO 3: Navegación — SIEMPRE se ejecuta ──
+  navigateTo(finalUrl.toString(), `Entrando a ${game.label}.`);
 }
 
 /* ======================================
