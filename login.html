@@ -2,1165 +2,616 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>Acceso | Musi</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Musi | Iniciar viaje</title>
 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta
     name="description"
-    content="Inicia sesión en Musi para guardar tu progreso y continuar el viaje sonoro por Colombia."
+    content="Accede a Musi para guardar tu progreso y comenzar tu viaje artístico por Colombia."
   />
-  <meta name="theme-color" content="#2d5bff" />
+  <meta name="theme-color" content="#5B5BF7" />
 
-  <link rel="stylesheet" href="css/styles.css" />
-  <link rel="stylesheet" href="css/ui.css" />
-
+  <link rel="icon" href="assets/favicon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap"
     rel="stylesheet"
   />
 
-  <link rel="icon" href="assets/favicon.png" />
-
   <style>
     :root {
-      --login-bg-1: #f8fbff;
-      --login-bg-2: #eef4ff;
-      --login-text: #111827;
-      --login-text-soft: #64748b;
-      --login-primary: #2d5bff;
-      --login-primary-dark: #2148d8;
-      --login-violet: #7c4dff;
-      --login-cyan: #11c5d9;
-      --login-card: rgba(255, 255, 255, 0.72);
-      --login-card-border: rgba(255, 255, 255, 0.84);
-      --login-shadow: 0 24px 60px rgba(15, 23, 42, 0.10);
-      --login-shadow-soft: 0 10px 24px rgba(15, 23, 42, 0.05);
+      --bg-1: #f5f7ff;
+      --bg-2: #eef2ff;
+      --card: rgba(255, 255, 255, 0.9);
+      --card-strong: #ffffff;
+      --text: #182033;
+      --muted: #64708b;
+      --primary: #5b5bf7;
+      --primary-2: #7d6bff;
+      --accent: #ffb84d;
+      --accent-2: #ff7bc3;
+      --success: #31b57b;
+      --danger: #d9534f;
+      --border: rgba(24, 32, 51, 0.08);
+      --shadow: 0 20px 60px rgba(70, 78, 140, 0.14);
+      --radius-xl: 32px;
+      --radius-lg: 24px;
+      --radius-md: 18px;
+      --radius-sm: 14px;
+      --transition: 220ms ease;
     }
 
     * {
       box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    .login-page {
-      min-height: 100vh;
       margin: 0;
-      overflow: hidden;
-      background:
-        radial-gradient(circle at 18% 16%, rgba(45, 91, 255, 0.12), transparent 22%),
-        radial-gradient(circle at 82% 18%, rgba(124, 77, 255, 0.12), transparent 22%),
-        radial-gradient(circle at 50% 100%, rgba(17, 197, 217, 0.10), transparent 30%),
-        linear-gradient(180deg, var(--login-bg-1) 0%, var(--login-bg-2) 100%);
-      position: relative;
+      padding: 0;
+    }
+
+    html, body {
+      min-height: 100%;
+    }
+
+    body {
       font-family: "Poppins", sans-serif;
-      color: var(--login-text);
+      color: var(--text);
+      background:
+        radial-gradient(circle at 15% 20%, rgba(125, 107, 255, 0.22), transparent 22%),
+        radial-gradient(circle at 85% 18%, rgba(255, 184, 77, 0.20), transparent 18%),
+        radial-gradient(circle at 78% 78%, rgba(255, 123, 195, 0.18), transparent 22%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      overflow-x: hidden;
     }
 
-    .login-page.is-routing {
-      overflow: hidden;
-      cursor: progress;
-    }
-
-    .login-page::before,
-    .login-page::after {
-      content: "";
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(80px);
+    .bg-bubbles {
+      position: fixed;
+      inset: 0;
       pointer-events: none;
+      overflow: hidden;
       z-index: 0;
-      opacity: 0.7;
     }
 
-    .login-page::before {
-      width: 320px;
-      height: 320px;
-      left: -60px;
-      top: 6%;
-      background: rgba(45, 91, 255, 0.12);
+    .bubble {
+      position: absolute;
+      border-radius: 999px;
+      filter: blur(8px);
+      opacity: 0.28;
+      animation: floaty 10s ease-in-out infinite;
     }
 
-    .login-page::after {
-      width: 340px;
-      height: 340px;
-      right: -80px;
+    .bubble.one {
+      width: 180px;
+      height: 180px;
+      background: #7d6bff;
+      left: 8%;
+      top: 10%;
+    }
+
+    .bubble.two {
+      width: 120px;
+      height: 120px;
+      background: #ffb84d;
+      right: 12%;
+      top: 18%;
+      animation-delay: -2s;
+    }
+
+    .bubble.three {
+      width: 220px;
+      height: 220px;
+      background: #ff7bc3;
+      right: 8%;
+      bottom: 6%;
+      animation-delay: -4s;
+    }
+
+    .bubble.four {
+      width: 140px;
+      height: 140px;
+      background: #5b5bf7;
+      left: 10%;
       bottom: 8%;
-      background: rgba(124, 77, 255, 0.12);
+      animation-delay: -1.5s;
+    }
+
+    @keyframes floaty {
+      0%, 100% { transform: translateY(0px) translateX(0px) scale(1); }
+      50% { transform: translateY(-16px) translateX(10px) scale(1.04); }
     }
 
     .login-shell {
       position: relative;
       z-index: 1;
-      min-height: 100vh;
-      width: min(100% - 24px, 1180px);
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1.05fr 0.95fr;
-      gap: 18px;
-      align-items: center;
-      padding: 20px 0;
+      width: 100%;
+      max-width: 520px;
     }
 
-    .login-visual,
-    .login-card {
-      border-radius: 30px;
-      background: var(--login-card);
-      border: 1px solid var(--login-card-border);
-      box-shadow: var(--login-shadow);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-    }
-
-    .login-visual {
-      position: relative;
-      min-height: 680px;
-      padding: 28px;
-      overflow: hidden;
-      display: grid;
-      align-content: space-between;
-      isolation: isolate;
-    }
-
-    .login-visual::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(circle at 30% 24%, rgba(45, 91, 255, 0.16), transparent 24%),
-        radial-gradient(circle at 78% 24%, rgba(124, 77, 255, 0.16), transparent 24%),
-        radial-gradient(circle at 50% 82%, rgba(17, 197, 217, 0.12), transparent 28%);
-      z-index: -1;
-    }
-
-    .login-visual-top {
-      display: grid;
-      gap: 14px;
-    }
-
-    .login-brand {
+    .back-link {
       display: inline-flex;
       align-items: center;
-      gap: 12px;
-      width: fit-content;
-      padding: 10px 14px;
+      gap: 10px;
+      margin-bottom: 16px;
+      padding: 12px 18px;
       border-radius: 999px;
-      background: rgba(255,255,255,0.76);
-      border: 1px solid rgba(148, 163, 184, 0.16);
-      box-shadow: var(--login-shadow-soft);
+      background: rgba(255, 255, 255, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.65);
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.95rem;
+      box-shadow: 0 10px 30px rgba(70, 78, 140, 0.08);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition: transform var(--transition), box-shadow var(--transition), background var(--transition);
     }
 
-    .login-brand-mark {
-      width: 38px;
-      height: 38px;
-      border-radius: 12px;
+    .back-link:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 34px rgba(70, 78, 140, 0.14);
+      background: rgba(255, 255, 255, 0.92);
+    }
+
+    .login-card {
+      background: var(--card);
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow);
+      padding: 30px 28px 26px;
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .brand-logo-wrap {
+      width: 72px;
+      height: 72px;
+      border-radius: 24px;
+      background: linear-gradient(135deg, #6a5cff, #8b7dff);
       display: grid;
       place-items: center;
-      background: linear-gradient(135deg, var(--login-primary), var(--login-violet));
-      color: white;
-      font-weight: 800;
-      box-shadow: 0 10px 20px rgba(45, 91, 255, 0.20);
+      box-shadow: 0 16px 30px rgba(91, 91, 247, 0.28);
       overflow: hidden;
+      flex-shrink: 0;
     }
 
-    .login-brand-mark img {
-      width: 24px;
-      height: 24px;
+    .brand-logo-wrap img {
+      width: 78%;
+      height: 78%;
       object-fit: contain;
     }
 
-    .login-brand-text {
-      display: grid;
-      gap: 1px;
-    }
-
-    .login-brand-label {
+    .brand-copy small {
+      display: inline-block;
       font-size: 0.78rem;
-      color: var(--login-text-soft);
-      font-weight: 700;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
-    }
-
-    .login-brand-title {
-      font-size: 0.98rem;
-      color: var(--login-text);
+      color: var(--primary);
       font-weight: 700;
+      margin-bottom: 4px;
     }
 
-    .login-kicker {
-      margin: 0;
-      color: var(--login-primary);
-      font-size: 0.86rem;
-      font-weight: 800;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-    }
-
-    .login-title {
-      margin: 0;
-      font-size: clamp(2.4rem, 5vw, 4rem);
+    .brand-copy h1 {
+      font-family: "Baloo 2", cursive;
+      font-size: clamp(2.2rem, 5vw, 3rem);
       line-height: 0.95;
-      letter-spacing: -0.05em;
-      color: var(--login-text);
-    }
-
-    .login-description {
-      max-width: 560px;
-      color: var(--login-text-soft);
-      font-size: 1rem;
-      line-height: 1.75;
-      margin: 0;
-    }
-
-    .login-world {
-      position: relative;
-      min-height: 320px;
-      display: grid;
-      place-items: center;
-    }
-
-    .login-map-glow {
-      position: absolute;
-      width: 320px;
-      height: 320px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(45, 91, 255, 0.18), transparent 65%);
-      filter: blur(10px);
-      opacity: 0.9;
-    }
-
-    .login-orb {
-      position: relative;
-      width: min(100%, 360px);
-      aspect-ratio: 1 / 1;
-      border-radius: 50%;
-      background:
-        radial-gradient(circle at 36% 28%, rgba(255,255,255,0.82), rgba(255,255,255,0) 18%),
-        linear-gradient(160deg, #2d5bff, #7c4dff 56%, #11c5d9);
-      box-shadow:
-        inset -22px -26px 48px rgba(17, 24, 39, 0.16),
-        0 22px 56px rgba(45, 91, 255, 0.22);
-      overflow: hidden;
-      animation: loginFloat 4.2s ease-in-out infinite;
-    }
-
-    .login-orb::before {
-      content: "";
-      position: absolute;
-      inset: 16% 14%;
-      border-radius: 50%;
-      background:
-        radial-gradient(circle at 30% 36%, rgba(255,255,255,0.20), transparent 18%),
-        radial-gradient(circle at 68% 30%, rgba(255,255,255,0.16), transparent 16%),
-        radial-gradient(circle at 52% 72%, rgba(255,255,255,0.16), transparent 18%);
-    }
-
-    .login-orbit {
-      position: absolute;
-      inset: -26px;
-      border-radius: 50%;
-      border: 1px dashed rgba(45, 91, 255, 0.16);
-      animation: loginSpin 18s linear infinite;
-    }
-
-    .login-musi {
-      position: absolute;
-      top: 14%;
-      right: 10%;
-      width: 78px;
-      height: 78px;
-      border-radius: 24px;
-      display: grid;
-      place-items: center;
-      background: rgba(255,255,255,0.88);
-      color: var(--login-primary);
-      font-size: 2rem;
-      font-weight: 800;
-      box-shadow: 0 16px 30px rgba(15, 23, 42, 0.10);
-      animation: musiDrift 5s ease-in-out infinite;
-    }
-
-    .login-stars {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-    }
-
-    .login-star {
-      position: absolute;
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.96);
-      box-shadow: 0 0 14px rgba(255,255,255,0.92);
-      animation: loginTwinkle 2.6s ease-in-out infinite;
-    }
-
-    .login-star.s1 { top: 20%; left: 20%; }
-    .login-star.s2 { top: 30%; right: 16%; animation-delay: 0.7s; }
-    .login-star.s3 { bottom: 18%; left: 24%; animation-delay: 1.2s; }
-    .login-star.s4 { bottom: 15%; right: 20%; animation-delay: 1.8s; }
-
-    .login-features {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 12px;
-    }
-
-    .login-feature {
-      padding: 14px 14px 12px;
-      border-radius: 20px;
-      background: rgba(255,255,255,0.78);
-      border: 1px solid rgba(255,255,255,0.86);
-      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
-    }
-
-    .login-feature-icon {
-      width: 42px;
-      height: 42px;
-      display: grid;
-      place-items: center;
-      border-radius: 14px;
-      background: linear-gradient(135deg, #dfe8ff, #eee7ff);
-      font-size: 1.15rem;
       margin-bottom: 10px;
     }
 
-    .login-feature h3 {
-      margin: 0 0 4px;
-      font-size: 0.95rem;
-      color: var(--login-text);
-    }
-
-    .login-feature p {
-      margin: 0;
-      color: var(--login-text-soft);
-      font-size: 0.84rem;
-      line-height: 1.55;
-    }
-
-    .login-card {
-      min-height: 680px;
-      padding: 26px 24px 22px;
-      display: grid;
-      grid-template-rows: auto auto auto auto 1fr auto;
-      gap: 18px;
-    }
-
-    .login-card-top {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 16px;
-      flex-wrap: wrap;
-    }
-
-    .login-card-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      min-height: 40px;
-      padding: 0.6rem 0.95rem;
-      border-radius: 999px;
-      background: rgba(45, 91, 255, 0.10);
-      color: var(--login-primary);
-      border: 1px solid rgba(45, 91, 255, 0.10);
-      font-size: 0.86rem;
-      font-weight: 700;
-    }
-
-    .login-back-link {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 40px;
-      padding: 0.7rem 0.95rem;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.82);
-      border: 1px solid rgba(148, 163, 184, 0.18);
-      color: var(--login-text);
-      font-size: 0.9rem;
-      font-weight: 700;
-      transition: all 0.22s ease;
-      text-decoration: none;
-    }
-
-    .login-back-link:hover {
-      transform: translateY(-2px);
-      background: rgba(255,255,255,0.96);
-    }
-
-    .login-card-head {
-      display: grid;
-      gap: 10px;
-    }
-
-    .login-card-kicker {
-      margin: 0;
-      color: var(--login-primary);
-      font-size: 0.84rem;
-      font-weight: 800;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-    }
-
-    .login-card-title {
-      margin: 0;
-      font-size: clamp(1.9rem, 4vw, 2.7rem);
-      line-height: 1;
-      letter-spacing: -0.04em;
-      color: var(--login-text);
-    }
-
-    .login-card-description {
-      margin: 0;
-      color: var(--login-text-soft);
-      font-size: 0.96rem;
+    .brand-copy p {
+      color: var(--muted);
+      font-size: 1rem;
       line-height: 1.7;
+      max-width: 420px;
     }
 
-    .login-user-preview {
-      display: grid;
-      grid-template-columns: auto 1fr;
-      gap: 14px;
-      align-items: center;
-      padding: 16px;
+    .helper-card {
+      margin-top: 24px;
+      background: rgba(255, 255, 255, 0.82);
+      border: 1px solid var(--border);
       border-radius: 22px;
-      background: rgba(255,255,255,0.84);
-      border: 1px solid rgba(148, 163, 184, 0.16);
-      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.05);
+      padding: 18px 18px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
     }
 
-    .login-avatar {
-      width: 58px;
-      height: 58px;
+    .helper-icon {
+      width: 52px;
+      height: 52px;
       border-radius: 18px;
+      background: linear-gradient(135deg, rgba(91, 91, 247, 0.14), rgba(255, 123, 195, 0.14));
       display: grid;
       place-items: center;
-      background: linear-gradient(135deg, var(--login-primary), var(--login-violet));
-      color: white;
-      font-size: 1.15rem;
-      font-weight: 800;
-      box-shadow: 0 12px 22px rgba(45, 91, 255, 0.20);
-      overflow: hidden;
-      text-transform: uppercase;
+      font-size: 1.6rem;
+      flex-shrink: 0;
     }
 
-    .login-avatar img {
+    .helper-card h2 {
+      font-size: 1rem;
+      margin-bottom: 4px;
+    }
+
+    .helper-card p {
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .session-box {
+      margin-top: 24px;
+      padding: 18px;
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.78);
+      border: 1px solid var(--border);
+      display: none;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .session-box.show {
+      display: flex;
+    }
+
+    .avatar {
+      width: 56px;
+      height: 56px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, #5b5bf7, #8b7dff);
+      color: white;
+      font-weight: 800;
+      font-size: 1.2rem;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .avatar img {
       width: 100%;
       height: 100%;
       object-fit: cover;
     }
 
-    .login-user-text {
-      display: grid;
-      gap: 4px;
+    .session-copy {
+      flex: 1;
       min-width: 0;
     }
 
-    .login-user-label {
-      color: var(--login-text-soft);
-      font-size: 0.82rem;
+    .session-copy small {
+      display: block;
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-bottom: 4px;
       font-weight: 600;
     }
 
-    .login-user-name {
-      color: var(--login-text);
-      font-size: 1rem;
-      font-weight: 700;
-      overflow-wrap: anywhere;
+    .session-copy strong {
+      display: block;
+      font-size: 1.05rem;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
-    .login-user-meta {
-      color: var(--login-text-soft);
-      font-size: 0.88rem;
-      overflow-wrap: anywhere;
+    .session-copy span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.92rem;
+      margin-top: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
-    .login-actions {
+    .actions {
       display: grid;
-      gap: 12px;
-      align-content: start;
+      gap: 14px;
+      margin-top: 26px;
     }
 
-    .login-btn {
+    .btn {
+      appearance: none;
+      border: none;
+      width: 100%;
+      min-height: 62px;
+      border-radius: 999px;
+      font-family: inherit;
+      font-size: 1.02rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition:
+        transform var(--transition),
+        box-shadow var(--transition),
+        opacity var(--transition),
+        background var(--transition);
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 10px;
-      width: 100%;
+      gap: 12px;
+      padding: 0 22px;
+      text-decoration: none;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+    }
+
+    .btn-primary {
+      color: #fff;
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      box-shadow: 0 16px 30px rgba(91, 91, 247, 0.28);
+    }
+
+    .btn-primary:hover {
+      box-shadow: 0 20px 36px rgba(91, 91, 247, 0.34);
+    }
+
+    .btn-ghost {
+      color: #7a5cff;
+      background: rgba(122, 92, 255, 0.08);
+      border: 1px solid rgba(122, 92, 255, 0.12);
       min-height: 52px;
-      padding: 0.95rem 1rem;
-      border-radius: 999px;
-      font-family: inherit;
       font-size: 0.96rem;
       font-weight: 700;
-      cursor: pointer;
-      transition: all 0.22s ease;
-      border: none;
     }
 
-    .login-btn:focus-visible {
-      outline: none;
-      box-shadow: 0 0 0 4px rgba(45, 91, 255, 0.12);
+    .btn[disabled] {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none !important;
     }
 
-    .login-btn-primary {
-      background: linear-gradient(135deg, var(--login-primary), #4f76ff);
-      color: white;
-      box-shadow: 0 14px 26px rgba(45, 91, 255, 0.22);
-    }
-
-    .login-btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 18px 34px rgba(45, 91, 255, 0.28);
-    }
-
-    .login-btn-secondary {
-      background: rgba(255,255,255,0.86);
-      color: var(--login-text);
-      border: 1px solid rgba(148, 163, 184, 0.18);
-      box-shadow: 0 10px 20px rgba(15, 23, 42, 0.05);
-    }
-
-    .login-btn-secondary:hover {
-      transform: translateY(-2px);
-      background: rgba(255,255,255,0.98);
-    }
-
-    .login-btn-neutral {
-      background: rgba(124, 77, 255, 0.10);
-      color: #5a39b6;
-      border: 1px solid rgba(124, 77, 255, 0.10);
-    }
-
-    .login-btn-neutral:hover {
-      transform: translateY(-2px);
-      background: rgba(124, 77, 255, 0.14);
-    }
-
-    .login-btn.is-loading,
-    .login-btn:disabled {
-      pointer-events: none;
-      opacity: 0.82;
-    }
-
-    .login-divider {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      color: #94a3b8;
-      font-size: 0.84rem;
+    .status-message {
+      min-height: 26px;
+      margin-top: 18px;
+      text-align: center;
+      font-size: 0.95rem;
       font-weight: 600;
+      color: var(--muted);
     }
 
-    .login-divider::before,
-    .login-divider::after {
-      content: "";
-      flex: 1;
-      height: 1px;
-      border-radius: 999px;
-      background: linear-gradient(90deg, transparent, rgba(148, 163, 184, 0.24), transparent);
+    .status-message.success {
+      color: var(--success);
     }
 
-    .login-note {
-      display: grid;
-      gap: 10px;
-      padding: 16px;
-      border-radius: 22px;
-      background: rgba(255,255,255,0.82);
-      border: 1px solid rgba(148, 163, 184, 0.16);
+    .status-message.error {
+      color: var(--danger);
     }
 
-    .login-note-title {
-      margin: 0;
-      color: var(--login-text);
-      font-size: 0.95rem;
-      font-weight: 700;
-    }
-
-    .login-note-text {
-      margin: 0;
-      color: var(--login-text-soft);
-      font-size: 0.9rem;
-      line-height: 1.65;
-    }
-
-    .login-alert {
-      min-height: 48px;
-      padding: 0.9rem 1rem;
-      border-radius: 18px;
-      background: rgba(255,255,255,0.86);
-      border: 1px solid rgba(148, 163, 184, 0.16);
-      color: var(--login-text-soft);
-      font-size: 0.92rem;
+    .mini-note {
+      margin-top: 18px;
+      text-align: center;
+      font-size: 0.86rem;
+      color: #7a86a0;
       line-height: 1.6;
     }
 
-    .login-alert.is-error {
-      background: rgba(254, 242, 242, 0.95);
-      border-color: rgba(239, 68, 68, 0.16);
-      color: #b91c1c;
-    }
-
-    .login-alert.is-success {
-      background: rgba(240, 253, 244, 0.95);
-      border-color: rgba(34, 197, 94, 0.16);
-      color: #166534;
-    }
-
-    .login-card-footer {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      flex-wrap: wrap;
-      text-align: center;
-      color: var(--login-text-soft);
-      font-size: 0.84rem;
-    }
-
-    .route-overlay {
-      position: fixed;
-      inset: 0;
-      z-index: 20;
-      display: grid;
-      place-items: center;
-      padding: 20px;
-      background:
-        radial-gradient(circle at top, rgba(45, 91, 255, 0.18), transparent 24%),
-        linear-gradient(180deg, rgba(10, 17, 35, 0.82), rgba(10, 17, 35, 0.92));
-      color: #fff;
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
-      transition:
-        opacity 0.24s ease,
-        visibility 0.24s ease;
-    }
-
-    .route-overlay.show {
-      opacity: 1;
-      visibility: visible;
-      pointer-events: auto;
-    }
-
-    .route-card {
-      width: min(100%, 420px);
-      padding: 28px 24px;
-      border-radius: 26px;
-      text-align: center;
-      background: rgba(19, 28, 52, 0.78);
-      border: 1px solid rgba(255, 255, 255, 0.14);
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.26);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-    }
-
-    .route-spinner {
-      width: 58px;
-      height: 58px;
-      margin: 0 auto 18px;
-      border-radius: 50%;
-      border: 4px solid rgba(255, 255, 255, 0.18);
-      border-top-color: #ffffff;
-      animation: spin 0.95s linear infinite;
-    }
-
-    .route-title {
-      margin: 0;
-      font-size: 1.16rem;
-      font-weight: 700;
-    }
-
-    .route-text {
-      margin: 10px 0 0;
-      color: rgba(229, 236, 255, 0.82);
-      line-height: 1.6;
-      font-size: 0.95rem;
-    }
-
-    @keyframes loginFloat {
-      0%, 100% {
-        transform: translateY(0);
-      }
-      50% {
-        transform: translateY(-10px);
-      }
-    }
-
-    @keyframes loginSpin {
-      from {
-        transform: rotate(0deg);
-      }
-      to {
-        transform: rotate(360deg);
-      }
-    }
-
-    @keyframes musiDrift {
-      0%, 100% {
-        transform: translateY(0) rotate(-3deg);
-      }
-      50% {
-        transform: translateY(-10px) rotate(4deg);
-      }
-    }
-
-    @keyframes loginTwinkle {
-      0%, 100% {
-        opacity: 0.28;
-        transform: scale(0.88);
-      }
-      50% {
-        opacity: 1;
-        transform: scale(1.18);
-      }
-    }
-
-    @keyframes spin {
-      to {
-        transform: rotate(360deg);
-      }
-    }
-
-    @media (max-width: 1080px) {
-      .login-shell {
-        grid-template-columns: 1fr;
+    @media (max-width: 640px) {
+      body {
+        padding: 16px;
       }
 
-      .login-visual,
       .login-card {
-        min-height: auto;
+        padding: 24px 18px 22px;
+        border-radius: 26px;
       }
 
-      .login-visual {
-        padding-bottom: 22px;
-      }
-    }
-
-    @media (max-width: 680px) {
-      .login-shell {
-        width: min(100% - 16px, 1180px);
-        padding: 14px 0;
+      .brand {
+        align-items: flex-start;
       }
 
-      .login-visual,
-      .login-card {
-        border-radius: 22px;
+      .brand-logo-wrap {
+        width: 62px;
+        height: 62px;
+        border-radius: 20px;
       }
 
-      .login-visual,
-      .login-card {
-        padding: 18px 16px;
+      .brand-copy h1 {
+        font-size: 2.2rem;
       }
 
-      .login-features {
-        grid-template-columns: 1fr;
-      }
-
-      .login-card-top {
-        flex-direction: column;
-        align-items: stretch;
-      }
-
-      .login-back-link {
-        width: fit-content;
-      }
-
-      .login-user-preview {
-        grid-template-columns: auto 1fr;
-      }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .login-orb,
-      .login-orbit,
-      .login-musi,
-      .login-star,
-      .route-spinner {
-        animation: none !important;
+      .helper-card {
+        align-items: flex-start;
       }
     }
   </style>
 </head>
+<body>
+  <div class="bg-bubbles" aria-hidden="true">
+    <div class="bubble one"></div>
+    <div class="bubble two"></div>
+    <div class="bubble three"></div>
+    <div class="bubble four"></div>
+  </div>
 
-<body class="login-page">
   <main class="login-shell">
-    <section class="login-visual" aria-labelledby="loginVisualTitle">
-      <div class="login-visual-top">
-        <div class="login-brand" aria-label="Marca del juego">
-          <div class="login-brand-mark" aria-hidden="true">
-            <img src="assets/logo.png" alt="" />
-          </div>
-          <div class="login-brand-text">
-            <span class="login-brand-label">Acceso</span>
-            <span class="login-brand-title">Musi</span>
-          </div>
+    <a class="back-link" href="index.html">
+      ← Volver al inicio
+    </a>
+
+    <section class="login-card">
+      <div class="brand">
+        <div class="brand-logo-wrap">
+          <img src="assets/logo.png" alt="Logo Musi" />
         </div>
 
-        <p class="login-kicker">Acceso al viaje</p>
-
-        <h1 id="loginVisualTitle" class="login-title">
-          Entra al viaje y guarda tu recorrido
-        </h1>
-
-        <p class="login-description">
-          Esta pantalla valida tu sesión antes de continuar el flujo del juego. Si entraste
-          desde inicio, después del acceso volverás exactamente al punto que corresponde:
-          boot, historia o mapa, sin romper el recorrido.
-        </p>
-      </div>
-
-      <div class="login-world" aria-hidden="true">
-        <div class="login-stars">
-          <span class="login-star s1"></span>
-          <span class="login-star s2"></span>
-          <span class="login-star s3"></span>
-          <span class="login-star s4"></span>
-        </div>
-
-        <div class="login-map-glow"></div>
-
-        <div class="login-orb">
-          <div class="login-orbit"></div>
-          <div class="login-musi">🎵</div>
+        <div class="brand-copy">
+          <small>Acceso al viaje</small>
+          <h1>Entra a Musi</h1>
+          <p>
+            Inicia sesión con Google para guardar tu progreso y continuar tu recorrido.
+          </p>
         </div>
       </div>
 
-      <div class="login-features">
-        <article class="login-feature">
-          <div class="login-feature-icon" aria-hidden="true">🔐</div>
-          <h3>Sesión real</h3>
-          <p>El acceso usa la autenticación existente del proyecto y no un invento local raro.</p>
-        </article>
-
-        <article class="login-feature">
-          <div class="login-feature-icon" aria-hidden="true">🧭</div>
-          <h3>Ruta correcta</h3>
-          <p>Después de entrar, vuelves al paso correcto del flujo según el avance narrativo.</p>
-        </article>
-
-        <article class="login-feature">
-          <div class="login-feature-icon" aria-hidden="true">⭐</div>
-          <h3>Progreso</h3>
-          <p>Tu sesión ayuda a conservar mejor el avance y a identificar quién está jugando.</p>
-        </article>
-      </div>
-    </section>
-
-    <section class="login-card" aria-labelledby="loginCardTitle">
-      <div class="login-card-top">
-        <div class="login-card-badge">
-          <span>●</span>
-          <span>Acceso al viaje</span>
-        </div>
-
-        <a href="index.html" class="login-back-link">
-          Volver al inicio
-        </a>
-      </div>
-
-      <header class="login-card-head">
-        <p class="login-card-kicker">Sesión</p>
-        <h2 id="loginCardTitle" class="login-card-title">Elige cómo entrar</h2>
-        <p class="login-card-description">
-          Puedes usar Google para una sesión identificada o entrar como invitado si solo quieres
-          comenzar rápido. En ambos casos se respetará el destino correcto guardado por el flujo del juego.
-        </p>
-      </header>
-
-      <div class="login-user-preview" id="authOnly" hidden>
-        <div class="login-avatar" id="userAvatar">M</div>
-
-        <div class="login-user-text">
-          <span class="login-user-label">Sesión activa</span>
-          <span class="login-user-name" id="userName">Jugador</span>
-          <span class="login-user-meta" id="userEmail">-</span>
+      <div class="helper-card">
+        <div class="helper-icon">🎵</div>
+        <div>
+          <h2>Tu aventura se guarda mejor con cuenta</h2>
+          <p>
+            Si ya habías entrado antes, Musi continuará tu viaje automáticamente.
+          </p>
         </div>
       </div>
 
-      <div class="login-actions guest-only" id="guestOnly">
-        <button id="loginGoogleBtn" class="login-btn login-btn-primary" type="button">
-          <span aria-hidden="true">🔐</span>
-          <span>Continuar con Google</span>
+      <div id="sessionBox" class="session-box" aria-live="polite">
+        <div class="avatar" id="userAvatar">M</div>
+        <div class="session-copy">
+          <small>Sesión activa</small>
+          <strong id="userName">Jugador</strong>
+          <span id="userEmail">Sin correo</span>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button id="googleLoginBtn" class="btn btn-primary" type="button">
+          🔐 Entrar con Google
         </button>
 
-        <div class="login-divider">
-          <span>o</span>
-        </div>
-
-        <button id="loginGuestBtn" class="login-btn login-btn-secondary" type="button">
-          <span aria-hidden="true">✨</span>
-          <span>Entrar como invitado</span>
+        <button id="logoutBtn" class="btn btn-ghost" type="button" style="display: none;">
+          ↩ Cerrar sesión
         </button>
       </div>
 
-      <div class="login-actions auth-only" id="loggedActions" hidden>
-        <button id="continueBtn" class="login-btn login-btn-primary" type="button">
-          <span aria-hidden="true">🧭</span>
-          <span>Continuar viaje</span>
-        </button>
+      <p id="statusMessage" class="status-message" aria-live="polite"></p>
 
-        <button id="logoutBtn" class="login-btn login-btn-neutral" type="button">
-          <span aria-hidden="true">↩</span>
-          <span>Cerrar sesión</span>
-        </button>
-      </div>
-
-      <section class="login-note">
-        <h3 class="login-note-title">Acceso sugerido</h3>
-        <p class="login-note-text">
-          Si quieren una sesión más consistente y un perfil mejor identificado, usen Google.
-          Si solo quieren entrar rápido a explorar, pueden empezar como invitados. La diferencia
-          es la identidad de la sesión, no la ruta del juego.
-        </p>
-      </section>
-
-      <div id="loginMessage" class="login-alert" aria-live="polite">
-        Inicia sesión para continuar el viaje de Musi.
-      </div>
-
-      <footer class="login-card-footer">
-        <span>Musicala</span>
-        <span>•</span>
-        <span>Musi: Un viaje sonoro por Colombia</span>
-      </footer>
+      <p class="mini-note">
+        Si ya tienes sesión activa, esta pantalla se saltará automáticamente.
+      </p>
     </section>
   </main>
 
-  <div id="routeOverlay" class="route-overlay" aria-hidden="true">
-    <div class="route-card" role="status" aria-live="polite" aria-atomic="true">
-      <div class="route-spinner" aria-hidden="true"></div>
-      <p class="route-title">Preparando acceso</p>
-      <p id="routeText" class="route-text">
-        Continuando al siguiente punto del viaje.
-      </p>
-    </div>
-  </div>
-
   <script type="module">
     import {
-      bindAuthUI,
-      onUserChange,
-      getCurrentUser,
-      renderAuthUserUI,
-      renderAuthVisibility,
-      resolvePostLoginRedirect,
-      clearPostLoginRedirect
-    } from "./js/auth.js";
+      loginWithGoogle,
+      logoutUser,
+      observeAuthState,
+      getRedirectAfterLogin
+    } from "./js/firebase-config.js";
 
-    const ROUTES = {
-      home: "index.html",
-      map: "mapa.html"
-    };
-
-    const STORAGE_KEYS = {
-      userSession: "musi_user_session",
-      userProfile: "musi_user_profile"
-    };
-
-    const loginMessage = document.getElementById("loginMessage");
-    const continueBtn = document.getElementById("continueBtn");
+    const googleLoginBtn = document.getElementById("googleLoginBtn");
     const logoutBtn = document.getElementById("logoutBtn");
+
+    const sessionBox = document.getElementById("sessionBox");
     const userAvatar = document.getElementById("userAvatar");
-    const guestOnly = document.getElementById("guestOnly");
-    const authOnly = document.getElementById("authOnly");
-    const loggedActions = document.getElementById("loggedActions");
-    const routeOverlay = document.getElementById("routeOverlay");
-    const routeText = document.getElementById("routeText");
     const userName = document.getElementById("userName");
     const userEmail = document.getElementById("userEmail");
+    const statusMessage = document.getElementById("statusMessage");
 
-    let isRouting = false;
+    let hasRedirected = false;
 
-    function setMessage(message, type = "") {
-      if (!loginMessage) return;
-
-      loginMessage.textContent = message;
-      loginMessage.classList.remove("is-error", "is-success");
-
-      if (type === "error") {
-        loginMessage.classList.add("is-error");
-      }
-
-      if (type === "success") {
-        loginMessage.classList.add("is-success");
-      }
+    function setStatus(message = "", type = "") {
+      statusMessage.textContent = message;
+      statusMessage.className = "status-message";
+      if (type) statusMessage.classList.add(type);
     }
 
-    function getUserInitial(user) {
-      const raw =
-        user?.displayName ||
-        user?.name ||
-        user?.email ||
-        "M";
-
-      return String(raw).trim().charAt(0).toUpperCase() || "M";
+    function getInitials(name = "") {
+      const cleaned = String(name).trim();
+      if (!cleaned) return "M";
+      const parts = cleaned.split(/\s+/).slice(0, 2);
+      return parts.map(p => p.charAt(0).toUpperCase()).join("") || "M";
     }
 
-    function updatePreviewAvatar(user) {
-      if (!userAvatar) return;
+    function renderUser(user) {
+      if (user) {
+        sessionBox.classList.add("show");
 
-      if (user?.photoURL) {
-        const safeAlt = user.displayName || "usuario";
-        userAvatar.innerHTML = `<img src="${user.photoURL}" alt="Avatar de ${safeAlt}">`;
+        const displayName =
+          user.displayName ||
+          user.name ||
+          "Jugador";
+
+        const email =
+          user.email ||
+          "Sesión iniciada";
+
+        userName.textContent = displayName;
+        userEmail.textContent = email;
+
+        if (user.photoURL) {
+          userAvatar.innerHTML = `<img src="${user.photoURL}" alt="Avatar de usuario" />`;
+        } else {
+          userAvatar.textContent = getInitials(displayName);
+        }
+
+        logoutBtn.style.display = "inline-flex";
       } else {
-        userAvatar.textContent = getUserInitial(user);
+        sessionBox.classList.remove("show");
+        userAvatar.textContent = "M";
+        userName.textContent = "Jugador";
+        userEmail.textContent = "Sin correo";
+        logoutBtn.style.display = "none";
       }
     }
 
-    function persistLocalSession(user) {
+    function goNext() {
+      if (hasRedirected) return;
+      hasRedirected = true;
+
+      const nextPage =
+        (typeof getRedirectAfterLogin === "function" && getRedirectAfterLogin()) ||
+        sessionStorage.getItem("musi_redirect_after_login") ||
+        "boot.html";
+
+      window.location.href = nextPage;
+    }
+
+    googleLoginBtn?.addEventListener("click", async () => {
       try {
-        const safeProfile = {
-          uid: user?.uid || `guest-${Date.now()}`,
-          displayName: user?.displayName || user?.name || (user?.isAnonymous ? "Invitado" : "Jugador"),
-          email: user?.email || "",
-          photoURL: user?.photoURL || "",
-          isAnonymous: Boolean(user?.isAnonymous)
-        };
+        setStatus("Abriendo acceso con Google...");
+        googleLoginBtn.disabled = true;
 
-        localStorage.setItem(STORAGE_KEYS.userSession, safeProfile.uid);
-        localStorage.setItem(STORAGE_KEYS.userProfile, JSON.stringify(safeProfile));
+        await loginWithGoogle();
+
+        setStatus("Sesión iniciada correctamente ✨", "success");
       } catch (error) {
-        console.warn("No se pudo guardar la sesión local espejo.", error);
+        console.error("Error login Google:", error);
+        setStatus("No se pudo iniciar sesión con Google.", "error");
+        googleLoginBtn.disabled = false;
       }
-    }
+    });
 
-    function clearLocalSession() {
+    logoutBtn?.addEventListener("click", async () => {
       try {
-        localStorage.removeItem(STORAGE_KEYS.userSession);
-        localStorage.removeItem(STORAGE_KEYS.userProfile);
+        await logoutUser();
+        setStatus("Sesión cerrada.");
       } catch (error) {
-        console.warn("No se pudo limpiar la sesión local espejo.", error);
-      }
-    }
-
-    function showRouteOverlay(message) {
-      if (!routeOverlay || isRouting) return;
-
-      isRouting = true;
-      document.body.classList.add("is-routing");
-      routeOverlay.classList.add("show");
-      routeOverlay.setAttribute("aria-hidden", "false");
-      routeText.textContent = message;
-    }
-
-    function goToResolvedRoute(message = "Continuando al siguiente paso del viaje.") {
-      if (isRouting) return;
-
-      const target = resolvePostLoginRedirect(ROUTES.map);
-      clearPostLoginRedirect();
-
-      showRouteOverlay(message);
-
-      window.setTimeout(() => {
-        window.location.href = target;
-      }, 320);
-    }
-
-    function setAuthBlocksVisible(isLoggedIn) {
-      if (guestOnly) {
-        guestOnly.hidden = isLoggedIn;
-      }
-
-      if (authOnly) {
-        authOnly.hidden = !isLoggedIn;
-      }
-
-      if (loggedActions) {
-        loggedActions.hidden = !isLoggedIn;
-      }
-    }
-
-    function updateLoggedState(user) {
-      renderAuthUserUI?.(user);
-      renderAuthVisibility?.(user);
-      updatePreviewAvatar(user);
-
-      const isLoggedIn = Boolean(user?.uid);
-      setAuthBlocksVisible(isLoggedIn);
-
-      if (!isLoggedIn) {
-        if (userName) userName.textContent = "Jugador";
-        if (userEmail) userEmail.textContent = "-";
-        setMessage("Inicia sesión para continuar el viaje de Musi.");
-        return;
-      }
-
-      persistLocalSession(user);
-
-      if (userName) {
-        userName.textContent =
-          user?.displayName ||
-          user?.name ||
-          (user?.isAnonymous ? "Invitado" : "Jugador");
-      }
-
-      if (userEmail) {
-        userEmail.textContent =
-          user?.email ||
-          (user?.isAnonymous ? "Sesión invitado" : "Sin correo registrado");
-      }
-
-      if (user.isAnonymous) {
-        setMessage("Entraste como invitado. Todo listo para continuar el recorrido.", "success");
-      } else {
-        setMessage(
-          `Sesión lista. Bienvenido${user.displayName ? `, ${user.displayName}` : ""}.`,
-          "success"
-        );
-      }
-    }
-
-    bindAuthUI({
-      redirectAfterLogin: "",
-      redirectAfterLogout: "",
-      disableIfAuthenticated: false,
-      onLogin: async (user) => {
-        updateLoggedState(user);
-        setMessage("Acceso correcto. Continuando al siguiente paso del viaje...", "success");
-      },
-      onLogout: async () => {
-        clearLocalSession();
-        setAuthBlocksVisible(false);
-        setMessage("Sesión cerrada. Puedes volver a entrar cuando quieras.");
-      },
-      onError: async (error) => {
-        setMessage(error?.message || "No se pudo completar el acceso.", "error");
+        console.error("Error logout:", error);
+        setStatus("No se pudo cerrar la sesión.", "error");
       }
     });
 
-    onUserChange(async (user) => {
-      updateLoggedState(user);
-    });
+    if (typeof observeAuthState === "function") {
+      observeAuthState((user) => {
+        renderUser(user);
 
-    continueBtn?.addEventListener("click", () => {
-      const currentUser = getCurrentUser();
-
-      if (!currentUser?.uid) {
-        setMessage("Primero debes iniciar sesión para continuar.", "error");
-        return;
-      }
-
-      persistLocalSession(currentUser);
-      goToResolvedRoute("Recuperando tu sesión y continuando el viaje.");
-    });
-
-    logoutBtn?.addEventListener("click", () => {
-      clearLocalSession();
-    });
-
-    const initialUser = getCurrentUser();
-    updateLoggedState(initialUser);
-
-    if (initialUser?.uid) {
-      setMessage("Ya hay una sesión activa. Puedes continuar el viaje cuando quieras.", "success");
+        if (user) {
+          setStatus("Sesión detectada. Redirigiendo...", "success");
+          setTimeout(goNext, 500);
+        } else {
+          setStatus("");
+          googleLoginBtn.disabled = false;
+        }
+      });
+    } else {
+      renderUser(null);
+      googleLoginBtn.disabled = false;
     }
   </script>
 </body>

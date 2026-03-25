@@ -25,18 +25,23 @@
 
   <style>
     :root {
-      --story-bg-1: #f8fbff;
+      --story-bg-1: #f7f9ff;
       --story-bg-2: #eef4ff;
-      --story-text: #111827;
+      --story-bg-3: #f8f4ff;
+      --story-text: #0f172a;
       --story-text-soft: #64748b;
       --story-primary: #2d5bff;
-      --story-primary-dark: #2148d8;
+      --story-primary-dark: #2248d3;
       --story-violet: #7c4dff;
-      --story-cyan: #11c5d9;
+      --story-cyan: #15b7d8;
+      --story-pink: #ff7ac3;
       --story-card: rgba(255, 255, 255, 0.72);
-      --story-card-border: rgba(255, 255, 255, 0.84);
-      --story-shadow: 0 24px 60px rgba(15, 23, 42, 0.10);
-      --story-shadow-soft: 0 16px 40px rgba(15, 23, 42, 0.08);
+      --story-card-border: rgba(255, 255, 255, 0.88);
+      --story-shadow: 0 28px 80px rgba(15, 23, 42, 0.12);
+      --story-shadow-soft: 0 18px 40px rgba(15, 23, 42, 0.08);
+      --story-radius-xl: 30px;
+      --story-radius-lg: 24px;
+      --story-radius-md: 18px;
     }
 
     * {
@@ -47,62 +52,62 @@
       scroll-behavior: smooth;
     }
 
-    .story-page {
+    body.story-page {
       min-height: 100vh;
       margin: 0;
       overflow: hidden;
-      background:
-        radial-gradient(circle at 18% 15%, rgba(45, 91, 255, 0.12), transparent 22%),
-        radial-gradient(circle at 80% 18%, rgba(124, 77, 255, 0.12), transparent 22%),
-        radial-gradient(circle at 50% 100%, rgba(17, 197, 217, 0.10), transparent 30%),
-        linear-gradient(180deg, var(--story-bg-1) 0%, var(--story-bg-2) 100%);
       position: relative;
       font-family: "Poppins", sans-serif;
       color: var(--story-text);
+      background:
+        radial-gradient(circle at 8% 10%, rgba(45, 91, 255, 0.10), transparent 22%),
+        radial-gradient(circle at 90% 8%, rgba(124, 77, 255, 0.10), transparent 24%),
+        radial-gradient(circle at 50% 100%, rgba(21, 183, 216, 0.12), transparent 28%),
+        linear-gradient(180deg, var(--story-bg-1) 0%, var(--story-bg-2) 52%, var(--story-bg-3) 100%);
     }
 
-    .story-page.is-routing {
+    body.story-page.is-routing {
       overflow: hidden;
       cursor: progress;
     }
 
-    .story-page::before,
-    .story-page::after {
+    body.story-page::before,
+    body.story-page::after {
       content: "";
       position: absolute;
       border-radius: 50%;
-      filter: blur(80px);
+      filter: blur(90px);
       pointer-events: none;
       z-index: 0;
       opacity: 0.65;
     }
 
-    .story-page::before {
-      width: 300px;
-      height: 300px;
-      left: -40px;
-      top: 8%;
-      background: rgba(45, 91, 255, 0.12);
+    body.story-page::before {
+      width: 340px;
+      height: 340px;
+      left: -50px;
+      top: 10%;
+      background: rgba(45, 91, 255, 0.18);
     }
 
-    .story-page::after {
-      width: 320px;
-      height: 320px;
-      right: -50px;
-      bottom: 8%;
-      background: rgba(124, 77, 255, 0.12);
+    body.story-page::after {
+      width: 360px;
+      height: 360px;
+      right: -60px;
+      bottom: 6%;
+      background: rgba(124, 77, 255, 0.18);
     }
 
     .story-shell {
       position: relative;
       z-index: 1;
+      width: min(100% - 24px, 1260px);
       min-height: 100vh;
-      width: min(100% - 24px, 1100px);
       margin: 0 auto;
+      padding: 20px 0 24px;
       display: grid;
       grid-template-rows: auto 1fr auto;
       gap: 18px;
-      padding: 20px 0 24px;
     }
 
     .story-topbar {
@@ -111,9 +116,9 @@
       justify-content: space-between;
       gap: 16px;
       padding: 14px 18px;
-      border-radius: 24px;
+      border-radius: 26px;
       background: rgba(255, 255, 255, 0.62);
-      border: 1px solid rgba(255, 255, 255, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.84);
       box-shadow: var(--story-shadow-soft);
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
@@ -122,21 +127,28 @@
     .story-brand {
       display: inline-flex;
       align-items: center;
-      gap: 12px;
+      gap: 14px;
       min-width: 0;
     }
 
-    .story-brand-mark {
-      width: 42px;
-      height: 42px;
-      border-radius: 14px;
+    .story-brand-logo-wrap {
+      width: 54px;
+      height: 54px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, rgba(45,91,255,0.12), rgba(124,77,255,0.14));
+      border: 1px solid rgba(45, 91, 255, 0.12);
       display: grid;
       place-items: center;
-      background: linear-gradient(135deg, var(--story-primary), var(--story-violet));
-      color: white;
-      font-weight: 800;
-      box-shadow: 0 12px 24px rgba(45, 91, 255, 0.22);
+      overflow: hidden;
+      box-shadow: 0 12px 28px rgba(45, 91, 255, 0.16);
       flex-shrink: 0;
+    }
+
+    .story-brand-logo {
+      width: 78%;
+      height: 78%;
+      object-fit: contain;
+      display: block;
     }
 
     .story-brand-text {
@@ -145,15 +157,15 @@
     }
 
     .story-brand-label {
-      font-size: 0.82rem;
-      color: #63708a;
-      font-weight: 700;
-      letter-spacing: 0.04em;
+      font-size: 0.8rem;
+      color: #64748b;
+      font-weight: 800;
+      letter-spacing: 0.05em;
       text-transform: uppercase;
     }
 
     .story-brand-title {
-      font-size: 1rem;
+      font-size: 1.02rem;
       color: var(--story-text);
       font-weight: 700;
     }
@@ -162,43 +174,44 @@
       display: inline-flex;
       align-items: center;
       gap: 10px;
-      min-height: 42px;
-      padding: 0.6rem 0.95rem;
+      min-height: 44px;
+      padding: 0.65rem 1rem;
       border-radius: 999px;
-      background: rgba(255, 255, 255, 0.82);
+      background: rgba(255, 255, 255, 0.86);
       border: 1px solid rgba(148, 163, 184, 0.18);
-      box-shadow: 0 10px 20px rgba(15, 23, 42, 0.05);
+      box-shadow: 0 10px 22px rgba(15, 23, 42, 0.05);
       color: var(--story-primary);
-      font-size: 0.92rem;
-      font-weight: 700;
+      font-size: 0.94rem;
+      font-weight: 800;
       white-space: nowrap;
     }
 
     .story-main {
       display: grid;
-      grid-template-columns: 1.05fr 0.95fr;
+      grid-template-columns: minmax(0, 1.08fr) minmax(360px, 0.92fr);
       gap: 18px;
       min-height: 0;
+      align-items: stretch;
     }
 
     .story-visual,
     .story-card {
       min-height: 0;
-      border-radius: 30px;
+      border-radius: var(--story-radius-xl);
       background: var(--story-card);
       border: 1px solid var(--story-card-border);
       box-shadow: var(--story-shadow);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
     }
 
     .story-visual {
       position: relative;
       overflow: hidden;
-      padding: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      padding: 18px;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 14px;
       isolation: isolate;
     }
 
@@ -206,91 +219,189 @@
       content: "";
       position: absolute;
       inset: 0;
+      z-index: 0;
       background:
-        radial-gradient(circle at 50% 50%, rgba(45, 91, 255, 0.18), transparent 32%),
-        radial-gradient(circle at 30% 28%, rgba(124, 77, 255, 0.16), transparent 24%),
-        radial-gradient(circle at 70% 75%, rgba(17, 197, 217, 0.16), transparent 24%);
-      z-index: -1;
-    }
-
-    .story-planet {
-      position: relative;
-      width: min(100%, 360px);
-      aspect-ratio: 1 / 1;
-      border-radius: 50%;
-      background:
-        radial-gradient(circle at 35% 30%, rgba(255,255,255,0.85), rgba(255,255,255,0) 20%),
-        linear-gradient(160deg, #2d5bff, #7c4dff 55%, #11c5d9);
-      box-shadow:
-        inset -20px -24px 45px rgba(17, 24, 39, 0.16),
-        0 22px 55px rgba(45, 91, 255, 0.24);
-      animation: storyFloat 4s ease-in-out infinite;
-      overflow: hidden;
-    }
-
-    .story-planet::before {
-      content: "";
-      position: absolute;
-      inset: 18% 15%;
-      border-radius: 50%;
-      background:
-        radial-gradient(circle at 30% 35%, rgba(255,255,255,0.24), transparent 18%),
-        radial-gradient(circle at 70% 28%, rgba(255,255,255,0.18), transparent 16%),
-        radial-gradient(circle at 48% 72%, rgba(255,255,255,0.14), transparent 18%);
-      opacity: 0.8;
-    }
-
-    .story-orbit {
-      position: absolute;
-      inset: -30px;
-      border-radius: 50%;
-      border: 1px dashed rgba(45, 91, 255, 0.18);
-      animation: slowSpin 16s linear infinite;
-    }
-
-    .story-musi {
-      position: absolute;
-      top: 10%;
-      right: 10%;
-      width: 76px;
-      height: 76px;
-      border-radius: 24px;
-      display: grid;
-      place-items: center;
-      background: rgba(255,255,255,0.86);
-      color: var(--story-primary);
-      font-size: 2rem;
-      font-weight: 800;
-      box-shadow: 0 16px 30px rgba(15, 23, 42, 0.12);
-      animation: musiDrift 5s ease-in-out infinite;
-    }
-
-    .story-stars {
-      position: absolute;
-      inset: 0;
+        radial-gradient(circle at 14% 20%, rgba(45, 91, 255, 0.16), transparent 20%),
+        radial-gradient(circle at 88% 18%, rgba(124, 77, 255, 0.16), transparent 22%),
+        radial-gradient(circle at 50% 90%, rgba(21, 183, 216, 0.12), transparent 26%);
       pointer-events: none;
     }
 
-    .story-star {
-      position: absolute;
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.96);
-      box-shadow: 0 0 14px rgba(255,255,255,0.92);
-      animation: twinkleStory 2.4s ease-in-out infinite;
+    .story-visual-header,
+    .story-visual-stage,
+    .story-visual-footer {
+      position: relative;
+      z-index: 1;
     }
 
-    .story-star.s1 { top: 16%; left: 18%; }
-    .story-star.s2 { top: 28%; right: 18%; animation-delay: 0.6s; }
-    .story-star.s3 { bottom: 20%; left: 22%; animation-delay: 1.2s; }
-    .story-star.s4 { bottom: 14%; right: 20%; animation-delay: 1.8s; }
+    .story-visual-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .story-visual-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0.6rem 0.9rem;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.82);
+      border: 1px solid rgba(148, 163, 184, 0.16);
+      color: var(--story-primary);
+      font-weight: 700;
+      font-size: 0.88rem;
+    }
+
+    .story-visual-badge-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--story-primary), var(--story-violet));
+      box-shadow: 0 0 0 4px rgba(45, 91, 255, 0.12);
+    }
+
+    .story-stage-note {
+      color: var(--story-text-soft);
+      font-size: 0.88rem;
+      font-weight: 500;
+    }
+
+    .story-visual-stage {
+      display: grid;
+      min-height: 0;
+      align-items: center;
+    }
+
+    .story-video-shell {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      min-height: 420px;
+      border-radius: 28px;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 50% 40%, rgba(255,255,255,0.12), transparent 20%),
+        linear-gradient(160deg, #dfe9ff 0%, #eef3ff 42%, #f5efff 100%);
+      border: 1px solid rgba(255, 255, 255, 0.76);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.75),
+        0 24px 50px rgba(45, 91, 255, 0.14);
+    }
+
+    .story-video-shell::before {
+      content: "";
+      position: absolute;
+      inset: -20%;
+      background:
+        radial-gradient(circle at 20% 18%, rgba(45,91,255,0.14), transparent 18%),
+        radial-gradient(circle at 82% 14%, rgba(124,77,255,0.14), transparent 22%),
+        radial-gradient(circle at 50% 88%, rgba(21,183,216,0.12), transparent 24%);
+      filter: blur(24px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .story-video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      z-index: 1;
+      opacity: 1;
+      transition: opacity 260ms ease, transform 260ms ease;
+      background: #edf3ff;
+    }
+
+    .story-video.is-switching {
+      opacity: 0.18;
+      transform: scale(1.02);
+    }
+
+    .story-video-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+      background:
+        linear-gradient(180deg, rgba(9, 18, 40, 0.10) 0%, rgba(9, 18, 40, 0.02) 26%, rgba(9, 18, 40, 0.16) 100%);
+    }
+
+    .story-floating-logo {
+      position: absolute;
+      right: 16px;
+      bottom: 16px;
+      z-index: 3;
+      width: 74px;
+      height: 74px;
+      padding: 10px;
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.88);
+      border: 1px solid rgba(255,255,255,0.95);
+      box-shadow: 0 16px 30px rgba(15, 23, 42, 0.14);
+      display: grid;
+      place-items: center;
+      animation: floatLogo 4s ease-in-out infinite;
+    }
+
+    .story-floating-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .story-visual-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .story-visual-caption {
+      display: grid;
+      gap: 2px;
+      min-width: 0;
+    }
+
+    .story-visual-caption-label {
+      color: var(--story-primary);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .story-visual-caption-text {
+      color: var(--story-text-soft);
+      font-size: 0.92rem;
+      line-height: 1.5;
+    }
+
+    .story-mini-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0.65rem 0.9rem;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.82);
+      border: 1px solid rgba(148, 163, 184, 0.16);
+      color: var(--story-text);
+      font-size: 0.88rem;
+      font-weight: 700;
+    }
 
     .story-card {
       display: grid;
       grid-template-rows: auto 1fr auto;
-      padding: 22px 22px 20px;
       gap: 18px;
+      padding: 24px;
+      min-height: 0;
     }
 
     .story-card-head {
@@ -309,9 +420,9 @@
 
     .story-title {
       margin: 0;
-      font-size: clamp(1.8rem, 4vw, 2.7rem);
-      line-height: 1;
-      letter-spacing: -0.04em;
+      font-size: clamp(1.85rem, 3.8vw, 2.9rem);
+      line-height: 0.98;
+      letter-spacing: -0.045em;
       color: var(--story-text);
     }
 
@@ -319,7 +430,8 @@
       margin: 0;
       color: var(--story-text-soft);
       font-size: 0.98rem;
-      line-height: 1.6;
+      line-height: 1.65;
+      max-width: 56ch;
     }
 
     .story-slide-wrap {
@@ -331,7 +443,7 @@
 
     .story-slide {
       display: none;
-      animation: fadeSlideIn 360ms ease;
+      animation: fadeSlideIn 320ms ease;
     }
 
     .story-slide.active {
@@ -347,35 +459,36 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      min-width: 48px;
+      min-width: 50px;
       min-height: 32px;
-      padding: 0.4rem 0.7rem;
+      padding: 0.4rem 0.72rem;
       border-radius: 999px;
       background: rgba(45, 91, 255, 0.10);
       color: var(--story-primary);
       font-size: 0.84rem;
-      font-weight: 700;
+      font-weight: 800;
       width: fit-content;
     }
 
     .story-slide-title {
       margin: 0;
-      font-size: clamp(1.4rem, 3vw, 2rem);
-      line-height: 1.1;
+      font-size: clamp(1.42rem, 2.8vw, 2.15rem);
+      line-height: 1.08;
       color: var(--story-text);
+      letter-spacing: -0.03em;
     }
 
     .story-slide-text {
       color: #475569;
       font-size: 1rem;
-      line-height: 1.75;
+      line-height: 1.78;
       max-width: 52ch;
       margin: 0;
     }
 
     .story-emphasis {
       color: var(--story-primary);
-      font-weight: 700;
+      font-weight: 800;
     }
 
     .story-slide-quote {
@@ -405,16 +518,21 @@
       width: 12px;
       height: 12px;
       border-radius: 50%;
-      background: rgba(148, 163, 184, 0.26);
+      background: rgba(148, 163, 184, 0.28);
       border: 1px solid transparent;
       transition: all 0.22s ease;
       cursor: pointer;
     }
 
+    .story-indicator:hover {
+      transform: scale(1.08);
+      background: rgba(45, 91, 255, 0.46);
+    }
+
     .story-indicator.active {
       transform: scale(1.12);
       background: var(--story-primary);
-      border-color: rgba(45, 91, 255, 0.18);
+      border-color: rgba(45, 91, 255, 0.16);
       box-shadow: 0 0 0 4px rgba(45, 91, 255, 0.10);
     }
 
@@ -446,13 +564,14 @@
       border: none;
     }
 
-    .story-btn:focus-visible {
+    .story-btn:focus-visible,
+    .story-indicator:focus-visible {
       outline: none;
       box-shadow: 0 0 0 4px rgba(45, 91, 255, 0.12);
     }
 
     .story-btn-primary {
-      background: linear-gradient(135deg, var(--story-primary), #4e77ff);
+      background: linear-gradient(135deg, var(--story-primary), #4f78ff);
       color: white;
       box-shadow: 0 14px 26px rgba(45, 91, 255, 0.22);
     }
@@ -463,7 +582,7 @@
     }
 
     .story-btn-secondary {
-      background: rgba(255, 255, 255, 0.86);
+      background: rgba(255, 255, 255, 0.88);
       color: var(--story-text);
       border: 1px solid rgba(148, 163, 184, 0.18);
       box-shadow: 0 8px 20px rgba(15, 23, 42, 0.05);
@@ -487,7 +606,7 @@
 
     .story-helper {
       color: var(--story-text-soft);
-      font-size: 0.88rem;
+      font-size: 0.89rem;
     }
 
     .story-bottom {
@@ -496,81 +615,76 @@
       justify-content: center;
       gap: 10px;
       flex-wrap: wrap;
-      color: var(--story-text-soft);
-      font-size: 0.88rem;
       text-align: center;
+      color: #6b7280;
+      font-size: 0.88rem;
+      padding: 0 10px;
     }
 
     .route-overlay {
       position: fixed;
       inset: 0;
-      z-index: 20;
+      z-index: 40;
       display: grid;
       place-items: center;
       padding: 20px;
-      background:
-        radial-gradient(circle at top, rgba(45, 91, 255, 0.18), transparent 24%),
-        linear-gradient(180deg, rgba(10, 17, 35, 0.82), rgba(10, 17, 35, 0.92));
-      color: #fff;
+      background: rgba(242, 247, 255, 0.74);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
       opacity: 0;
-      visibility: hidden;
       pointer-events: none;
-      transition:
-        opacity 0.24s ease,
-        visibility 0.24s ease;
+      transition: opacity 220ms ease;
     }
 
-    .route-overlay.show {
+    .route-overlay.is-visible {
       opacity: 1;
-      visibility: visible;
       pointer-events: auto;
     }
 
     .route-card {
-      width: min(100%, 420px);
-      padding: 28px 24px;
-      border-radius: 26px;
+      width: min(100%, 360px);
+      padding: 24px 22px;
+      border-radius: 28px;
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid rgba(255, 255, 255, 0.96);
+      box-shadow: 0 24px 60px rgba(15, 23, 42, 0.14);
       text-align: center;
-      background: rgba(19, 28, 52, 0.78);
-      border: 1px solid rgba(255, 255, 255, 0.14);
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.26);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
     }
 
     .route-spinner {
-      width: 58px;
-      height: 58px;
-      margin: 0 auto 18px;
+      width: 52px;
+      height: 52px;
+      margin: 0 auto 14px;
       border-radius: 50%;
-      border: 4px solid rgba(255, 255, 255, 0.18);
-      border-top-color: #ffffff;
-      animation: spin 0.95s linear infinite;
+      border: 4px solid rgba(45, 91, 255, 0.12);
+      border-top-color: var(--story-primary);
+      animation: spinStory 0.9s linear infinite;
     }
 
     .route-title {
-      margin: 0;
-      font-size: 1.16rem;
-      font-weight: 700;
+      margin: 0 0 8px;
+      color: var(--story-text);
+      font-weight: 800;
+      font-size: 1.15rem;
     }
 
     .route-text {
-      margin: 10px 0 0;
-      color: rgba(229, 236, 255, 0.82);
-      line-height: 1.6;
+      margin: 0;
+      color: var(--story-text-soft);
+      line-height: 1.65;
       font-size: 0.95rem;
     }
 
     .sr-only {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip: rect(0, 0, 0, 0);
-      white-space: nowrap;
-      border: 0;
+      position: absolute !important;
+      width: 1px !important;
+      height: 1px !important;
+      padding: 0 !important;
+      margin: -1px !important;
+      overflow: hidden !important;
+      clip: rect(0, 0, 0, 0) !important;
+      white-space: nowrap !important;
+      border: 0 !important;
     }
 
     @keyframes fadeSlideIn {
@@ -584,96 +698,75 @@
       }
     }
 
-    @keyframes storyFloat {
+    @keyframes floatLogo {
       0%, 100% {
         transform: translateY(0);
       }
       50% {
-        transform: translateY(-10px);
+        transform: translateY(-6px);
       }
     }
 
-    @keyframes musiDrift {
-      0%, 100% {
-        transform: translateY(0) rotate(-3deg);
-      }
-      50% {
-        transform: translateY(-10px) rotate(4deg);
-      }
-    }
-
-    @keyframes slowSpin {
-      from {
-        transform: rotate(0deg);
-      }
+    @keyframes spinStory {
       to {
         transform: rotate(360deg);
       }
     }
 
-    @keyframes twinkleStory {
-      0%, 100% {
-        opacity: 0.3;
-        transform: scale(0.9);
-      }
-      50% {
-        opacity: 1;
-        transform: scale(1.18);
-      }
-    }
-
-    @keyframes spin {
-      to {
-        transform: rotate(360deg);
-      }
-    }
-
-    @media (max-width: 960px) {
+    @media (max-width: 1080px) {
       .story-main {
         grid-template-columns: 1fr;
       }
 
-      .story-visual {
-        min-height: 280px;
+      .story-video-shell {
+        min-height: 360px;
       }
     }
 
-    @media (max-width: 640px) {
+    @media (max-width: 720px) {
       .story-shell {
-        width: min(100% - 16px, 1100px);
-        gap: 14px;
+        width: min(100% - 16px, 1260px);
         padding: 14px 0 18px;
       }
 
-      .story-topbar {
-        padding: 12px 14px;
-        border-radius: 20px;
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
+      .story-topbar,
       .story-card,
       .story-visual {
-        border-radius: 22px;
+        border-radius: 24px;
+      }
+
+      .story-topbar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .story-brand {
+        justify-content: flex-start;
+      }
+
+      .story-progress-chip {
+        justify-content: center;
       }
 
       .story-card {
-        padding: 18px 16px 16px;
+        padding: 18px;
       }
 
       .story-visual {
-        padding: 20px;
+        padding: 14px;
       }
 
-      .story-planet {
-        width: min(100%, 280px);
+      .story-video-shell {
+        min-height: 280px;
+        border-radius: 22px;
       }
 
-      .story-musi {
-        width: 64px;
-        height: 64px;
-        border-radius: 20px;
-        font-size: 1.7rem;
+      .story-floating-logo {
+        width: 62px;
+        height: 62px;
+        border-radius: 18px;
+        right: 12px;
+        bottom: 12px;
       }
 
       .story-actions {
@@ -697,13 +790,12 @@
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .story-planet,
-      .story-orbit,
-      .story-musi,
-      .story-star,
-      .story-slide,
-      .route-spinner {
+      .story-video,
+      .story-floating-logo,
+      .route-spinner,
+      .story-slide {
         animation: none !important;
+        transition: none !important;
       }
     }
   </style>
@@ -713,7 +805,15 @@
   <main class="story-shell">
     <header class="story-topbar" aria-label="Barra superior de historia">
       <div class="story-brand">
-        <div class="story-brand-mark" aria-hidden="true">M</div>
+        <div class="story-brand-logo-wrap" aria-hidden="true">
+          <img
+            src="assets/logo.png"
+            alt=""
+            class="story-brand-logo"
+            onerror="this.style.display='none'; this.parentElement.textContent='M'; this.parentElement.style.fontWeight='800'; this.parentElement.style.color='#2d5bff';"
+          />
+        </div>
+
         <div class="story-brand-text">
           <span class="story-brand-label">Historia</span>
           <span class="story-brand-title">Musi</span>
@@ -721,22 +821,59 @@
       </div>
 
       <div class="story-progress-chip" aria-live="polite">
-        <span id="storyProgressText">Escena 1 de 5</span>
+        <span id="storyProgressText">Escena 1 de 7</span>
       </div>
     </header>
 
     <section class="story-main" aria-labelledby="storyTitle">
-      <aside class="story-visual" aria-hidden="true">
-        <div class="story-stars">
-          <span class="story-star s1"></span>
-          <span class="story-star s2"></span>
-          <span class="story-star s3"></span>
-          <span class="story-star s4"></span>
+      <aside class="story-visual" aria-label="Visual del capítulo narrativo">
+        <div class="story-visual-header">
+          <div class="story-visual-badge">
+            <span class="story-visual-badge-dot" aria-hidden="true"></span>
+            <span>Capítulo animado</span>
+          </div>
+
+          <span class="story-stage-note" id="storyStageNote">Video 1 de 7</span>
         </div>
 
-        <div class="story-planet">
-          <div class="story-orbit"></div>
-          <div class="story-musi">🎵</div>
+        <div class="story-visual-stage">
+          <div class="story-video-shell">
+            <video
+              id="storyVideo"
+              class="story-video"
+              muted
+              playsinline
+              autoplay
+              loop
+              preload="metadata"
+              poster="assets/musi.png"
+            >
+              <source src="assets/story1.mp4" type="video/mp4" />
+            </video>
+
+            <div class="story-video-overlay" aria-hidden="true"></div>
+
+            <div class="story-floating-logo" aria-hidden="true">
+              <img
+                src="assets/musi.png"
+                alt=""
+                onerror="this.src='assets/logo.png'"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="story-visual-footer">
+          <div class="story-visual-caption">
+            <span class="story-visual-caption-label">Experiencia narrativa</span>
+            <span class="story-visual-caption-text" id="storyVisualCaption">
+              Musi empieza a recordar que cada territorio guarda una energía artística distinta.
+            </span>
+          </div>
+
+          <div class="story-mini-indicator" id="storyMiniIndicator">
+            Escena 01
+          </div>
         </div>
       </aside>
 
@@ -792,7 +929,20 @@
           <section class="story-slide" data-slide="3" aria-label="Escena 4">
             <div class="story-slide-inner">
               <span class="story-slide-number">04</span>
-              <h2 class="story-slide-title">Cada juego despierta una memoria</h2>
+              <h2 class="story-slide-title">Cada región tiene su propio pulso</h2>
+              <p class="story-slide-text">
+                En el Caribe, el Pacífico, la región Andina, los Llanos y la Amazonía, Musi descubrirá guardianes, paisajes y formas distintas de crear.
+              </p>
+              <p class="story-slide-text">
+                Cada encuentro abre una puerta a nuevos ritmos, cuerpos, instrumentos y relatos.
+              </p>
+            </div>
+          </section>
+
+          <section class="story-slide" data-slide="4" aria-label="Escena 5">
+            <div class="story-slide-inner">
+              <span class="story-slide-number">05</span>
+              <h2 class="story-slide-title">Los juegos despiertan la memoria</h2>
               <p class="story-slide-text">
                 En cada región, Musi encontrará desafíos, minijuegos y experiencias inspiradas en la música, la danza, las artes y la cultura del territorio.
               </p>
@@ -802,12 +952,25 @@
             </div>
           </section>
 
-          <section class="story-slide" data-slide="4" aria-label="Escena 5">
+          <section class="story-slide" data-slide="5" aria-label="Escena 6">
             <div class="story-slide-inner">
-              <span class="story-slide-number">05</span>
-              <h2 class="story-slide-title">El viaje está por continuar</h2>
+              <span class="story-slide-number">06</span>
+              <h2 class="story-slide-title">Este viaje no se mira solamente</h2>
               <p class="story-slide-text">
-                Ahora Musi necesita avanzar por el mapa, descubrir regiones, sumar experiencia y recuperar la energía creativa que sigue viva en Colombia.
+                Aquí no vinieron solo a observar. Vinieron a explorar, elegir, intentar, fallar, aprender y volver a jugar.
+              </p>
+              <p class="story-slide-text">
+                Porque la historia de Musi se completa cuando alguien del otro lado también se atreve a participar.
+              </p>
+            </div>
+          </section>
+
+          <section class="story-slide" data-slide="6" aria-label="Escena 7">
+            <div class="story-slide-inner">
+              <span class="story-slide-number">07</span>
+              <h2 class="story-slide-title">El mapa ya los está esperando</h2>
+              <p class="story-slide-text">
+                Ahora Musi necesita avanzar por el territorio, descubrir regiones, sumar experiencia y recuperar la energía creativa que sigue viva en Colombia.
               </p>
               <p class="story-slide-text">
                 El resto ya no lo cuenta la historia sola. <span class="story-emphasis">Lo juegan ustedes.</span>
@@ -826,26 +989,42 @@
             <span class="story-indicator" data-indicator="2" tabindex="0" role="button" aria-label="Ir a escena 3"></span>
             <span class="story-indicator" data-indicator="3" tabindex="0" role="button" aria-label="Ir a escena 4"></span>
             <span class="story-indicator" data-indicator="4" tabindex="0" role="button" aria-label="Ir a escena 5"></span>
+            <span class="story-indicator" data-indicator="5" tabindex="0" role="button" aria-label="Ir a escena 6"></span>
+            <span class="story-indicator" data-indicator="6" tabindex="0" role="button" aria-label="Ir a escena 7"></span>
           </div>
 
           <div class="story-actions">
             <div class="story-actions-left">
-              <button class="story-btn story-btn-secondary" id="prevSlideBtn" type="button" disabled>
+              <button id="prevSlideBtn" class="story-btn story-btn-secondary" type="button">
                 Anterior
               </button>
+
+              <span id="storyHelperText" class="story-helper">
+                Usa siguiente para avanzar
+              </span>
             </div>
 
             <div class="story-actions-right">
-              <span class="story-helper" id="storyHelperText">Usa siguiente para avanzar</span>
-              <button class="story-btn story-btn-secondary" id="skipStoryBtn" type="button">
+              <button
+                id="skipStoryBtn"
+                class="story-btn story-btn-secondary"
+                type="button"
+                data-skip-story
+              >
                 Omitir historia
               </button>
-              <button class="story-btn story-btn-primary" id="nextSlideBtn" type="button">
+
+              <button
+                id="nextSlideBtn"
+                class="story-btn story-btn-primary"
+                type="button"
+              >
                 Siguiente
               </button>
+
               <button
-                class="story-btn story-btn-primary hidden"
                 id="storyContinueBtn"
+                class="story-btn story-btn-primary hidden"
                 type="button"
                 data-complete-story
               >
@@ -891,13 +1070,77 @@
     const storyContinueBtn = document.getElementById("storyContinueBtn");
     const storyProgressText = document.getElementById("storyProgressText");
     const storyHelperText = document.getElementById("storyHelperText");
+    const storyStageNote = document.getElementById("storyStageNote");
+    const storyMiniIndicator = document.getElementById("storyMiniIndicator");
+    const storyVisualCaption = document.getElementById("storyVisualCaption");
+    const storyVideo = document.getElementById("storyVideo");
     const routeOverlay = document.getElementById("routeOverlay");
     const routeText = document.getElementById("routeText");
     const srStoryStatus = document.getElementById("srStoryStatus");
 
+    const storyVideos = [
+      "assets/story1.mp4",
+      "assets/story2.mp4",
+      "assets/story3.mp4",
+      "assets/story4.mp4",
+      "assets/story5.mp4",
+      "assets/story6.mp4",
+      "assets/story7.mp4"
+    ];
+
+    const visualCaptions = [
+      "Musi empieza a recordar que cada territorio guarda una energía artística distinta.",
+      "Algunas memorias creativas se fueron apagando y el territorio quedó en silencio.",
+      "Musi aparece como una presencia sensible, lista para escuchar y aprender.",
+      "Cada región abre una puerta diferente a la música, el cuerpo y la imaginación.",
+      "Los minijuegos activan ritmos, saberes y rutas creativas dormidas.",
+      "Este universo no solo se observa: se explora, se prueba y se juega.",
+      "El mapa se abre para que ustedes continúen el viaje junto a Musi."
+    ];
+
     let currentIndex = 0;
     let isRouting = false;
     const totalSlides = slides.length;
+
+    function preloadStoryVideos() {
+      storyVideos.forEach((src) => {
+        const video = document.createElement("video");
+        video.preload = "metadata";
+        video.src = src;
+      });
+    }
+
+    async function syncVideoWithSlide(index) {
+      const nextSrc = storyVideos[index];
+      if (!nextSrc || !storyVideo) return;
+
+      const currentSrc = storyVideo.currentSrc || storyVideo.querySelector("source")?.src || "";
+      const alreadyShowing = currentSrc.includes(nextSrc);
+
+      if (alreadyShowing) {
+        try {
+          storyVideo.currentTime = 0;
+          await storyVideo.play();
+        } catch (_) {}
+        return;
+      }
+
+      storyVideo.classList.add("is-switching");
+
+      setTimeout(async () => {
+        storyVideo.pause();
+        storyVideo.src = nextSrc;
+        storyVideo.load();
+
+        try {
+          await storyVideo.play();
+        } catch (_) {
+          /* autoplay puede fallar en algunos contextos, pero al estar muted casi siempre entra */
+        }
+
+        storyVideo.classList.remove("is-switching");
+      }, 140);
+    }
 
     function updateStoryUI() {
       slides.forEach((slide, index) => {
@@ -905,11 +1148,16 @@
       });
 
       indicators.forEach((dot, index) => {
-        dot.classList.toggle("active", index === currentIndex);
-        dot.setAttribute("aria-pressed", String(index === currentIndex));
+        const isActive = index === currentIndex;
+        dot.classList.toggle("active", isActive);
+        dot.setAttribute("aria-pressed", String(isActive));
       });
 
       storyProgressText.textContent = `Escena ${currentIndex + 1} de ${totalSlides}`;
+      storyStageNote.textContent = `Video ${currentIndex + 1} de ${storyVideos.length}`;
+      storyMiniIndicator.textContent = `Escena ${String(currentIndex + 1).padStart(2, "0")}`;
+      storyVisualCaption.textContent = visualCaptions[currentIndex] || "";
+      srStoryStatus.textContent = `Escena ${currentIndex + 1} de ${totalSlides}`;
 
       const isFirst = currentIndex === 0;
       const isLast = currentIndex === totalSlides - 1;
@@ -923,96 +1171,104 @@
       } else {
         storyHelperText.textContent = "Usa siguiente para avanzar";
       }
+
+      syncVideoWithSlide(currentIndex);
     }
 
-    function goNextSlide() {
+    function goToSlide(index) {
       if (isRouting) return;
+      if (index < 0 || index >= totalSlides) return;
+
+      currentIndex = index;
+      updateStoryUI();
+    }
+
+    function nextSlide() {
       if (currentIndex < totalSlides - 1) {
-        currentIndex += 1;
-        updateStoryUI();
+        goToSlide(currentIndex + 1);
       }
     }
 
-    function goPrevSlide() {
-      if (isRouting) return;
+    function prevSlide() {
       if (currentIndex > 0) {
-        currentIndex -= 1;
-        updateStoryUI();
+        goToSlide(currentIndex - 1);
       }
     }
 
-    function showRouteOverlay(message) {
+    async function openMap({ complete = false } = {}) {
       if (isRouting) return;
       isRouting = true;
 
       document.body.classList.add("is-routing");
-      routeOverlay.classList.add("show");
+      routeOverlay.classList.add("is-visible");
       routeOverlay.setAttribute("aria-hidden", "false");
-      routeText.textContent = message;
-      srStoryStatus.textContent = message;
-    }
 
-    async function finishStory() {
-      if (isRouting) return;
-
-      showRouteOverlay("Historia completada. Abriendo el mapa principal.");
+      routeText.textContent = complete
+        ? "Guardando el avance de la historia y preparando el mapa."
+        : "Saltando la historia y preparando el mapa.";
 
       try {
-        await completeStoryAndGoToMap();
+        if (complete) {
+          await completeStoryAndGoToMap();
+        } else {
+          await goToMap();
+        }
       } catch (error) {
-        console.error("[story] Error al completar historia:", error);
-        goToMap();
+        console.error("No se pudo abrir el mapa:", error);
+        routeText.textContent = "No se pudo abrir el mapa. Reintentando...";
+        setTimeout(() => {
+          window.location.href = "mapa.html";
+        }, 900);
       }
     }
 
-    prevSlideBtn?.addEventListener("click", goPrevSlide);
-    nextSlideBtn?.addEventListener("click", goNextSlide);
-    storyContinueBtn?.addEventListener("click", finishStory);
-    skipStoryBtn?.addEventListener("click", finishStory);
+    prevSlideBtn?.addEventListener("click", prevSlide);
+    nextSlideBtn?.addEventListener("click", nextSlide);
 
-    indicators.forEach((dot, index) => {
-      dot.addEventListener("click", () => {
-        if (isRouting) return;
-        currentIndex = index;
-        updateStoryUI();
+    skipStoryBtn?.addEventListener("click", () => {
+      openMap({ complete: false });
+    });
+
+    storyContinueBtn?.addEventListener("click", () => {
+      openMap({ complete: true });
+    });
+
+    indicators.forEach((indicator) => {
+      const targetIndex = Number(indicator.dataset.indicator);
+
+      indicator.addEventListener("click", () => {
+        goToSlide(targetIndex);
       });
 
-      dot.addEventListener("keydown", (event) => {
+      indicator.addEventListener("keydown", (event) => {
         if (event.key === "Enter" || event.key === " ") {
           event.preventDefault();
-          if (isRouting) return;
-          currentIndex = index;
-          updateStoryUI();
+          goToSlide(targetIndex);
         }
       });
     });
 
-    window.addEventListener("keydown", async (event) => {
+    window.addEventListener("keydown", (event) => {
       if (isRouting) return;
 
       if (event.key === "ArrowRight") {
-        event.preventDefault();
-        goNextSlide();
+        nextSlide();
       }
 
       if (event.key === "ArrowLeft") {
-        event.preventDefault();
-        goPrevSlide();
+        prevSlide();
       }
 
-      if (event.key === "Enter" || event.key === " ") {
-        if (currentIndex === totalSlides - 1) {
-          event.preventDefault();
-          await finishStory();
-        }
-      }
-
-      if (event.key === "Escape") {
-        event.preventDefault();
-        await finishStory();
+      if (event.key === "Enter" && currentIndex === totalSlides - 1) {
+        openMap({ complete: true });
       }
     });
 
+    storyVideo?.addEventListener("error", () => {
+      console.warn("No se pudo cargar el video actual de historia.");
+    });
+
+    preloadStoryVideos();
     updateStoryUI();
   </script>
 </body>

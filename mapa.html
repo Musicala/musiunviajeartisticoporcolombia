@@ -10,12 +10,10 @@
   />
   <meta name="theme-color" content="#2d5bff" />
 
-  <!-- Estilos -->
   <link rel="stylesheet" href="css/styles.css" />
   <link rel="stylesheet" href="css/mapa.css" />
   <link rel="stylesheet" href="css/ui.css" />
 
-  <!-- Fuentes -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
@@ -23,7 +21,6 @@
     rel="stylesheet"
   />
 
-  <!-- Favicon -->
   <link rel="icon" href="assets/favicon.png" />
 
   <style>
@@ -50,7 +47,16 @@
       --map-page-radius-sm: 12px;
     }
 
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
     body.map-page.game-map-page {
+      margin: 0;
       color: var(--map-page-text);
       background:
         radial-gradient(circle at top left, rgba(45, 91, 255, 0.12), transparent 24%),
@@ -186,6 +192,7 @@
         background-color 0.2s ease,
         border-color 0.2s ease,
         color 0.2s ease;
+      font-family: inherit;
     }
 
     .hud-back-link,
@@ -196,6 +203,7 @@
       background: rgba(255, 255, 255, 0.78);
       border: 1px solid #dce6ff;
       box-shadow: var(--map-page-shadow-soft);
+      cursor: pointer;
     }
 
     .hud-primary-btn {
@@ -773,6 +781,7 @@
         background-color 0.2s ease,
         border-color 0.2s ease,
         opacity 0.2s ease;
+      font-family: inherit;
     }
 
     .map-hotspot:hover {
@@ -815,9 +824,10 @@
       transform: translate(-50%, -100%);
       display: grid;
       justify-items: center;
-      gap: 2px;
+      gap: 4px;
       pointer-events: none;
       transition: top 0.3s ease, left 0.3s ease;
+      filter: drop-shadow(0 14px 24px rgba(45, 91, 255, 0.22));
     }
 
     .traveler-arrow {
@@ -828,15 +838,26 @@
       animation: travelerBounce 1.8s ease-in-out infinite;
     }
 
-    .traveler-badge {
-      min-height: 28px;
-      padding: 6px 10px;
+    .traveler-avatar-wrap {
+      width: 78px;
+      height: 78px;
+      display: grid;
+      place-items: center;
       border-radius: 999px;
-      background: linear-gradient(135deg, var(--map-page-primary), var(--map-page-violet));
-      color: white;
-      font-size: 0.78rem;
-      font-weight: 800;
-      box-shadow: 0 10px 20px rgba(45, 91, 255, 0.2);
+      background:
+        radial-gradient(circle at 30% 25%, rgba(255,255,255,0.98), rgba(255,255,255,0.88) 65%, rgba(226,236,255,0.88));
+      border: 3px solid rgba(255,255,255,0.96);
+      box-shadow:
+        0 12px 26px rgba(45, 91, 255, 0.22),
+        0 0 0 6px rgba(255, 209, 102, 0.16);
+      overflow: hidden;
+    }
+
+    .traveler-avatar {
+      width: 90%;
+      height: 90%;
+      object-fit: contain;
+      display: block;
     }
 
     .map-quick-card {
@@ -1272,6 +1293,11 @@
         width: 100%;
         margin-top: 16px;
       }
+
+      .traveler-avatar-wrap {
+        width: 68px;
+        height: 68px;
+      }
     }
 
     @media (max-width: 760px) {
@@ -1306,6 +1332,11 @@
       .map-hotspot-label {
         font-size: 0.8rem;
       }
+
+      .traveler-avatar-wrap {
+        width: 60px;
+        height: 60px;
+      }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -1323,9 +1354,6 @@
 <body class="map-page game-map-page">
   <div class="background background-map" aria-hidden="true"></div>
 
-  <!-- =========================
-       CAPAS DECORATIVAS
-  ========================== -->
   <div class="map-scene-decor" aria-hidden="true">
     <span class="scene-cloud cloud-1"></span>
     <span class="scene-cloud cloud-2"></span>
@@ -1338,9 +1366,6 @@
     <span class="scene-star star-4"></span>
   </div>
 
-  <!-- =========================
-       HUD / HEADER SUPERIOR
-  ========================== -->
   <header class="map-header game-hud">
     <div class="hud-left">
       <a href="index.html" class="hud-back-link" aria-label="Volver al inicio de Musi">
@@ -1349,11 +1374,11 @@
       </a>
 
       <div class="brand-block">
-        <p class="brand-kicker">MUSI · HUB PRINCIPAL</p>
+        <p class="brand-kicker">MUSI · MAPA PRINCIPAL</p>
         <h1 class="brand-title">Mapa del viaje por Colombia</h1>
         <p class="brand-subtitle">
           Este es el centro real del recorrido. Desde aquí eliges regiones, revisas tu avance,
-          entras al perfil, administras tu sesión y decides el siguiente paso del viaje.
+          entras al perfil y continúas el viaje sin pasar por pantallas muertas que ya no aportan nada.
         </p>
       </div>
     </div>
@@ -1364,8 +1389,8 @@
         <strong class="xp-value" id="xpValue">0</strong>
       </div>
 
-      <a href="menu.html" class="hud-utility-link" title="Abrir centro de control">
-        Centro de control
+      <a href="story.html" class="hud-utility-link" title="Volver a la historia">
+        Ver historia
       </a>
 
       <button
@@ -1401,13 +1426,7 @@
     </div>
   </header>
 
-  <!-- =========================
-       CONTENIDO PRINCIPAL
-  ========================== -->
   <main class="map-layout game-map-layout">
-    <!-- =========================
-         PANEL IZQUIERDO / HUD JUGADOR
-    ========================== -->
     <aside class="sidebar-panel player-sidebar" aria-label="Panel lateral del jugador">
       <section class="player-card hero-player-card" id="playerCard">
         <div class="player-card-top">
@@ -1497,20 +1516,16 @@
       </section>
     </aside>
 
-    <!-- =========================
-         MAPA PRINCIPAL
-    ========================== -->
     <section class="map-main game-map-main" aria-labelledby="interactiveMapTitle">
       <div class="map-board adventure-board">
-        <!-- HERO CENTRAL -->
         <section class="map-hero-card">
           <div class="map-hero-copy">
             <p class="map-kicker">Mundo 1 · Colombia sonora</p>
             <h2>Elige tu siguiente destino</h2>
             <p>
               Haz clic sobre una región del mapa para abrir su tarjeta, conocer su energía
-              y escoger los minijuegos disponibles. Esta pantalla ahora sí funciona como el
-              corazón del juego y no como un primo lejano del menú.
+              y escoger los minijuegos disponibles. Esta pantalla sí queda como el corazón
+              del juego, en vez de mandar a un menú duplicado a perder tiempo como buen clásico humano.
             </p>
 
             <div class="map-hero-badges">
@@ -1529,7 +1544,6 @@
           </div>
         </section>
 
-        <!-- RESUMEN RÁPIDO -->
         <section class="map-stats-strip" aria-label="Resumen rápido del viaje">
           <article class="map-stat-card">
             <span class="map-stat-icon">🧭</span>
@@ -1543,7 +1557,7 @@
             <span class="map-stat-icon">🎮</span>
             <div>
               <p class="map-stat-label">Modo</p>
-              <strong>Tarjetas por región</strong>
+              <strong>Mapa interactivo</strong>
             </div>
           </article>
 
@@ -1556,7 +1570,6 @@
           </article>
         </section>
 
-        <!-- TÍTULO DE SECCIÓN -->
         <section class="regions-section-header">
           <div>
             <p class="map-kicker">Selección de regiones</p>
@@ -1568,9 +1581,6 @@
           </p>
         </section>
 
-        <!-- =========================
-             MAPA VISUAL CON HOTSPOTS
-        ========================== -->
         <section class="interactive-map-panel" aria-labelledby="interactiveMapTitle">
           <div class="interactive-map-header">
             <div>
@@ -1602,7 +1612,6 @@
             id="interactiveMapStage"
             aria-label="Mapa interactivo de las regiones de Colombia"
           >
-            <!-- Imagen del mapa -->
             <figure class="interactive-map-figure">
               <img
                 src="assets/mapa-colombia-musi.png"
@@ -1612,7 +1621,6 @@
               />
             </figure>
 
-            <!-- Caminos decorativos -->
             <div class="map-routes-layer" aria-hidden="true">
               <span class="map-route route-1"></span>
               <span class="map-route route-2"></span>
@@ -1620,7 +1628,6 @@
               <span class="map-route route-4"></span>
             </div>
 
-            <!-- Indicador de Musi / flecha -->
             <div
               class="map-traveler-indicator"
               id="mapTravelerIndicator"
@@ -1628,10 +1635,15 @@
               data-current-region="caribe"
             >
               <span class="traveler-arrow">⬇</span>
-              <span class="traveler-badge">Musi</span>
+              <span class="traveler-avatar-wrap">
+                <img
+                  src="assets/musi.png"
+                  alt="Musi"
+                  class="traveler-avatar"
+                />
+              </span>
             </div>
 
-            <!-- Hotspots -->
             <div class="map-hotspots-layer" id="mapHotspotsLayer">
               <button
                 class="map-hotspot is-unlocked is-current"
@@ -1712,7 +1724,6 @@
               </button>
             </div>
 
-            <!-- Tarjeta rápida actual -->
             <aside class="map-quick-card" id="mapQuickCard" aria-live="polite">
               <p class="quick-card-kicker">Destino actual</p>
               <h3 class="quick-card-title" id="quickCardTitle">Caribe</h3>
@@ -1730,9 +1741,6 @@
           </div>
         </section>
 
-        <!-- =========================
-             RESUMEN DE REGIONES
-        ========================== -->
         <section class="regions-summary-panel">
           <div class="regions-summary-header">
             <div>
@@ -1741,12 +1749,11 @@
             </div>
             <p>
               Estas tarjetas sirven como respaldo visual y resumen rápido del mapa. El territorio manda,
-              pero el HTML igual necesita una red de seguridad porque así es la vida digital.
+              pero el HTML igual agradece una segunda capa de navegación por si acaso.
             </p>
           </div>
 
           <div class="regions-grid game-regions-grid" id="regionsGrid">
-            <!-- CARIBE -->
             <article
               class="region-card unlocked region-theme-caribe"
               data-region="caribe"
@@ -1793,7 +1800,6 @@
               <div class="region-path region-path-right" aria-hidden="true"></div>
             </article>
 
-            <!-- ANDINA -->
             <article
               class="region-card locked region-theme-andina"
               data-region="andina"
@@ -1838,7 +1844,6 @@
               </div>
             </article>
 
-            <!-- PACÍFICA -->
             <article
               class="region-card locked region-theme-pacifica"
               data-region="pacifica"
@@ -1883,7 +1888,6 @@
               </div>
             </article>
 
-            <!-- ORINOQUÍA -->
             <article
               class="region-card locked region-theme-orinoquia"
               data-region="orinoquia"
@@ -1928,7 +1932,6 @@
               </div>
             </article>
 
-            <!-- AMAZONÍA -->
             <article
               class="region-card locked region-theme-amazonia"
               data-region="amazonia"
@@ -1973,7 +1976,6 @@
               </div>
             </article>
 
-            <!-- INSULAR -->
             <article
               class="region-card locked region-theme-insular"
               data-region="insular"
@@ -2023,9 +2025,6 @@
     </section>
   </main>
 
-  <!-- =========================
-       MODAL DETALLE DE REGIÓN
-  ========================== -->
   <section
     class="region-modal hidden"
     id="regionModal"
@@ -2075,17 +2074,12 @@
             <p id="modalGamesCount">4 experiencias artísticas</p>
           </div>
 
-          <div class="region-games-grid" id="modalRegionGames">
-            <!-- JS o fallback HTML -->
-          </div>
+          <div class="region-games-grid" id="modalRegionGames"></div>
         </section>
       </div>
     </div>
   </section>
 
-  <!-- =========================
-       TOAST / NOTIFICACIÓN
-  ========================== -->
   <div
     class="toast hidden"
     id="toastMessage"
@@ -2093,9 +2087,6 @@
     aria-live="polite"
   ></div>
 
-  <!-- =========================
-       OVERLAY DE RUTA
-  ========================== -->
   <div id="routeOverlay" class="route-overlay" aria-hidden="true">
     <div class="route-card" role="status" aria-live="polite" aria-atomic="true">
       <div class="route-spinner" aria-hidden="true"></div>
@@ -2108,9 +2099,6 @@
 
   <p id="srMapStatus" class="sr-only" aria-live="polite"></p>
 
-  <!-- =========================
-       DATOS BASE PARA JS
-  ========================== -->
   <script>
     window.MUSI_MAP_CONFIG = {
       startingRegion: "caribe",
@@ -2137,7 +2125,7 @@
               art: "Música",
               label: "Ritmo Caribe",
               description: "Sigue patrones rítmicos inspirados en percusiones del Caribe.",
-              href: "minijuegos/ritmo-caribe/index.html?return=mapa.html",
+              href: "https://musicalaescuela.github.io/atrapaelritmo/index.html",
               xpReward: 10,
               available: true
             },
@@ -2444,7 +2432,6 @@
     };
   </script>
 
-  <!-- Template para tarjetas de minijuegos -->
   <template id="regionGameCardTemplate">
     <article class="region-game-card">
       <div class="region-game-card-top">
@@ -2465,7 +2452,6 @@
     </article>
   </template>
 
-  <!-- Auth UI -->
   <script type="module">
     import { bindAuthUI } from "./js/auth.js";
 
@@ -2489,7 +2475,6 @@
     });
   </script>
 
-  <!-- Scripts -->
   <script type="module" src="js/app.js"></script>
   <script type="module" src="js/mapa.js"></script>
 </body>
